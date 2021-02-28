@@ -1,0 +1,209 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Female Stretching</string>
+    <string name="youtube_api_key">AIzaSyAoyJpy8xbelBg5uuoAfa_c2E4v262OiSE</string>
+
+
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="REWARD_VIDEO">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="BANNER">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="INTERSTITIAL">ca-app-pub-3940256099942544/1033173712</string>
+
+
+    <string name="number_picker_formatter">%02d</string>
+
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="exit_msg">Press Back twice to exit</string>
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
+    <string name="choose_gallery">Pick From Gallery</string>
+    <string name="err_file_manager">Please install a File Manager.</string>
+    <string name="choose_camera">Take From Camera</string>
+    <string name="permission_msg">Gallery and Camera permission is required</string>
+    <string name="permission_setting">Permission Setting</string>
+
+    <string name="login">Login</string>
+    <string name="profile">Profile</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
+
+    <string name="err_camera">cannot open camera</string>
+
+    <string name="name">Name</string>
+
+
+    <string name="need_permission_title">Need permission(s)</string>
+    <string name="err_need_permission_msg">You have previously declined this permission.\nYou must approve this permission in \"Permissions\" in the app settings on your device.</string>
+
+    <string name="back">Back</string>
+    <string name="more">More</string>
+    <string name="facility_code">Facility Code</string>
+    <string name="home">Home</string>
+
+    <string name="inmate_activity">Inmate Activity</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="logout">Logout</string>
+
+    <string name="what_s_your_goal">What\'s your goal?</string>
+
+    <string name="goal_warm_up">Warm-up</string>
+    <string name="goal_cool_down">Cool-down</string>
+    <string name="goal_pain_relief">Pain relief</string>
+    <string name="goal_body_relax">Body relax</string>
+    <string name="goal_posture_correction">Posture correction</string>
+    <string name="next">next</string>
+    <string name="finished">Finished</string>
+    <string name="achievement_comes_with_discipline">Achievement comes with discipline</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="set_your_weekly_goal">Set Your Weekly Goal</string>
+    <string name="tip_weekly_goal">We recommend training at least 3 days weekly for a better result.</string>
+    <string name="days">days</string>
+
+    <string name="menu_training_plans">Training Plans</string>
+    <string name="menu_discover">Discover</string>
+    <string name="menu_my_training">My Training</string>
+    <string name="menu_report">Report</string>
+    <string name="menu_reminder">Reminder</string>
+    <string name="menu_language">Language</string>
+    <string name="menu_setting">Settings</string>
+    <string name="set_weekly_goals_for_a_better_body_shape">Set weekly goals for a better body shape</string>
+    <string name="calorie">Calorie</string>
+    <string name="workouts">Workouts</string>
+    <string name="workout">Workout</string>
+    <string name="minute">Minute</string>
+    <string name="minutes">minutes</string>
+    <string name="week_goal">Week Goal</string>
+    <string name="go">Go!</string>
+    <string name="back_to_top">back to top</string>
+    <string name="set_a_goal">+ Set a goal</string>
+    <string name="introduction">Introduction</string>
+    <string name="dummy_text">Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="start">Start</string>
+    <string name="reset">Reset</string>
+    <string name="dummy_ex_detail">Lie flat on the floor, and lift your hips off the floor while keeping your back straight.\n\nHold this position as long as you can.\n\nThe bridge exercise strengthens the whole abdomen, the lower back and the glutes.</string>
+    <string name="reset_plan">Reset plan</string>
+    <string name="edit_plan">Edit plan</string>
+    <string name="current">Current</string>
+    <string name="replace_with">Replace With</string>
+    <string name="replace">Replace</string>
+    <string name="replace_exercise">Replace Exercise</string>
+    <string name="save_changes_que">Save changes?</string>
+    <string name="select_music">Select music</string>
+    <string name="ready_to_go">Ready to go!</string>
+    <string name="sound_options">Sound options</string>
+    <string name="mute">Mute</string>
+    <string name="voice_guide">Voice guide</string>
+    <string name="voice_guide_des">Know your next workout and how many times you need to do it.</string>
+    <string name="coach_tips">Coach tips</string>
+    <string name="coach_tips_des">Follow coach tips to make sure you use the right from during each exercise.</string>
+    <string name="done">Done</string>
+    <string name="video_underline"><u>Video</u></string>
+    <string name="animation"><u>Animation</u></string>
+    <string name="quite_exercise_msg">Hold on and think about why you started.</string>
+    <string name="quit">Quit</string>
+    <string name="str_continue">Continue</string>
+    <string name="come_back_in_30_minute"><u>Come back in 30 minute</u></string>
+    <string name="rest">Rest</string>
+    <string name="_20s">+20s</string>
+    <string name="skip">Skip</string>
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+    <string name="recent">Recent</string>
+    <string name="add">Add</string>
+    <string name="add_exercise">Add Exercise</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="new_training">New Training</string>
+    <string name="please_name_your_plan">Please name your plan</string>
+    <string name="exercises">Exercises</string>
+    <string name="duration">Duration</string>
+    <string name="share">Share</string>
+    <string name="reminder_colon">Reminder:</string>
+    <string name="weight">Weight</string>
+    <string name="kg">KG</string>
+    <string name="lb">LB</string>
+    <string name="bmi">BMI</string>
+    <string name="tap_here_to_input_your_height">Tap <b>here</b> to input your height</string>
+    <string name="sync_to_google_fit">Sync to Google Fit</string>
+    <string name="i_feel">I feel</string>
+    <string name="easy">Easy</string>
+    <string name="exhausted">Exhausted</string>
+    <string name="height">Height</string>
+    <string name="cm">CM</string>
+    <string name="in">IN</string>
+    <string name="view_all">View all</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="year_of_birth">Year of Birth</string>
+    <string name="previous">Previous</string>
+    <string name="history">History</string>
+    <string name="repeat">Repeat</string>
+    <string name="records">Records</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="heaviest">Heaviest</string>
+    <string name="lightest">Lightest</string>
+    <string name="edit">Edit</string>
+    <string name="training_rest">Training rest</string>
+    <string name="countdown_time">Countdown Time</string>
+    <string name="go_premium">Go Premium</string>
+    <string name="voice_options_tts">Voice Options (TTS)</string>
+    <string name="test_voice">Test Voice</string>
+    <string name="download_tts_engine">Download TTs Engine</string>
+    <string name="select_tts_engine">Select TTS Engine</string>
+    <string name="google_text_to_speech_engine">Google Text-to-speech Engine</string>
+    <string name="voice_language">Voice Language</string>
+    <string name="download_more_tts_language_data">Download more TTS language data</string>
+    <string name="device_tts_setting">Device TTS Setting</string>
+    <string name="health_data">Health Data</string>
+    <string name="remind_me_to_workout_every_day">Remind me to workout every day</string>
+    <string name="metric_and_imperial_units"><![CDATA[Metric & Imperial Units]]></string>
+    <string name="language_options">Language options</string>
+    <string name="keep_the_screen_on">Keep the screen on</string>
+    <string name="general_settings">General Settings</string>
+    <string name="community">Community</string>
+    <string name="share_with_friends">Share with friends</string>
+    <string name="support_us">Support Us</string>
+    <string name="rate_us">Rate us</string>
+    <string name="feedback">Feedback</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="did_you_hear_test_voice">Did you hear the test voice?</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dl_test_voice_no_msg_test">The TTS engine you are using is not working now, please double check it, switch to another TTS engine, or download TTS voice language.</string>
+    <string name="please_choose_guide_voice_engine">Please choose guide voice engine:</string>
+    <string name="set">SET</string>
+    <string name="weight_unit">Weight Unit</string>
+    <string name="height_unit">Height Unit</string>
+    <string name="access_all_features">Access all features</string>
+    <string name="iap_detail">1. All payments made through Play Store are controlled and managed by Google.\n2. Payments will be charged to your Play Store Account at confirmation of purchase.\n3. Subscription automatically renews, unless auto-renew is turned off at least 24 hours before the end of the current period.\n4. Account will be charged for renewal within 24 hours prior to the end of the current period.\n5. You may manage your subscriptions and auto-renewal may be turned off by going to your Play Store account settings after purchase.\n6. Any unused portion of a free trial period, if offered, will be forfeited if you purchase a subscription to the publication, where applicable.</string>
+    <string name="unlock_training">Unlock Training</string>
+    <string name="start_the_free_trail_to_unlock_all_training_plans">Start the free trail to unlock all training plans.</string>
+    <string name="pain_relief">Pain relief</string>
+    <string name="flexibility">Flexibility</string>
+    <string name="training_goal">Training goal</string>
+    <string name="for_beginners">For beginners</string>
+    <string name="posture_correction">Posture correction</string>
+    <string name="fat_burning">Fat burning</string>
+    <string name="body_focus">Body focus</string>
+    <string name="short_workout">Short workout</string>
+    <string name="long_workout">Long workout</string>
+
+    <string name="routine">Routine</string>
+    <string name="mins">Mins</string>
+    <string name="test">Test</string>
+
+    <string name="tip">Tip</string>
+    <string name="confirm_delete">Confirm delete?</string>
+    <string name="delete_confirmation_msg">Are you sure you want to delete it?</string>
+    <string name="week">Week</string>
+
+    <string name="privacy_policy_link">https://sites.google.com/view/femalestretchingexercises-pp/home</string>
+    <string name="do_it_again">Do it again</string>
+    <string name="version_1_2">Version 1.0</string>
+
+</resources>

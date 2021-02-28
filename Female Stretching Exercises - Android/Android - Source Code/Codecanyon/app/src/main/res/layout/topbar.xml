@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isBackShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isDiscoverShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isMenuShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isLogoutShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isInterNetAvailable"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isInterNetAvailableShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isHomeShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isSaveShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isMoreShow"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="topBarClickListener"
+            type="com.stretching.interfaces.TopBarClickListener" />
+
+        <variable
+            name="isSyncingShow"
+            type="java.lang.Boolean" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:background="@color/primary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center">
+
+                <com.common.view.CTextView
+                    android:id="@+id/tvTitleText_"
+                    style="@style/txt_fff_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/app_name" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:contentDescription="@null"
+                android:padding="10dp"
+                android:src="@drawable/ic_menu"
+                android:tint="@color/white"
+                android:visibility="@{isMenuShow ? View.VISIBLE : View.GONE, default=gone}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgBack_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:contentDescription="@null"
+                android:padding="10dp"
+                android:onClick="@{(v)->topBarClickListener.onTopBarClickListener(v,@string/back)}"
+                android:src="@drawable/td_btn_back_w"
+                android:scaleType="fitCenter"
+                android:visibility="@{isBackShow ? View.VISIBLE : View.GONE, default=gone}" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:contentDescription="@null"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:onClick="@{(v)->topBarClickListener.onTopBarClickListener(v,@string/menu_discover)}"
+                    android:src="@drawable/ic_library"
+                    android:visibility="@{isDiscoverShow ? View.VISIBLE : View.GONE, default=gone}" />
+
+
+                <!--<androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:contentDescription="@null"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_internet_not_connected"
+                    android:visibility="@{isInterNetAvailable ? View.GONE : View.VISIBLE, default=gone}" />-->
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:contentDescription="@null"
+                    android:onClick="@{(v)->topBarClickListener.onTopBarClickListener(v,@string/more)}"
+                    android:src="@drawable/ic_more"
+                    android:padding="10dp"
+                    android:visibility="@{isMoreShow ? View.VISIBLE : View.GONE, default=gone}" />
+
+                <com.common.view.CMTextView
+                    style="@style/txt_fff_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:onClick="@{(v)->topBarClickListener.onTopBarClickListener(v,@string/save)}"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/save"
+                    android:textAllCaps="true"
+                    android:visibility="@{isSaveShow ? View.VISIBLE : View.GONE, default=gone}" />
+
+
+            </LinearLayout>
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1px"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:background="@color/gray_light"/>-->
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</layout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PinView">
+        <attr name="pinBackground" format="reference"/>
+        <attr name="pinLength" format="integer"/>
+        <attr name="pinWidth" format="dimension"/>
+        <attr name="pinHeight" format="dimension"/>
+        <attr name="splitWidth" format="dimension"/>
+        <attr name="cursorVisible" format="boolean"/>
+        <attr name="password" format="boolean"/>
+        <attr name="forceKeyboard" format ="boolean"/>
+        <attr name="hint" format="string"/>
+        <attr name="inputType"/>
+        <attr name="textSize" format="dimension"/>
+    </declare-styleable>
+    <attr name="inputType" format="enum">
+        <enum name="text" value="0"/>
+        <enum name="number" value="1"/>
+    </attr>
+
+    <declare-styleable name="ShadowView">
+        <attr name="android:foreground"/>
+        <attr name="shadowMargin" format="dimension"/>
+        <attr name="shadowMarginTop" format="dimension"/>
+        <attr name="shadowMarginLeft" format="dimension"/>
+        <attr name="shadowMarginRight" format="dimension"/>
+        <attr name="shadowMarginBottom" format="dimension"/>
+        <attr name="cornerRadius" format="dimension"/>
+        <attr name="cornerRadiusTL" format="dimension"/>
+        <attr name="cornerRadiusTR" format="dimension"/>
+        <attr name="cornerRadiusBL" format="dimension"/>
+        <attr name="cornerRadiusBR" format="dimension"/>
+        <attr name="foregroundColor" format="color"/>
+        <attr name="shadowColor" format="color"/>
+        <attr name="shadowDx" format="float"/>
+        <attr name="shadowDy" format="float"/>
+        <attr name="shadowRadius" format="dimension"/>
+        <attr name="backgroundColor" format="color"/>
+    </declare-styleable>
+    <declare-styleable name="ShadowView_Layout">
+        <attr name="layout_gravity">
+            <flag name="top"
+                  value="0x30"/>
+            <flag name="bottom"
+                  value="0x50"/>
+            <flag name="left"
+                  value="0x03"/>
+            <flag name="right"
+                  value="0x05"/>
+            <flag name="center_vertical"
+                  value="0x10"/>
+            <flag name="fill_vertical"
+                  value="0x70"/>
+            <flag name="center_horizontal"
+                  value="0x01"/>
+            <flag name="fill_horizontal"
+                  value="0x07"/>
+            <flag name="center"
+                  value="0x11"/>
+            <flag name="fill"
+                  value="0x77"/>
+            <flag name="clip_vertical"
+                  value="0x80"/>
+            <flag name="clip_horizontal"
+                  value="0x08"/>
+            <flag name="start"
+                  value="0x00800003"/>
+            <flag name="end"
+                  value="0x00800005"/>
+        </attr>
+    </declare-styleable>
+
+    <attr name="compactCalendarEventIndicatorStyle" format="enum">
+        <enum name="fill_large_indicator" value="1" />
+        <enum name="no_fill_large_indicator" value="2" />
+        <enum name="small_indicator" value="3" />
+    </attr>
+    <attr name="compactCalendarCurrentDayIndicatorStyle" format="enum">
+        <enum name="fill_large_indicator" value="1" />
+        <enum name="no_fill_large_indicator" value="2" />
+    </attr>
+    <attr name="compactCalendarCurrentSelectedDayIndicatorStyle" format="enum">
+        <enum name="fill_large_indicator" value="1" />
+        <enum name="no_fill_large_indicator" value="2" />
+    </attr>
+    <declare-styleable name="CompactCalendarView">
+        <attr name="compactCalendarTextSize" format="dimension"/>
+        <attr name="compactCalendarBackgroundColor" format="color"/>
+        <attr name="compactCalendarCurrentDayBackgroundColor" format="color"/>
+        <attr name="compactCalendarCurrentDayTextColor" format="color"/>
+        <attr name="compactCalendarEventDayTextColor" format="color"/>
+        <attr name="compactCalendarCurrentSelectedDayBackgroundColor" format="color"/>
+        <attr name="compactCalendarCurrentSelectedDayTextColor" format="color"/>
+        <attr name="compactCalendarTextColor" format="color"/>
+        <attr name="compactCalendarMultiEventIndicatorColor" format="color"/>
+        <attr name="compactCalendarTargetHeight" format="dimension"/>
+        <attr name="compactCalendarEventIndicatorStyle"/>
+        <attr name="compactCalendarCurrentDayIndicatorStyle"/>
+        <attr name="compactCalendarCurrentSelectedDayIndicatorStyle"/>
+        <attr name="compactCalendarDisplayOtherMonthDays" format="boolean"/>
+        <attr name="compactCalendarShouldSelectFirstDayOfMonthOnScroll" format="boolean"/>
+        <attr name="compactCalendarOtherMonthDaysTextColor" format="color"/>
+    </declare-styleable>
+</resources>

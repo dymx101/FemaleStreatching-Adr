@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_10sdp">
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/npDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:np_dividerColor="@color/number_picker_divider_color"
+            app:np_dividerThickness="1dp"
+            app:np_max="7"
+            app:np_min="1"
+            app:np_selectedTextColor="@color/black"
+            app:np_selectedTextSize="20sp"
+            app:np_textColor="@color/black"
+            app:np_textSize="20sp"
+            app:np_value="4" />
+
+        <com.common.view.CTextView
+            style="@style/txt_000_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:text="@string/days" />
+
+
+    </LinearLayout>
+
+</layout>

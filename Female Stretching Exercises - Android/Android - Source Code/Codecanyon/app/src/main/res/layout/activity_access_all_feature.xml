@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="handler"
+            type="com.stretching.AccessAllFeaturesActivity.ClickHandler" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    app:layout_collapseMode="parallax">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/title_image"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bg_pay_page_top"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/view_mask"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/scrim_bottom_top"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:onClick="@{(v)->handler.onBackClick()}"
+                        android:padding="10dp"
+                        android:src="@drawable/td_btn_back_w"
+                        app:layout_collapseMode="pin"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_58sdp">
+
+                    <com.common.view.CBTextView
+                        style="@style/txt_fff_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/_12sdp"
+                        android:paddingTop="@dimen/_12sdp"
+                        android:text="@string/access_all_features" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:onClick="@{(v)->handler.onPerMonthClick()}">
+
+                        <View
+                            android:id="@+id/borderPerMonth"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:background="@drawable/bg_green_border_radius_8"
+                            android:visibility="invisible"
+                            app:layout_constraintBottom_toBottomOf="@id/llPerMonth"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/llPerMonth" />
+
+                        <LinearLayout
+                            android:id="@+id/llPerMonth"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:background="@drawable/bg_dark_blue_radius_8"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_12sdp"
+                            android:paddingEnd="@dimen/_12sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.common.view.CBTextView
+                                android:id="@+id/tvMonthly"
+                                style="@style/txt_fff_18"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="₹49.00/Month" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imgCheckPerMonth"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/bg_circle_border" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:onClick="@{(v)->handler.onFreeTrialClick()}">
+
+                        <View
+                            android:id="@+id/borderFreeTrial"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:background="@drawable/bg_green_border_radius_8"
+                            android:visibility="invisible"
+                            app:layout_constraintBottom_toBottomOf="@id/llFreeTrial"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/llFreeTrial" />
+
+                        <LinearLayout
+                            android:id="@+id/llFreeTrial"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:background="@drawable/bg_dark_blue_radius_8"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_12sdp"
+                            android:paddingEnd="@dimen/_12sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <com.common.view.CBTextView
+                                    style="@style/txt_fff_18"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAllCaps="true"
+                                    android:text="Free 7 Days Trial"/>
+
+                                <com.common.view.CBTextView
+                                    android:id="@+id/tvYearly"
+                                    style="@style/txt_fff_14"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:text="then ₹199.00/Year"/>
+
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/imgCheckFreeTrial"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:src="@drawable/bg_circle_border" />
+
+                        </LinearLayout>
+
+                        <com.common.view.CMTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_green_radius_5"
+                            android:backgroundTint="@color/md_yellow_400"
+                            style="@style/txt_000_12"
+                            android:paddingTop="@dimen/_2sdp"
+                            android:paddingEnd="@dimen/_7sdp"
+                            android:paddingBottom="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_7sdp"
+                            android:layout_marginEnd="@dimen/_50sdp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="@id/llFreeTrial"
+                            android:layout_marginTop="3dp"
+                            android:text="Save 67%"/>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/_15sdp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_15sdp"
+                        android:orientation="vertical">
+
+                        <com.common.view.CTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTint="@color/green_text"
+                            android:drawableStart="@drawable/ic_done"
+                            style="@style/txt_fff_14"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:text="No ADS, full access to all workouts"/>
+
+                        <com.common.view.CTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTint="@color/green_text"
+                            android:drawableStart="@drawable/ic_done"
+                            style="@style/txt_fff_14"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:text="60+ stretching, exercises to move better"/>
+
+                        <com.common.view.CTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTint="@color/green_text"
+                            android:drawableStart="@drawable/ic_done"
+                            style="@style/txt_fff_14"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:text="Full body stretching, flexibility, pain relief, etc"/>
+
+                        <com.common.view.CTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTint="@color/green_text"
+                            android:drawableStart="@drawable/ic_done"
+                            style="@style/txt_fff_14"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:text="Add new workouts constantly"/>
+
+                    </LinearLayout>
+
+                    <com.common.view.CTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/_15sdp"
+                        android:paddingEnd="@dimen/_15sdp"
+                        style="@style/txt_999_12"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:text="@string/iap_detail"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.common.view.CBButtonView
+            android:id="@+id/btnContinue"
+            style="@style/txt_fff_18"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/btn_bg_round_gradiant"
+            android:layout_gravity="bottom"
+            android:text="@string/str_continue"
+            android:onClick="@{(v)->handler.onContinueClick()}"/>
+
+    </FrameLayout>
+
+
+</layout>

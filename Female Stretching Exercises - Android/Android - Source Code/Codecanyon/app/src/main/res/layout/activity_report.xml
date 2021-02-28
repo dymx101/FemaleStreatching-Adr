@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="handler"
+            type="com.stretching.ReportActivity.ClickHandler" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/topbar"
+                layout="@layout/topbar" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primary_dark"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_15sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvWorkOuts"
+                            style="@style/txt_green_22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="125" />
+
+                        <com.common.view.CBTextView
+                            style="@style/txt_999_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:text="@string/workouts"
+                            android:textAllCaps="true" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvCalorie"
+                            style="@style/txt_green_22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12" />
+
+                        <com.common.view.CBTextView
+                            style="@style/txt_999_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:text="@string/calorie"
+                            android:textAllCaps="true" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvMinutes"
+                            style="@style/txt_green_22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12" />
+
+                        <com.common.view.CBTextView
+                            style="@style/txt_999_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:text="@string/minute"
+                            android:textAllCaps="true" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/gray_light_"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10sdp">
+
+                    <com.common.view.CTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_333_16"
+                        android:text="@string/history"/>
+
+                    <com.common.view.CTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_green_16"
+                        android:textAllCaps="true"
+                        android:text="@string/more"
+                        android:onClick="@{(v)->handler.onRecordsClick()}"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvWeekGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="7"
+                    tools:listitem="@layout/item_report_week_day" />
+
+                <com.common.view.CTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    style="@style/txt_green_16"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:text="@string/records"
+                    android:onClick="@{(v)->handler.onRecordsClick()}"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_10sdp"
+                    android:background="@color/gray_light_____">
+
+                    <com.google.android.gms.ads.AdView
+                        xmlns:ads="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/adView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_gravity="bottom"
+                        ads:adSize="BANNER"
+                        ads:adUnitId="@string/BANNER" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp">
+
+                        <com.common.view.CTextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_333_16"
+                            android:text="@string/weight"/>
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:onClick="@{(v)->handler.onAddWeightClick()}"
+                            android:src="@drawable/btn_add_weight_green"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/_10sdp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <com.common.view.CTextView
+                                android:id="@+id/tvCurrentTitle"
+                                style="@style/txt_999_14"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/current"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:orientation="horizontal"
+                                app:layout_constraintTop_toBottomOf="@id/tvCurrentTitle"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent">
+
+                                <com.common.view.CBTextView
+                                    android:id="@+id/tvCurrentWeight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/txt_green_22"
+                                    android:text="0.00"
+                                    app:layout_constraintTop_toBottomOf="@id/tvCurrentTitle"
+                                    app:layout_constraintStart_toStartOf="parent"/>
+
+                                <com.common.view.CTextView
+                                    android:id="@+id/tvCurretUnit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/txt_333_14"
+                                    tools:text="kg"
+                                    android:textAllCaps="false"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    app:layout_constraintTop_toBottomOf="@id/tvCurrentTitle"
+                                    app:layout_constraintStart_toStartOf="parent"/>
+
+                            </LinearLayout>
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.common.view.CTextView
+                                android:id="@+id/tvLastTitle"
+                                style="@style/txt_999_14"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/last_30_days"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <com.common.view.CTextView
+                                android:id="@+id/tvAvgWeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_green_radius_5"
+                                android:text="-0.00 kg"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                style="@style/txt_fff_14"
+                                android:paddingTop="@dimen/_8sdp"
+                                android:paddingBottom="@dimen/_8sdp"
+                                android:paddingStart="@dimen/_15sdp"
+                                android:paddingEnd="@dimen/_15sdp"/>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <com.common.view.CTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_000_14"
+                        android:text="@string/kg"
+                        android:paddingStart="@dimen/_10sdp"/>
+
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:id="@+id/chartWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_280sdp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp">
+
+                        <com.common.view.CTextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_666_16"
+                            android:text="@string/heaviest"/>
+
+                        <com.common.view.CTextView
+                            android:id="@+id/tvHeaviestWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_666_16"
+                            tools:text="80.00 Kg"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_15sdp"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp">
+
+                        <com.common.view.CTextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_666_16"
+                            android:text="@string/lightest"/>
+
+                        <com.common.view.CTextView
+                            android:id="@+id/tvLightestWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_666_16"
+                            tools:text="80.00 Kg"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_10sdp"
+                    android:background="@color/gray_light_____"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.common.view.CMTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_000_16"
+                            android:text="BMI(kg/m\u00B2) : "/>
+
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvBMI"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            style="@style/txt_000_20"
+                            tools:text="26.79"/>
+
+                        <com.common.view.CTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_green_16"
+                            android:textAllCaps="true"
+                            android:text="@string/edit"
+                            android:onClick="@{(v)->handler.onEditBMIClick()}"
+                            android:paddingStart="@dimen/_10sdp"/>
+
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clBMIGraphView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:paddingEnd="@dimen/_7sdp">
+
+                        <RelativeLayout
+                            android:id="@+id/rlBMI"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <!-- Bmi Color view -->
+                            <LinearLayout
+                                android:id="@+id/lnyBmiGraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:background="@color/white"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="@dimen/_10sdp"
+                                android:weightSum="7">
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_weight="0.5"
+                                    android:background="@color/colorFirst" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_weight="1.5"
+                                    android:background="@color/colorSecond" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_weight="2"
+                                    android:background="@color/colorThird" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_weight="1"
+                                    android:background="@color/colorFour" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_weight="1"
+                                    android:background="@color/colorFive" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@color/colorSix" />
+
+                            </LinearLayout>
+
+                            <!-- Bmi Blank view and display bmi percentage -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="65dp"
+                                android:orientation="horizontal"
+                                android:weightSum="7">
+
+                                <View
+                                    android:id="@+id/blankView1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0" />
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.1">
+
+                                    <com.common.view.CTextView
+                                        android:id="@+id/txtBmiGrade"
+                                        style="@style/txt_000_14"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0.0" />
+
+                                    <View
+                                        android:id="@+id/BmiPosition"
+                                        android:layout_width="5dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_below="@+id/txtBmiGrade"
+                                        android:layout_centerHorizontal="true"
+                                        android:background="@color/black" />
+                                </RelativeLayout>
+
+                                <View
+                                    android:id="@+id/blankView3"
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.0"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <!-- Bmi bottom text -->
+                        <LinearLayout
+                            android:id="@+id/llBmiNumberGraph"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="7"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/rlBMI">
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="0.4"
+                                android:text="15" />
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="1.3"
+                                android:text="16" />
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="2.1"
+                                android:text="18.5" />
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="1.1"
+                                android:text="25" />
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="1"
+                                android:text="30" />
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="0.80"
+                                android:text="35" />
+
+                            <com.common.view.CTextView
+                                style="@style/txt_000_14"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_weight="0.35"
+                                android:text="40" />
+
+                        </LinearLayout>
+
+                        <com.common.view.CTextView
+                            android:id="@+id/tvWeightString"
+                            style="@style/txt_green_16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:text="demo text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/llBmiNumberGraph" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/gray_light_"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10sdp">
+
+                    <com.common.view.CTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_333_16"
+                        android:text="@string/height"/>
+
+                    <com.common.view.CTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_green_16"
+                        android:textAllCaps="true"
+                        android:text="@string/edit"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:onClick="@{(v)->handler.onEditBMIClick()}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp">
+
+                    <com.common.view.CTextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_green_16"
+                        android:text="@string/current"/>
+
+                    <com.common.view.CEditTextView
+                        android:id="@+id/editCurrHeightCM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_666_16"
+                        android:hint="0.0CM"
+                        tools:text="172.65 CM"
+                        android:focusable="false"
+                        android:onClick="@{(v)->handler.onEditBMIClick()}"/>
+
+                    <com.common.view.CEditTextView
+                        android:id="@+id/editCurrHeightFT"
+                        style="@style/txt_666_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="0.0 FT"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:focusable="false"
+                        android:visibility="gone"
+                        android:onClick="@{(v)->handler.onEditBMIClick()}"/>
+
+                    <com.common.view.CEditTextView
+                        android:id="@+id/editCurrHeightIn"
+                        style="@style/txt_666_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="0.0 IN"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:focusable="false"
+                        android:visibility="gone"
+                        android:onClick="@{(v)->handler.onEditBMIClick()}"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</layout>

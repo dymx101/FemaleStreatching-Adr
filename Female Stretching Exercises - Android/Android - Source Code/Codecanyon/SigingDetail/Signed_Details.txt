@@ -1,0 +1,23 @@
+Alias: FemaleStretching
+
+Password: NinetyNineApps_FemaleStretching
+
+Validity: 100 years
+
+First and Last Name: NinetyNineApps
+
+Organizational Unit: NinetyNineApps
+
+Organization: NinetyNineApps
+
+City: Surat
+
+State: Gujarat
+
+Country Code: IN
+
+version code : 1
+
+version name : 1.0
+
+

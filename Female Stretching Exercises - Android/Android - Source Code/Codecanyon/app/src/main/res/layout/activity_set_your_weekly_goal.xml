@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isLoading"
+            type="java.lang.Boolean" />
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:background="@color/bg_common_blue"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_5sdp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/td_btn_back_w"/>
+
+        <LinearLayout
+            android:id="@+id/llContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp">
+
+            <com.common.view.CBTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/txt_fff_18"
+                android:text="@string/set_your_weekly_goal"
+                android:textAllCaps="true"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_25sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/_50sdp"
+                    android:paddingBottom="@dimen/_50sdp"
+                    android:paddingStart="@dimen/_15sdp"
+                    android:paddingEnd="@dimen/_15sdp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <com.common.view.CTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_666_14"
+                        android:text="@string/tip_weekly_goal"/>
+
+                    <com.common.view.CMTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_000_16"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="Weekly training days"/>
+
+                    <LinearLayout
+                        android:id="@+id/llTrainingDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp">
+
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvTrainingDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_green_18"
+                            android:drawableEnd="@drawable/ic_arrow_drop_down"
+                            android:drawableTint="@color/green_text"
+                            android:text="4 Days"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/gray_light_"/>
+
+                    <com.common.view.CMTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/txt_000_16"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="First day of week"/>
+
+                    <LinearLayout
+                        android:id="@+id/llFirstDayOfWeek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp">
+
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvFirstDayOfWeek"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/txt_green_18"
+                            android:drawableEnd="@drawable/ic_arrow_drop_down"
+                            android:drawableTint="@color/green_text"
+                            android:text="Sunday"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/gray_light_"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <com.common.view.CBButtonView
+            android:id="@+id/btnSave"
+            style="@style/txt_fff_18"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height"
+            android:paddingStart="@dimen/_65sdp"
+            android:paddingEnd="@dimen/_65sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_50sdp"
+            android:background="@drawable/btn_bg_round_gradiant"
+            android:text="@string/save"
+            />
+
+    </LinearLayout>
+
+</layout>
