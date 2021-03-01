@@ -83,3 +83,5 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+.DS_Store
+/Female Stretching Exercises - Android/Android - Source Code/Codecanyon/.idea/
