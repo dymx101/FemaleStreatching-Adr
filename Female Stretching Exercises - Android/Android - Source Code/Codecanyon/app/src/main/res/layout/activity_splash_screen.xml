@@ -30,13 +30,15 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/app_icon_round_corner" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/splash_tip_bottom" />
     </LinearLayout>
 
