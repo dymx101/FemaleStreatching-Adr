@@ -7,11 +7,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.stretching.databinding.ActivitySetYourWeeklyGoalBinding
 import com.stretching.databinding.DialogGoalDayPickerBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class SetYourWeeklyGoalActivity : BaseActivity() {
+class SetYourWeeklyGoalActivity : BaseActivity(), CallbackListener {
     val TAG = SetYourWeeklyGoalActivity::class.java.name + Constant.ARROW
 
     var binding: ActivitySetYourWeeklyGoalBinding? = null
@@ -139,12 +140,25 @@ class SetYourWeeklyGoalActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

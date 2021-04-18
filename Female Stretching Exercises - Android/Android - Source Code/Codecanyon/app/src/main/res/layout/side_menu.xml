@@ -97,7 +97,7 @@
                 android:clickable="false"
                 android:gravity="end"
                 android:padding="6dp"
-                android:text="@string/version_1_2"
+                android:text="@string/version_1_1"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:visibility="visible" />

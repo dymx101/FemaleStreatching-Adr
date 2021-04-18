@@ -2,6 +2,7 @@ package com.stretching
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -10,12 +11,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.MusicListAdapter
 import com.stretching.databinding.ActivityMusicListBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.Music
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class MusicListActivity : BaseActivity() {
+class MusicListActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityMusicListBinding? = null
     var adapter: MusicListAdapter? = null
@@ -30,6 +32,10 @@ class MusicListActivity : BaseActivity() {
         init()
     }
 
+    override fun onResume() {
+        openInternetDialog(this)
+        super.onResume()
+    }
     private fun initIntentParam() {
         try {
             /*if (intent.extras != null) {
@@ -96,25 +102,25 @@ class MusicListActivity : BaseActivity() {
 
         if (isRepeat) {
             binding!!.imgRepeat.setColorFilter(
-                ContextCompat.getColor(this, R.color.white),
-                android.graphics.PorterDuff.Mode.SRC_IN
+                    ContextCompat.getColor(this, R.color.white),
+                    android.graphics.PorterDuff.Mode.SRC_IN
             )
         } else {
             binding!!.imgRepeat.setColorFilter(
-                ContextCompat.getColor(this, R.color.gray_light_),
-                android.graphics.PorterDuff.Mode.SRC_IN
+                    ContextCompat.getColor(this, R.color.gray_light_),
+                    android.graphics.PorterDuff.Mode.SRC_IN
             )
         }
 
         if (isShuffle) {
             binding!!.imgSuffle.setColorFilter(
-                ContextCompat.getColor(this, R.color.white),
-                android.graphics.PorterDuff.Mode.SRC_IN
+                    ContextCompat.getColor(this, R.color.white),
+                    android.graphics.PorterDuff.Mode.SRC_IN
             )
         } else {
             binding!!.imgSuffle.setColorFilter(
-                ContextCompat.getColor(this, R.color.gray_light_),
-                android.graphics.PorterDuff.Mode.SRC_IN
+                    ContextCompat.getColor(this, R.color.gray_light_),
+                    android.graphics.PorterDuff.Mode.SRC_IN
             )
         }
     }
@@ -161,21 +167,21 @@ class MusicListActivity : BaseActivity() {
                 startActivity(i)
             } else {
                 val isShuffle =
-                    Utils.getPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_SHUFFLE, false)
+                        Utils.getPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_SHUFFLE, false)
                 if (isShuffle) {
                     Utils.setPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_SHUFFLE, false)
                     binding!!.imgSuffle.setColorFilter(
-                        ContextCompat.getColor(
-                            this@MusicListActivity,
-                            R.color.gray_light_
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                            ContextCompat.getColor(
+                                    this@MusicListActivity,
+                                    R.color.gray_light_
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
                     )
                 } else {
                     binding!!.imgSuffle.setColorFilter(
-                        ContextCompat.getColor(
-                            this@MusicListActivity,
-                            R.color.white
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                            ContextCompat.getColor(
+                                    this@MusicListActivity,
+                                    R.color.white
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
                     )
                     Utils.setPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_SHUFFLE, true)
                 }
@@ -188,21 +194,21 @@ class MusicListActivity : BaseActivity() {
                 startActivity(i)
             } else {
                 val isRepeat =
-                    Utils.getPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_REPEAT, false)
+                        Utils.getPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_REPEAT, false)
                 if (isRepeat) {
                     Utils.setPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_REPEAT, false)
                     binding!!.imgRepeat.setColorFilter(
-                        ContextCompat.getColor(
-                            this@MusicListActivity,
-                            R.color.gray_light_
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                            ContextCompat.getColor(
+                                    this@MusicListActivity,
+                                    R.color.gray_light_
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
                     )
                 } else {
                     binding!!.imgRepeat.setColorFilter(
-                        ContextCompat.getColor(
-                            this@MusicListActivity,
-                            R.color.white
-                        ), android.graphics.PorterDuff.Mode.SRC_IN
+                            ContextCompat.getColor(
+                                    this@MusicListActivity,
+                                    R.color.white
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
                     )
                     Utils.setPref(this@MusicListActivity, Constant.PREF_IS_MUSIC_REPEAT, true)
                 }
@@ -214,6 +220,9 @@ class MusicListActivity : BaseActivity() {
                 val i = Intent(this@MusicListActivity, AccessAllFeaturesActivity::class.java)
                 startActivity(i)
             } else {
+                for (i in musicList!!.indices) {
+                    Log.e("TAG", "onNextClick::::: " + musicList!![i].name + "  " + musicList!![i].fileName + "  " + musicList!!.size)
+                }
                 MyApplication.nextMusic()
             }
         }
@@ -223,9 +232,24 @@ class MusicListActivity : BaseActivity() {
                 val i = Intent(this@MusicListActivity, AccessAllFeaturesActivity::class.java)
                 startActivity(i)
             } else {
+                for (i in musicList!!.indices) {
+                    Log.e("TAG", "onPrevClick::::: " + musicList!![i].name + "  " + musicList!![i].fileName + "  " + musicList!!.size)
+                }
                 MyApplication.prevMusic()
             }
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

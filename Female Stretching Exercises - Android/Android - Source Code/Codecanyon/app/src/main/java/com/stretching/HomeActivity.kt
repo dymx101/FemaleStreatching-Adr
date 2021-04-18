@@ -1,47 +1,74 @@
 package com.stretching
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.stretching.adapter.HomePlansAdapter
-import com.stretching.adapter.HomePlansExpandableAdapter
 import com.stretching.adapter.HomeWeekGoalAdapter
-import com.stretching.adapter.WorkoutListAdapter
 import com.stretching.databinding.ActivityHomeBinding
+import com.stretching.interfaces.AdsCallback
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.objects.HistoryDetailsClass
-import com.stretching.objects.HistoryTableClass
 import com.stretching.objects.HomePlanTableClass
-import com.stretching.objects.HomeTrainingPlans
+import com.stretching.utils.*
+import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
+import com.stretching.utils.Debug
 import com.stretching.utils.ExitStrategy
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
 import kotlin.math.roundToInt
 
 
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityHomeBinding? = null
     var homeWeekGoalAdapter: HomeWeekGoalAdapter? = null
     var homePlansAdapter: HomePlansAdapter? = null
     var recentPlan: HomePlanTableClass? = null
     var lastWorkout: HistoryDetailsClass? = null
+    var onClickAd = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        Log.e("TAG", "onCreate::::Main Activity::::::: " )
+
+        Log.e("TAG", "MainActivity:::::::::onCreate::::Main Activity:::  ")
         initTopBar(binding!!.topbar)
         initDrawerMenu(true)
         init()
+
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this, binding!!.llAdViewFacebook)
+        } else {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+        subScribeToFirebaseTopic()
+
+    }
+
+    private fun subScribeToFirebaseTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic("female_stretching")
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Debug.e("subScribeFirebaseTopic", ": Fail")
+                } else {
+                    Debug.e("subScribeFirebaseTopic", ": Success")
+                }
+            }
     }
 
     private fun init() {
@@ -59,25 +86,34 @@ class HomeActivity : BaseActivity() {
 
             override fun onItemClick(position: Int, view: View) {
                 val item = homePlansAdapter!!.getItem(position)
-                Log.e("TAG", "onItemClick:::::Home::: ${Gson().toJson(item)}" )
-                if (item.hasSubPlan) {
-                    val i = Intent(this@HomeActivity, SubPlanActivity::class.java)
-                    i.putExtra("workoutPlanData", Gson().toJson(item))
-                    startActivity(i)
-                } else if (item.planDays.equals("YES")) {
-                    val i = Intent(this@HomeActivity, DaysPlanDetailActivity::class.java)
-                    i.putExtra("workoutPlanData", Gson().toJson(item))
-                    startActivity(i)
-                } else {
-                    val i = Intent(this@HomeActivity, ExercisesListActivity::class.java)
-                    i.putExtra("workoutPlanData", Gson().toJson(item))
-                    if (item.isPro){
-                        i.putExtra(Constant.IS_PURCHASE, true)
-                    }else {
-                        i.putExtra(Constant.IS_PURCHASE, false)
+                if (!item.isPro) {
+                    Log.e("TAG", "onItemClick:OnItemL:::: ${item.isPro}")
+                    if (onClickAd == Constant.FIRST_CLICK_COUNT && Constant.FIRST_CLICK_COUNT != 0) {
+                        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+                            AdUtils.loadGoogleFullAd(this@HomeActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenMove(position)
+                                }
+                            })
+                        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+                            AdUtils.loadFacebookFullAd(this@HomeActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenMove(position)
+                                }
+                            })
+                        } else {
+                            startNextScreenMove(position)
+                        }
+                        onClickAd = 1
+                    } else {
+                        startNextScreenMove(position)
+                        onClickAd += 1
                     }
-                    startActivity(i)
+                }else{
+                    startNextScreenMove(position)
                 }
+
+
             }
         })
 
@@ -86,6 +122,28 @@ class HomeActivity : BaseActivity() {
 
     }
 
+
+    fun startNextScreenMove(position: Int) {
+        val item = homePlansAdapter!!.getItem(position)
+        if (item.hasSubPlan) {
+            val i = Intent(this@HomeActivity, SubPlanActivity::class.java)
+            i.putExtra("workoutPlanData", Gson().toJson(item))
+            startActivity(i)
+        } else if (item.planDays.equals("YES")) {
+            val i = Intent(this@HomeActivity, DaysPlanDetailActivity::class.java)
+            i.putExtra("workoutPlanData", Gson().toJson(item))
+            startActivity(i)
+        } else {
+            val i = Intent(this@HomeActivity, ExercisesListActivity::class.java)
+            i.putExtra("workoutPlanData", Gson().toJson(item))
+            if (item.isPro) {
+                i.putExtra(Constant.IS_PURCHASE, true)
+            } else {
+                i.putExtra(Constant.IS_PURCHASE, false)
+            }
+            startActivity(i)
+        }
+    }
 
     private fun setupWeekTopData() {
 
@@ -180,10 +238,12 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         changeSelection(0)
         setupWeekTopData()
         homePlansAdapter?.notifyDataSetChanged()
+        Log.e("TAG", "MainActivity:::::::::onResume:::Main Activity:::::: ")
     }
 
 
@@ -243,7 +303,7 @@ class HomeActivity : BaseActivity() {
             } else {
                 val i = Intent(this@HomeActivity, ExercisesListActivity::class.java)
                 i.putExtra("workoutPlanData", Gson().toJson(recentPlan))
-                i.putExtra(Constant.IS_PURCHASE,false)
+                i.putExtra(Constant.IS_PURCHASE, false)
                 startActivity(i)
             }
 
@@ -271,6 +331,19 @@ class HomeActivity : BaseActivity() {
             e.printStackTrace()
         }
     }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
+    }
+
 
     /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

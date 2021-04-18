@@ -5,35 +5,52 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.youtube.player.internal.i
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.WorkoutListAdapter
 import com.stretching.databinding.ActivityExerciseListBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class ExercisesListActivity : BaseActivity() {
+class ExercisesListActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityExerciseListBinding? = null
     var workoutListAdapter: WorkoutListAdapter? = null
     var workoutPlanData: HomePlanTableClass? = null
     var isCheck:Boolean=false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exercise_list)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
-        initIntentParam()
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+//        showUnlockTrainingDialog(this)
 
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
+        initIntentParam()
         init()
     }
 
@@ -118,6 +135,8 @@ class ExercisesListActivity : BaseActivity() {
 
         } else {
             workoutListAdapter!!.addAll(dbHelper.getHomeDetailExList(workoutPlanData!!.planId!!))
+            Log.e("TAG", "getExerciseData: ::::  "+workoutPlanData!!.planId +"  "+Gson().toJson(dbHelper.getHomeDetailExList(workoutPlanData!!.planId!!)))
+
         }
     }
 
@@ -136,12 +155,14 @@ class ExercisesListActivity : BaseActivity() {
                 binding!!.tvTitleText.text = "Day " + intent.getStringExtra("day_name")
                 binding!!.tvTitle.text = "Day " + intent.getStringExtra("day_name")
                 binding!!.tvShortDes.text = workoutPlanData!!.planName
+                Log.e("TAG", "fillData:11111111 "+ workoutPlanData!!.planName)
             } else {
                 binding!!.tvTitleText.text = workoutPlanData!!.planName
                 binding!!.tvTitle.text = workoutPlanData!!.planName
 
                 if (workoutPlanData!!.shortDes.isNullOrEmpty().not()) {
                     binding!!.tvShortDes.text = workoutPlanData!!.shortDes
+                    Log.e("TAG", "fillData:2222222222 "+ workoutPlanData!!.shortDes)
                 }
             }
 
@@ -184,6 +205,7 @@ class ExercisesListActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -227,6 +249,18 @@ class ExercisesListActivity : BaseActivity() {
         if (requestCode == 7979 && resultCode == Activity.RESULT_OK) {
             getExerciseData()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

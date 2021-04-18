@@ -13,327 +13,208 @@
 
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_light_____"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/title_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/splash_screen" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="#73000000"/>
-
-                </FrameLayout>
-
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/image_cup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/rp_complete_cup"
-                    android:layout_marginTop="@dimen/_40sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <LinearLayout
-                    android:id="@+id/llExercises"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_35sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/image_cup">
-
-                    <com.common.view.CBTextView
-                        android:id="@+id/tvTotalEx"
-                        style="@style/txt_fff_20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="10" />
-
-                    <com.common.view.CMTextView
-                        style="@style/txt_fff_14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/exercises" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llCalorie"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/image_cup">
-
-                    <com.common.view.CBTextView
-                        android:id="@+id/tvCalorie"
-                        style="@style/txt_fff_20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="0" />
-
-                    <com.common.view.CMTextView
-                        style="@style/txt_fff_14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/calorie" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llDuration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_35sdp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/image_cup">
-
-                    <com.common.view.CBTextView
-                        android:id="@+id/tvDuration"
-                        style="@style/txt_fff_20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="00:18" />
-
-                    <com.common.view.CMTextView
-                        style="@style/txt_fff_14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/duration" />
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/btnShare"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/btn_height"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:background="@drawable/btn_bg_round_gradiant"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/_20sdp"
-                    android:paddingEnd="@dimen/_20sdp"
-                    android:onClick="@{(v)->handler.onShareClick()}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/llCalorie">
-
-                    <com.common.view.CBTextView
-                        style="@style/txt_fff_18"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_share"
-                        android:drawablePadding="@dimen/_15sdp"
-                        android:drawableTint="@color/white"
-                        android:text="@string/share" />
-
-                </LinearLayout>
-
-                <com.common.view.CBTextView
-                    style="@style/txt_fff_16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_15sdp"
-                    android:onClick="@{(v)->handler.onDoItAgainClick()}"
-                    android:text="@string/do_it_again"
-                    android:textAllCaps="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/btnShare"
-                    app:layout_constraintStart_toStartOf="@+id/btnShare"
-                    app:layout_constraintTop_toBottomOf="@id/btnShare" />
-
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imgBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:onClick="@{(v)->handler.onBackClick()}"
-                    android:padding="10dp"
-                    android:src="@drawable/td_btn_back_w"
-                    app:layout_collapseMode="pin"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/gray_light_____"
                 android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="4dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_height="wrap_content">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/title_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/splash_screen" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="#73000000" />
+
+                    </FrameLayout>
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_cup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_40sdp"
+                        android:src="@drawable/rp_complete_cup"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/llExercises"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_12sdp">
+                        android:layout_marginStart="@dimen/_35sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/image_cup">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/rp_ic_reminder_green" />
-
-                        <com.common.view.CMTextView
-                            style="@style/txt_000_16"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:layout_weight="1"
-                            android:text="@string/reminder_colon" />
-
-                        <com.common.view.CMTextView
-                            android:id="@+id/tvReminders"
-                            style="@style/txt_666_16"
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvTotalEx"
+                            style="@style/txt_fff_20"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:maxWidth="@dimen/_80sdp"
-                            android:singleLine="true"
-                            android:ellipsize="end"
-                            tools:text="20:00" />
+                            tools:text="10" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="@dimen/_30sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_gravity="center"
-                            android:paddingStart="@dimen/_15sdp"
-                            android:paddingBottom="@dimen/_10sdp"
-                            android:paddingTop="@dimen/_10sdp"
-                            android:onClick="@{(v)->handler.onAddReminderClick()}"
-                            android:src="@drawable/rp_ic_add_green" />
+                        <com.common.view.CMTextView
+                            style="@style/txt_fff_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/exercises" />
+
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="4dp"
-                    app:cardUseCompatPadding="true">
-
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/llCalorie"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_12sdp">
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/image_cup">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/rp_ic_weight_green" />
-
-                        <com.common.view.CMTextView
-                            style="@style/txt_000_16"
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvCalorie"
+                            style="@style/txt_fff_20"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:text="@string/weight" />
+                            tools:text="0" />
 
-                        <com.common.view.CMEditTextView
-                            android:id="@+id/editWeight"
-                            style="@style/txt_666_16"
-                            android:layout_width="0dp"
+                        <com.common.view.CMTextView
+                            style="@style/txt_fff_14"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:imeOptions="actionDone"
-                            android:inputType="numberDecimal"
-                            android:hint="0.0" />
+                            android:text="@string/calorie" />
 
-
-                        <com.common.view.CMTextView
-                            android:id="@+id/tvKG"
-                            style="@style/txt_fff_16"
-                            android:layout_width="@dimen/_32sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:background="@color/gray_light_"
-                            android:gravity="center"
-                            android:onClick="@{(v)->handler.onKGClick()}"
-                            android:text="@string/kg" />
-
-                        <com.common.view.CMTextView
-                            android:id="@+id/tvLB"
-                            style="@style/txt_fff_16"
-                            android:layout_width="@dimen/_32sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:background="@color/green_text"
-                            android:gravity="center"
-                            android:onClick="@{(v)->handler.onLBClick()}"
-                            android:text="@string/lb" />
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:id="@+id/llDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_35sdp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/image_cup">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="4dp"
-                    app:cardUseCompatPadding="true">
+                        <com.common.view.CBTextView
+                            android:id="@+id/tvDuration"
+                            style="@style/txt_fff_20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="00:18" />
+
+                        <com.common.view.CMTextView
+                            style="@style/txt_fff_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/duration" />
+
+
+                    </LinearLayout>
+
 
                     <LinearLayout
+                        android:id="@+id/btnShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/btn_height"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:background="@drawable/btn_bg_round_gradiant"
+                        android:gravity="center"
+                        android:onClick="@{(v)->handler.onShareClick()}"
+                        android:paddingStart="@dimen/_20sdp"
+                        android:paddingEnd="@dimen/_20sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llCalorie">
+
+                        <com.common.view.CBTextView
+                            style="@style/txt_fff_18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_share"
+                            android:drawablePadding="@dimen/_15sdp"
+                            android:drawableTint="@color/white"
+                            android:text="@string/share" />
+
+                    </LinearLayout>
+
+                    <com.common.view.CBTextView
+                        style="@style/txt_fff_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_15sdp"
+                        android:onClick="@{(v)->handler.onDoItAgainClick()}"
+                        android:text="@string/do_it_again"
+                        android:textAllCaps="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/btnShare"
+                        app:layout_constraintStart_toStartOf="@+id/btnShare"
+                        app:layout_constraintTop_toBottomOf="@id/btnShare" />
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:onClick="@{(v)->handler.onBackClick()}"
+                        android:padding="10dp"
+                        android:src="@drawable/td_btn_back_w"
+                        app:layout_collapseMode="pin"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="4dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -344,7 +225,7 @@
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/rp_ic_bmi_green" />
+                                android:src="@drawable/rp_ic_reminder_green" />
 
                             <com.common.view.CMTextView
                                 style="@style/txt_000_16"
@@ -353,430 +234,572 @@
                                 android:layout_gravity="center"
                                 android:layout_marginStart="@dimen/_15sdp"
                                 android:layout_weight="1"
-                                android:text="@string/bmi" />
+                                android:text="@string/reminder_colon" />
 
                             <com.common.view.CMTextView
-                                android:id="@+id/tvBMI"
+                                android:id="@+id/tvReminders"
                                 style="@style/txt_666_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                tools:text="26.79kg/m\u00B2" />
+                                android:layout_marginStart="@dimen/_15sdp"
+                                android:ellipsize="end"
+                                android:maxWidth="@dimen/_80sdp"
+                                android:singleLine="true"
+                                tools:text="20:00" />
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imgEditTopBMI"
-                                android:layout_width="@dimen/_15sdp"
-                                android:layout_height="@dimen/_15sdp"
+                                android:layout_width="@dimen/_30sdp"
+                                android:layout_height="@dimen/_30sdp"
                                 android:layout_gravity="center"
-                                android:scaleType="fitCenter"
-                                android:layout_marginStart="@dimen/_15sdp"
-                                android:src="@drawable/rp_ic_edit_green"
-                                android:onClick="@{(v)->handler.onEditBMIClick()}"/>
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/imgArrowUp"
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_15sdp"
-                                android:src="@drawable/rp_ic_arrow_up_green"
-                                android:visibility="gone"
-                                android:onClick="@{(v)->handler.onArrowUpClick()}"/>
+                                android:onClick="@{(v)->handler.onAddReminderClick()}"
+                                android:paddingStart="@dimen/_15sdp"
+                                android:paddingTop="@dimen/_10sdp"
+                                android:paddingBottom="@dimen/_10sdp"
+                                android:src="@drawable/rp_ic_add_green" />
 
                         </LinearLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/clBMIGraphView"
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/_7sdp"
-                            android:paddingEnd="@dimen/_7sdp"
-                            android:visibility="gone">
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_12sdp">
 
-                            <RelativeLayout
-                                android:id="@+id/rlBMI"
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/rp_ic_weight_green" />
+
+                            <com.common.view.CMTextView
+                                style="@style/txt_000_16"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_15sdp"
+                                android:text="@string/weight" />
 
-                                <!-- Bmi Color view -->
-                                <LinearLayout
-                                    android:id="@+id/lnyBmiGraph"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_marginTop="@dimen/_2sdp"
-                                    android:background="@color/white"
-                                    android:orientation="horizontal"
-                                    android:weightSum="7">
+                            <com.common.view.CMEditTextView
+                                android:id="@+id/editWeight"
+                                style="@style/txt_666_16"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:hint="0.0"
+                                android:imeOptions="actionDone"
+                                android:inputType="numberDecimal" />
 
-                                    <View
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginEnd="@dimen/_2sdp"
-                                        android:layout_weight="0.5"
-                                        android:background="@color/colorFirst" />
 
-                                    <View
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginEnd="@dimen/_2sdp"
-                                        android:layout_weight="1.5"
-                                        android:background="@color/colorSecond" />
+                            <com.common.view.CMTextView
+                                android:id="@+id/tvKG"
+                                style="@style/txt_fff_16"
+                                android:layout_width="@dimen/_32sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:background="@color/gray_light_"
+                                android:gravity="center"
+                                android:onClick="@{(v)->handler.onKGClick()}"
+                                android:text="@string/kg" />
 
-                                    <View
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginEnd="@dimen/_2sdp"
-                                        android:layout_weight="2"
-                                        android:background="@color/colorThird" />
+                            <com.common.view.CMTextView
+                                android:id="@+id/tvLB"
+                                style="@style/txt_fff_16"
+                                android:layout_width="@dimen/_32sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:background="@color/green_text"
+                                android:gravity="center"
+                                android:onClick="@{(v)->handler.onLBClick()}"
+                                android:text="@string/lb" />
 
-                                    <View
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginEnd="@dimen/_2sdp"
-                                        android:layout_weight="1"
-                                        android:background="@color/colorFour" />
+                        </LinearLayout>
 
-                                    <View
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginEnd="@dimen/_2sdp"
-                                        android:layout_weight="1"
-                                        android:background="@color/colorFive" />
+                    </androidx.cardview.widget.CardView>
 
-                                    <View
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="1"
-                                        android:background="@color/colorSix" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="4dp"
+                        app:cardUseCompatPadding="true">
 
-                                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                                <!-- Bmi Blank view and display bmi percentage -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="65dp"
-                                    android:orientation="horizontal"
-                                    android:weightSum="7">
-
-                                    <View
-                                        android:id="@+id/blankView1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="0" />
-
-                                    <RelativeLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="0.1">
-
-                                        <com.common.view.CTextView
-                                            android:id="@+id/txtBmiGrade"
-                                            style="@style/txt_000_14"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="0.0" />
-
-                                        <View
-                                            android:id="@+id/BmiPosition"
-                                            android:layout_width="5dp"
-                                            android:layout_height="match_parent"
-                                            android:layout_below="@+id/txtBmiGrade"
-                                            android:layout_centerHorizontal="true"
-                                            android:background="@color/black" />
-                                    </RelativeLayout>
-
-                                    <View
-                                        android:id="@+id/blankView3"
-                                        android:layout_width="2dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="0.0"
-                                        android:visibility="gone" />
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-
-                            <!-- Bmi bottom text -->
                             <LinearLayout
-                                android:id="@+id/llBmiNumberGraph"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:weightSum="7"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/rlBMI">
+                                android:padding="@dimen/_12sdp">
 
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:src="@drawable/rp_ic_bmi_green" />
+
+                                <com.common.view.CMTextView
+                                    style="@style/txt_000_16"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
-                                    android:layout_weight="0.4"
-                                    android:text="15" />
-
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
-                                    android:layout_weight="1.3"
-                                    android:text="16" />
-
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
-                                    android:layout_weight="2.1"
-                                    android:text="18.5" />
-
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
-                                    android:layout_weight="1.1"
-                                    android:text="25" />
-
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_15sdp"
                                     android:layout_weight="1"
-                                    android:text="30" />
+                                    android:text="@string/bmi" />
 
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
-                                    android:layout_width="0dp"
+                                <com.common.view.CMTextView
+                                    android:id="@+id/tvBMI"
+                                    style="@style/txt_666_16"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
-                                    android:layout_weight="0.80"
-                                    android:text="35" />
+                                    android:layout_gravity="center"
+                                    tools:text="26.79kg/m\u00B2" />
 
-                                <com.common.view.CTextView
-                                    style="@style/txt_000_14"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="@dimen/_2sdp"
-                                    android:layout_weight="0.35"
-                                    android:text="40" />
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/imgEditTopBMI"
+                                    android:layout_width="@dimen/_15sdp"
+                                    android:layout_height="@dimen/_15sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_15sdp"
+                                    android:onClick="@{(v)->handler.onEditBMIClick()}"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/rp_ic_edit_green" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/imgArrowUp"
+                                    android:layout_width="@dimen/_14sdp"
+                                    android:layout_height="@dimen/_14sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_15sdp"
+                                    android:onClick="@{(v)->handler.onArrowUpClick()}"
+                                    android:src="@drawable/rp_ic_arrow_up_green"
+                                    android:visibility="gone" />
 
                             </LinearLayout>
 
-                            <com.common.view.CTextView
-                                android:id="@+id/tvWeightString"
-                                style="@style/txt_green_14"
-                                android:layout_width="wrap_content"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clBMIGraphView"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_2sdp"
-                                android:text="demo text"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/llBmiNumberGraph" />
+                                android:paddingStart="@dimen/_7sdp"
+                                android:paddingEnd="@dimen/_7sdp"
+                                android:visibility="gone">
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="@dimen/_15sdp"
-                                android:layout_height="@dimen/_15sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:layout_marginBottom="@dimen/_15sdp"
-                                android:src="@drawable/rp_ic_edit_green"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                android:onClick="@{(v)->handler.onEditBMIClick()}"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/llBmiNumberGraph" />
+                                <RelativeLayout
+                                    android:id="@+id/rlBMI"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                    <!-- Bmi Color view -->
+                                    <LinearLayout
+                                        android:id="@+id/lnyBmiGraph"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_marginTop="@dimen/_2sdp"
+                                        android:background="@color/white"
+                                        android:orientation="horizontal"
+                                        android:weightSum="7">
 
-                        <LinearLayout
-                            android:id="@+id/llTapInputHeight"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:paddingTop="@dimen/_15sdp"
-                            android:paddingBottom="@dimen/_25sdp"
-                            android:onClick="@{(v)->handler.onAddHeightClick()}">
+                                        <View
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginEnd="@dimen/_2sdp"
+                                            android:layout_weight="0.5"
+                                            android:background="@color/colorFirst" />
 
-                            <com.common.view.CTextView
-                                style="@style/txt_green_16"
-                                android:layout_width="wrap_content"
+                                        <View
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginEnd="@dimen/_2sdp"
+                                            android:layout_weight="1.5"
+                                            android:background="@color/colorSecond" />
+
+                                        <View
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginEnd="@dimen/_2sdp"
+                                            android:layout_weight="2"
+                                            android:background="@color/colorThird" />
+
+                                        <View
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginEnd="@dimen/_2sdp"
+                                            android:layout_weight="1"
+                                            android:background="@color/colorFour" />
+
+                                        <View
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginEnd="@dimen/_2sdp"
+                                            android:layout_weight="1"
+                                            android:background="@color/colorFive" />
+
+                                        <View
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="1"
+                                            android:background="@color/colorSix" />
+
+                                    </LinearLayout>
+
+                                    <!-- Bmi Blank view and display bmi percentage -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="65dp"
+                                        android:orientation="horizontal"
+                                        android:weightSum="7">
+
+                                        <View
+                                            android:id="@+id/blankView1"
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0" />
+
+                                        <RelativeLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0.1">
+
+                                            <com.common.view.CTextView
+                                                android:id="@+id/txtBmiGrade"
+                                                style="@style/txt_000_14"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="0.0" />
+
+                                            <View
+                                                android:id="@+id/BmiPosition"
+                                                android:layout_width="5dp"
+                                                android:layout_height="match_parent"
+                                                android:layout_below="@+id/txtBmiGrade"
+                                                android:layout_centerHorizontal="true"
+                                                android:background="@color/black" />
+                                        </RelativeLayout>
+
+                                        <View
+                                            android:id="@+id/blankView3"
+                                            android:layout_width="2dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="0.0"
+                                            android:visibility="gone" />
+
+                                    </LinearLayout>
+
+                                </RelativeLayout>
+
+                                <!-- Bmi bottom text -->
+                                <LinearLayout
+                                    android:id="@+id/llBmiNumberGraph"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="7"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/rlBMI">
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="0.4"
+                                        android:text="15" />
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="1.3"
+                                        android:text="16" />
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="2.1"
+                                        android:text="18.5" />
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="1.1"
+                                        android:text="25" />
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="1"
+                                        android:text="30" />
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="0.80"
+                                        android:text="35" />
+
+                                    <com.common.view.CTextView
+                                        style="@style/txt_000_14"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_2sdp"
+                                        android:layout_weight="0.35"
+                                        android:text="40" />
+
+                                </LinearLayout>
+
+                                <com.common.view.CTextView
+                                    android:id="@+id/tvWeightString"
+                                    style="@style/txt_green_14"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:text="demo text"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/llBmiNumberGraph" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="@dimen/_15sdp"
+                                    android:layout_height="@dimen/_15sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_marginEnd="@dimen/_10sdp"
+                                    android:layout_marginBottom="@dimen/_15sdp"
+                                    android:onClick="@{(v)->handler.onEditBMIClick()}"
+                                    android:src="@drawable/rp_ic_edit_green"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/llBmiNumberGraph" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llTapInputHeight"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="@string/tap_here_to_input_your_height"
-                                android:textStyle="italic" />
+                                android:gravity="center"
+                                android:onClick="@{(v)->handler.onAddHeightClick()}"
+                                android:paddingTop="@dimen/_15sdp"
+                                android:paddingBottom="@dimen/_25sdp">
+
+                                <com.common.view.CTextView
+                                    style="@style/txt_green_16"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="@string/tap_here_to_input_your_height"
+                                    android:textStyle="italic" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1px"
+                                android:background="@color/gray_light_"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_10sdp"
+                                android:visibility="gone">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/rp_icon_google_fit" />
+
+                                <com.common.view.CTextView
+                                    style="@style/txt_000_16"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:text="@string/sync_to_google_fit" />
+
+                                <Switch
+                                    android:id="@+id/switchGoogleFit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:visibility="gone"
-                            android:background="@color/gray_light_" />
+                    </androidx.cardview.widget.CardView>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_10sdp"
-                            android:visibility="gone">
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/rp_icon_google_fit" />
-
-                            <com.common.view.CTextView
-                                style="@style/txt_000_16"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_15sdp"
-                                android:layout_weight="1"
-                                android:text="@string/sync_to_google_fit" />
-
-                            <Switch
-                                android:id="@+id/switchGoogleFit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="4dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_10sdp">
-
-                        <com.common.view.CMTextView
-                            style="@style/txt_000_20"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:gravity="end"
-                            android:text="@string/i_feel" />
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="4dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp">
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp">
 
-                            <com.common.view.CTextView
-                                style="@style/txt_999_16"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/easy" />
-
-                            <com.common.view.CTextView
-                                style="@style/txt_999_16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/exhausted" />
-
-                        </LinearLayout>
-
-                        <RadioGroup
-                            android:id="@+id/rdgFeel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginBottom="@dimen/_10sdp">
-
-                            <RadioButton
-                                android:id="@+id/rdoFeelOne"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/_7sdp"
-                                android:onClick="@{(v)->handler.onSetFeel(1)}"/>
-
-                            <RadioButton
-                                android:id="@+id/rdoFeelTwo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/_7sdp"
-                                android:onClick="@{(v)->handler.onSetFeel(2)}"/>
-
-                            <RadioButton
-                                android:id="@+id/rdoFeelThree"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/_7sdp"
-                                android:onClick="@{(v)->handler.onSetFeel(3)}"/>
-
-                            <RadioButton
-                                android:id="@+id/rdoFeelFour"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/_7sdp"
-                                android:onClick="@{(v)->handler.onSetFeel(4)}"/>
-
-                            <RadioButton
-                                android:id="@+id/rdoFeelFive"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/_7sdp"
-                                android:onClick="@{(v)->handler.onSetFeel(5)}"/>
-
-                        </RadioGroup>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:onClick="@{(v)->handler.onFeedBackClick()}">
-
-                            <com.common.view.CTextView
-                                style="@style/txt_green_16"
+                            <com.common.view.CMTextView
+                                style="@style/txt_000_20"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:gravity="end"
-                                android:textAllCaps="true"
-                                android:text="@string/feedback" />
+                                android:text="@string/i_feel" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp">
+
+                                <com.common.view.CTextView
+                                    style="@style/txt_999_16"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/easy" />
+
+                                <com.common.view.CTextView
+                                    style="@style/txt_999_16"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/exhausted" />
+
+                            </LinearLayout>
+
+                            <RadioGroup
+                                android:id="@+id/rdgFeel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_10sdp"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/rdoFeelOne"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="@{(v)->handler.onSetFeel(1)}"
+                                    android:padding="@dimen/_7sdp" />
+
+                                <RadioButton
+                                    android:id="@+id/rdoFeelTwo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="@{(v)->handler.onSetFeel(2)}"
+                                    android:padding="@dimen/_7sdp" />
+
+                                <RadioButton
+                                    android:id="@+id/rdoFeelThree"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="@{(v)->handler.onSetFeel(3)}"
+                                    android:padding="@dimen/_7sdp" />
+
+                                <RadioButton
+                                    android:id="@+id/rdoFeelFour"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="@{(v)->handler.onSetFeel(4)}"
+                                    android:padding="@dimen/_7sdp" />
+
+                                <RadioButton
+                                    android:id="@+id/rdoFeelFive"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="@{(v)->handler.onSetFeel(5)}"
+                                    android:padding="@dimen/_7sdp" />
+
+                            </RadioGroup>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:onClick="@{(v)->handler.onFeedBackClick()}">
+
+                                <com.common.view.CTextView
+                                    style="@style/txt_green_16"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:gravity="end"
+                                    android:text="@string/feedback"
+                                    android:textAllCaps="true" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                </androidx.cardview.widget.CardView>
+                    <com.common.view.CBButtonView
+                        android:id="@+id/btnNext"
+                        style="@style/txt_fff_18"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_height"
+                        android:layout_marginStart="@dimen/_25sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_25sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:background="@drawable/btn_bg_round_gradiant"
+                        android:onClick="@{(v)->handler.onNextClick()}"
+                        android:text="@string/next" />
 
-                <com.common.view.CBButtonView
-                    android:id="@+id/btnNext"
-                    style="@style/txt_fff_18"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/btn_height"
-                    android:layout_marginStart="@dimen/_25sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_25sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:background="@drawable/btn_bg_round_gradiant"
-                    android:onClick="@{(v)->handler.onNextClick()}"
-                    android:text="@string/next" />
+                </LinearLayout>
+
 
             </LinearLayout>
 
+        </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
+        <RelativeLayout
 
-    </androidx.core.widget.NestedScrollView>
+            android:id="@+id/llAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:visibility="gone" />
 
+        <LinearLayout
+            android:id="@+id/llAdViewFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp50"
+            android:orientation="vertical"
+            android:visibility="visible" />
+    </LinearLayout>
 </layout>

@@ -2,40 +2,24 @@ package com.stretching
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.common.swipedragrecyclerview.OnDragListener
-import com.common.swipedragrecyclerview.OnSwipeListener
-import com.common.swipedragrecyclerview.RecyclerHelper
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.AddExerciseAdapter
 import com.stretching.adapter.AddExerciseCategoryAdapter
-import com.stretching.adapter.EditPlanAdapter
-import com.stretching.adapter.RecentAdapter
 import com.stretching.databinding.ActivityAddExerciesBinding
-import com.stretching.databinding.ActivityEditPlanBinding
-import com.stretching.databinding.ActivityRecentBinding
-import com.stretching.databinding.ActivityRestBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
-import com.stretching.objects.HomeTrainingPlans
-import com.stretching.objects.MyTrainingCatExTableClass
 import com.stretching.objects.MyTrainingCategoryTableClass
 import com.stretching.utils.AdUtils
-import com.stretching.utils.ErrorAlertDialog
+import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class AddExerciseActivity : BaseActivity() {
+class AddExerciseActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityAddExerciesBinding? = null
     var addExerciseCategoryAdapter: AddExerciseCategoryAdapter? = null
@@ -47,7 +31,19 @@ class AddExerciseActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_exercies)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
         initIntentParam()
         init()
     }
@@ -114,6 +110,7 @@ class AddExerciseActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -149,6 +146,18 @@ class AddExerciseActivity : BaseActivity() {
             }
             finish()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

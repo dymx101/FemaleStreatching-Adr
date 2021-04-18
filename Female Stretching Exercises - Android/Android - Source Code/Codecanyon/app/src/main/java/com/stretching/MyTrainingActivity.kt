@@ -15,13 +15,14 @@ import com.common.view.CEditTextView
 import com.google.gson.Gson
 import com.stretching.adapter.MyTrainingAdapter
 import com.stretching.databinding.ActivityMyTrainningBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class MyTrainingActivity : BaseActivity() {
+class MyTrainingActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityMyTrainningBinding? = null
     var myTrainingAdapter: MyTrainingAdapter? = null
@@ -109,6 +110,7 @@ class MyTrainingActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         fillData()
         changeSelection(2)
@@ -180,6 +182,18 @@ class MyTrainingActivity : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

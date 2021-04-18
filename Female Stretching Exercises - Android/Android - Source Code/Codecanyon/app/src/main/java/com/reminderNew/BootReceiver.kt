@@ -1,9 +1,10 @@
 
-package com.reminder
+package com.reminderNew
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import java.util.*
 
 class BootReceiver : BroadcastReceiver() {
@@ -26,11 +27,13 @@ class BootReceiver : BroadcastReceiver() {
     private var mCalendar: Calendar? = null
     private var mAlarmReceiver: AlarmReceiver? = null
     override fun onReceive(context: Context, intent: Intent) {
+        Log.e("TAG", "onReceive:inside:::: " )
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             val rb = ReminderDatabase(context)
             mCalendar = Calendar.getInstance()
             mAlarmReceiver = AlarmReceiver()
             val reminders = rb.allReminders
+            Log.e("TAG", "onReceive::::Boot:: ")
             for (rm in reminders) {
                 mReceivedID = rm.iD
                 mRepeat = rm.repeat

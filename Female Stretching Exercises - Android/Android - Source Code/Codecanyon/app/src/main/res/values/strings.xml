@@ -1,17 +1,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Female Stretching</string>
     <string name="youtube_api_key">AIzaSyAoyJpy8xbelBg5uuoAfa_c2E4v262OiSE</string>
-
-
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="REWARD_VIDEO">ca-app-pub-3940256099942544/5224354917</string>
-    <string name="BANNER">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="INTERSTITIAL">ca-app-pub-3940256099942544/1033173712</string>
-
 
     <string name="number_picker_formatter">%02d</string>
 
-    <string name="btn_ok">OK</string>
+    <string name="btn_ok">Ok</string>
     <string name="btn_cancel">Cancel</string>
     <string name="exit_msg">Press Back twice to exit</string>
     <string name="search">Search</string>
@@ -204,6 +198,13 @@
 
     <string name="privacy_policy_link">https://sites.google.com/view/femalestretchingexercises-pp/home</string>
     <string name="do_it_again">Do it again</string>
-    <string name="version_1_2">Version 1.0</string>
+
+    <string name="update">Update</string>
+    <string name="update_msg">An New Version of APP is Available</string>
+    <string name="critical_update_msg">An critical update is required</string>
+    <string name="btn_update">Update</string>
+
+    <string name="version_1_1">Version 1.2</string>
+
 
 </resources>

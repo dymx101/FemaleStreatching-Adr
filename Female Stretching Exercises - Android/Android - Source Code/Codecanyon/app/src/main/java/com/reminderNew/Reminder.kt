@@ -1,5 +1,5 @@
 
-package com.reminder
+package com.reminderNew
 
 // Reminder class
 class Reminder {

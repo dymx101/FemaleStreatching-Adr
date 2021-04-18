@@ -1,6 +1,5 @@
 package com.stretching
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,16 +9,15 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.DiscoverSubPlanAdapter
-import com.stretching.adapter.WorkoutListAdapter
 import com.stretching.databinding.ActivityDiscoverDetailBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomePlanTableClass
-import com.stretching.objects.HomeTrainingPlans
 import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class DiscoverDetailActivity : BaseActivity() {
+class DiscoverDetailActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityDiscoverDetailBinding? = null
     var discoverSubPlanAdapter: DiscoverSubPlanAdapter? = null
@@ -29,7 +27,24 @@ class DiscoverDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_discover_detail)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView, Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         showUnlockTrainingDialog(this)
         initIntentParam()
         init()
@@ -112,6 +127,7 @@ class DiscoverDetailActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -126,6 +142,18 @@ class DiscoverDetailActivity : BaseActivity() {
         fun onBackClick() {
             finish()
         }
+
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
 
     }
 

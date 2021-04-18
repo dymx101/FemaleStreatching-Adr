@@ -6,10 +6,12 @@ import java.io.File
 
 internal object Constant {
 
-    val CHECK_LB_KG = "check_lb_kg"
 
+    val CHECK_LB_KG = "check_lb_kg"
     val FINISH_ACTIVITY = "finish_activity"
+    val BANNER_TYPE = "BANNER_TYPE"
     val IS_PURCHASE = "is_purchase"
+    val REC_BANNER_TYPE = "REC_BANNER_TYPE"
     val FOLDER_NAME = "Stretching Exercises"
     val CACHE_DIR = ".StretchingExercises/Cache"
     val TMP_DIR = (Environment
@@ -127,10 +129,58 @@ internal object Constant {
 
     const val FROM_SETTING = "from setting"
 
-    const val  EXTRA_REMINDER_ID: String = "Reminder_ID"
-    var BANNER = ""
-    var INTERSTITIAL = ""
+    const val RESPONSE_FAILURE_CODE = 901
+    const val RESPONSE_SUCCESS_CODE = 200
+    const val VALIDATION_FAILED_CODE = 903
+    const val USER_NOT_FOUND = 333
+
+    fun getSuccessCode(): Int {
+        return RESPONSE_SUCCESS_CODE
+    }
+
+    fun getFailureCode(): Int {
+        return RESPONSE_FAILURE_CODE
+    }
+
+    fun getUserNotFoundCode(): Int {
+        return USER_NOT_FOUND
+    }
+
+    var FirstTimeClickCount = 0
+    var SecondTimeClickCount = 0
+
+
     const val ENABLE = "Enable"
     const val DISABLE = "Disable"
+
+//    var BANNER = ""
+//    var INTERSTITIAL = ""
+//    var REWARD_VIDEO = ""
+
+    /*New Key*/
+    var FB_BANNER_TYPE_AD = "FB_BANNER_TYPE_AD"
+    var FB_RECTANGLE_BANNER_TYPE_AD = "FB_RECTANGLE_BANNER_TYPE_AD"
+    var GOOGLE_BANNER_TYPE_AD = "GOOGLE_BANNER_TYPE_AD"
+    var GOOGLE_RECTANGLE_BANNER_TYPE_AD = "GOOGLE_RECTANGLE_BANNER_TYPE_AD"
+
+
+    var AD_FACEBOOK = "facebook"
+    var AD_GOOGLE = "google"
+
+    var AD_TYPE_FB_GOOGLE = "facebook"
+
+    var GOOGLE_BANNER = "ca-app-pub-3940256099942544/6300978111"
+    var GOOGLE_INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
+    var GOOGLE_REWARDED_VIDEO = "ca-app-pub-3940256099942544/5224354917"
+
+    var FB_BANNER = "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID"
+    var FB_BANNER_MEDIUM_RECTANGLE = "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID"
+    var FB_INTERSTITIAL = "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID"
+
+    var FIRST_CLICK_COUNT = 5
+
+
+    const val  EXTRA_REMINDER_ID: String = "Reminder_ID"
+
 
 }

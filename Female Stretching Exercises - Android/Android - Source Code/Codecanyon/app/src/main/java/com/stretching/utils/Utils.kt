@@ -13,6 +13,7 @@ import android.graphics.Typeface
 import android.location.LocationManager
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -21,6 +22,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.Base64
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -38,7 +40,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.stretching.BuildConfig
 import com.stretching.R
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
@@ -230,6 +232,24 @@ internal object Utils {
         }
 
         return outcome
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val connectivity =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivity != null) {
+            val info = connectivity.allNetworkInfo
+            if (info != null) {
+                for (i in info.indices) {
+                    Log.w("INTERNET:", i.toString())
+                    if (info[i].state == NetworkInfo.State.CONNECTED) {
+                        Log.w("INTERNET:", "connected!")
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
 
     fun getDeviceId(c: Context): String {
@@ -1939,13 +1959,13 @@ internal object Utils {
     fun getShortDayName(dayNo: String): String {
         var dayName = ""
         when (dayNo) {
-            "1" -> dayName = "SUN"
-            "2" -> dayName = "MON"
-            "3" -> dayName = "TUE"
-            "4" -> dayName = "WED"
-            "5" -> dayName = "THU"
-            "6" -> dayName = "FRI"
-            "7" -> dayName = "SAT"
+            "1" -> dayName = "Sun"
+            "2" -> dayName = "Mon"
+            "3" -> dayName = "Tue"
+            "4" -> dayName = "Wed"
+            "5" -> dayName = "Thu"
+            "6" -> dayName = "Fri"
+            "7" -> dayName = "Sat"
 
         }
         return dayName
@@ -1957,6 +1977,11 @@ internal object Utils {
 
     fun kgToLb(weightValue: Double): Double {
         return weightValue * 2.2046226218488
+    }
+
+    fun getafterPointValue(value:Float):String{
+        val format = DecimalFormat("#.##")
+        return format.format(value)
     }
 
     fun cmToInch(heightValue: Double): Double {
@@ -2228,22 +2253,22 @@ internal object Utils {
             val sendIntentGmail = Intent(Intent.ACTION_SEND)
             sendIntentGmail.type = "plain/text"
             sendIntentGmail.setPackage("com.google.android.gm")
-            sendIntentGmail.putExtra(Intent.EXTRA_EMAIL, arrayOf("fitnessentertainmentapps@gmail.com"))
+            sendIntentGmail.putExtra(Intent.EXTRA_EMAIL, arrayOf("Enter Your mail"))
             sendIntentGmail.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    content.resources.getString(R.string.app_name)+" - Android"
+                Intent.EXTRA_SUBJECT,
+                content.resources.getString(R.string.app_name)+" - Android"
             )
             content.startActivity(sendIntentGmail)
         } catch (e: Exception) {
             val sendIntentIfGmailFail = Intent(Intent.ACTION_SEND)
             sendIntentIfGmailFail.type = "*/*"
             sendIntentIfGmailFail.putExtra(
-                    Intent.EXTRA_EMAIL,
-                    arrayOf("fitnessentertainmentapps@gmail.com")
+                Intent.EXTRA_EMAIL,
+                arrayOf("Enter Your mail")
             )
             sendIntentIfGmailFail.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    content.resources.getString(R.string.app_name)+" - Android"
+                Intent.EXTRA_SUBJECT,
+                content.resources.getString(R.string.app_name)+" - Android"
             )
             if (sendIntentIfGmailFail.resolveActivity(content.packageManager) != null) {
                 content.startActivity(sendIntentIfGmailFail)

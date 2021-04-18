@@ -50,7 +50,6 @@
                     android:id="@+id/editWeight"
                     style="@style/txt_333_16"
                     android:layout_width="0dp"
-                    android:selectAllOnFocus="true"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="0.0 KG"

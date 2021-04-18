@@ -1,5 +1,6 @@
 package com.stretching
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.stretching.adapter.ReportWeekGoalAdapter
 import com.stretching.databinding.ActivityReportBinding
 import com.stretching.databinding.DialogWeightWithDateBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.DialogDismissListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.utils.AdUtils
@@ -33,7 +35,7 @@ import java.util.*
 import kotlin.math.roundToInt
 
 
-class ReportActivity : BaseActivity() {
+class ReportActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityReportBinding? = null
     var reportWeekGoalAdapter: ReportWeekGoalAdapter? = null
@@ -48,7 +50,21 @@ class ReportActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_report)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         initIntentParam()
         initDrawerMenu(true)
         init()
@@ -71,7 +87,7 @@ class ReportActivity : BaseActivity() {
 
         reportWeekGoalAdapter = ReportWeekGoalAdapter(this)
         binding!!.rvWeekGoal.layoutManager =
-            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+                LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding!!.rvWeekGoal.setAdapter(reportWeekGoalAdapter)
 
         reportWeekGoalAdapter!!.setEventListener(object : ReportWeekGoalAdapter.EventListener {
@@ -92,7 +108,7 @@ class ReportActivity : BaseActivity() {
         binding!!.tvWorkOuts.text = dbHelper.getHistoryTotalWorkout().toString()
         binding!!.tvCalorie.text = dbHelper.getHistoryTotalKCal().toInt().toString()
         binding!!.tvMinutes.text =
-            ((dbHelper.getHistoryTotalMinutes() / 60).toDouble()).roundToInt().toString()
+                ((dbHelper.getHistoryTotalMinutes() / 60).toDouble()).roundToInt().toString()
     }
 
     /* Todo set bmi calculation */
@@ -107,24 +123,24 @@ class ReportActivity : BaseActivity() {
 
             if (heightUnit.equals(Constant.DEF_CM)) {
                 val inch = Utils.ftInToInch(
-                    lastFoot,
-                    lastInch.toDouble()
+                        lastFoot,
+                        lastInch.toDouble()
                 )
                 binding!!.editCurrHeightCM.visibility = View.VISIBLE
                 binding!!.editCurrHeightFT.visibility = View.GONE
                 binding!!.editCurrHeightIn.visibility = View.GONE
                 binding!!.editCurrHeightCM.setText(
-                    Utils.inchToCm(inch).roundToInt().toDouble().toString()
+                        Utils.inchToCm(inch).roundToInt().toDouble().toString()
                 )
             } else {
                 binding!!.editCurrHeightCM.visibility = View.GONE
                 binding!!.editCurrHeightFT.visibility = View.VISIBLE
                 binding!!.editCurrHeightIn.visibility = View.VISIBLE
                 binding!!.editCurrHeightFT.setText(
-                    Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0).toString()
+                        Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0).toString()
                 )
                 binding!!.editCurrHeightIn.setText(
-                    Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toString()
+                        Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toString()
                 )
             }
 
@@ -134,29 +150,29 @@ class ReportActivity : BaseActivity() {
 
 
                 val bmiValue = Utils.getBmiCalculation(
-                    lastWeight,
-                    lastFoot,
-                    lastInch.toInt()
+                        lastWeight,
+                        lastFoot,
+                        lastInch.toInt()
                 )
 
                 val bmiVal = Utils.calculationForBmiGraph(bmiValue.toFloat())
 
                 val param = LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    bmiVal
+                        0,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        bmiVal
                 )
 
                 binding!!.txtBmiGrade.text = Utils.truncateUptoTwoDecimal(bmiValue.toString())
                 binding!!.tvBMI.text = Utils.truncateUptoTwoDecimal(bmiValue.toString())
                 binding!!.tvWeightString.text = Utils.bmiWeightString(bmiValue.toFloat())
                 binding!!.tvWeightString.setTextColor(
-                    ColorStateList.valueOf(
-                        Utils.bmiWeightTextColor(
-                            this,
-                            bmiValue.toFloat()
+                        ColorStateList.valueOf(
+                                Utils.bmiWeightTextColor(
+                                        this,
+                                        bmiValue.toFloat()
+                                )
                         )
-                    )
                 )
                 binding!!.blankView1.layoutParams = param
 
@@ -184,24 +200,24 @@ class ReportActivity : BaseActivity() {
                 binding!!.tvCurrentWeight.setText(Utils.truncateUptoTwoDecimal(lastWeight.toString()))
                 binding!!.tvCurretUnit.text = weightUnit
                 binding!!.tvHeaviestWeight.text =
-                    Utils.truncateUptoTwoDecimal(maxWeight.toString()) + " " + Constant.DEF_KG
+                        Utils.truncateUptoTwoDecimal(maxWeight.toString()) + " " + Constant.DEF_KG
                 binding!!.tvLightestWeight.text =
-                    Utils.truncateUptoTwoDecimal(minWeight.toString()) + " " + Constant.DEF_KG
+                        Utils.truncateUptoTwoDecimal(minWeight.toString()) + " " + Constant.DEF_KG
 
             } else if (weightUnit == Constant.DEF_LB && lastWeight != 0f) {
                 binding!!.tvCurrentWeight.setText(
-                    Utils.truncateUptoTwoDecimal(
-                        Utils.kgToLb(
-                            lastWeight.toDouble()
-                        ).toFloat().toString()
-                    )
+                        Utils.truncateUptoTwoDecimal(
+                                Utils.kgToLb(
+                                        lastWeight.toDouble()
+                                ).toFloat().toString()
+                        )
                 )
                 binding!!.tvCurretUnit.text = weightUnit
                 binding!!.tvHeaviestWeight.text = Utils.truncateUptoTwoDecimal(
-                    Utils.kgToLb(maxWeight.toDouble()).toFloat().toString()
+                        Utils.kgToLb(maxWeight.toDouble()).toFloat().toString()
                 ) + " " + Constant.DEF_LB
                 binding!!.tvLightestWeight.text = Utils.truncateUptoTwoDecimal(
-                    Utils.kgToLb(minWeight.toDouble()).toFloat().toString()
+                        Utils.kgToLb(minWeight.toDouble()).toFloat().toString()
                 ) + " " + Constant.DEF_LB
             }
         } catch (e: Exception) {
@@ -240,20 +256,27 @@ class ReportActivity : BaseActivity() {
             binding!!.chartWeight.setDrawBarShadow(false)
             binding!!.chartWeight.isHighlightFullBarEnabled = false
 
+
+
+
             val l = binding!!.chartWeight.legend
+            l.isEnabled = false
             l.isWordWrapEnabled = true
             l.textSize = 14f
             l.formSize = 15F
             l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
             l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+//            l.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
             l.orientation = Legend.LegendOrientation.HORIZONTAL
+
             l.setDrawInside(false)
+
 
             val leftAxis = binding!!.chartWeight.axisLeft
             leftAxis.setDrawGridLines(true)
-            leftAxis.axisMaximum = 1000f
-            leftAxis.axisMinimum = 0f
-            leftAxis.granularity = 0.5f
+//            leftAxis.axisMaximum = 1000f
+//            leftAxis.axisMinimum = 0f
+//            leftAxis.granularity = 0.5f
 
             val rightAxis = binding!!.chartWeight.axisRight
             rightAxis.isEnabled = false
@@ -277,11 +300,11 @@ class ReportActivity : BaseActivity() {
             data.setData(generateLineData())
 
             if (avgAnnualWight > 0) {
-                binding!!.chartWeight.getAxisLeft().removeAllLimitLines()
+                binding!!.chartWeight.axisLeft.removeAllLimitLines()
                 val ll = LimitLine(avgAnnualWight, "")
                 ll.lineColor = Color.rgb(181, 129, 189)
                 ll.lineWidth = 2f
-                binding!!.chartWeight.getAxisLeft().addLimitLine(ll)
+                binding!!.chartWeight.axisLeft.addLimitLine(ll)
 
                 val legendEntryA = LegendEntry()
                 legendEntryA.label = "Annual Average"
@@ -293,7 +316,7 @@ class ReportActivity : BaseActivity() {
             binding!!.chartWeight.data = data
 
             binding!!.chartWeight.setVisibleXRange(5f, 8f)
-            binding!!.chartWeight.setVisibleYRange(4f, 10F, YAxis.AxisDependency.LEFT)
+//            binding!!.chartWeight.setVisibleYRange(4f, 10F, YAxis.AxisDependency.LEFT)
 
             val strDate = Utils.parseTime(Date().time, "yyyy-MM-dd")
 
@@ -319,6 +342,7 @@ class ReportActivity : BaseActivity() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setGraphTouch() {
 
         binding!!.chartWeight.setOnTouchListener { _, event ->
@@ -351,10 +375,10 @@ class ReportActivity : BaseActivity() {
                     } else {
                         totalWeight += Utils.kgToLb(yAxisData[index]["KG"]!!.toDouble()).toFloat()
                         entries.add(
-                            Entry(
-                                position.toFloat(),
-                                Utils.kgToLb(yAxisData[index]["KG"]!!.toDouble()).toFloat()
-                            )
+                                Entry(
+                                        position.toFloat(),
+                                        Utils.kgToLb(yAxisData[index]["KG"]!!.toDouble()).toFloat()
+                                )
                         )
                     }
                 }
@@ -366,21 +390,21 @@ class ReportActivity : BaseActivity() {
 
                 if (weightUnit == Constant.DEF_KG) {
                     binding!!.tvAvgWeight.text =
-                        String.format("%.2f", diffrence).plus(" ${Constant.DEF_KG}")
+                            String.format("%.2f", diffrence).plus(" ${Constant.DEF_KG}")
                 } else {
                     binding!!.tvAvgWeight.text =
-                        String.format("%.2f", Utils.kgToLb(diffrence.toDouble()))
-                            .plus(" ${Constant.DEF_LB}")
+                            String.format("%.2f", Utils.kgToLb(diffrence.toDouble()))
+                                    .plus(" ${Constant.DEF_LB}")
                 }
 
 
                 if (diffrence < 0) {
                     binding!!.tvAvgWeight.backgroundTintList = ColorStateList.valueOf(
-                        Color.rgb(0, 192, 98)
+                            Color.rgb(0, 192, 98)
                     )
                 } else {
                     binding!!.tvAvgWeight.backgroundTintList = ColorStateList.valueOf(
-                        Color.rgb(246, 176, 39)
+                            Color.rgb(246, 176, 39)
                     )
                 }
 
@@ -398,23 +422,23 @@ class ReportActivity : BaseActivity() {
                         entries.add(Entry(position.toFloat(), lastWeight))
                     } else {
                         entries.add(
-                            Entry(
-                                position.toFloat(),
-                                Utils.kgToLb(lastWeight.toDouble()).toFloat()
-                            )
+                                Entry(
+                                        position.toFloat(),
+                                        Utils.kgToLb(lastWeight.toDouble()).toFloat()
+                                )
                         )
                     }
                 }
                 if (weightUnit == Constant.DEF_KG) {
                     binding!!.tvAvgWeight.text =
-                        String.format("%.2f", lastWeight).plus(" ${Constant.DEF_KG}")
+                            String.format("%.2f", lastWeight).plus(" ${Constant.DEF_KG}")
                 } else {
                     binding!!.tvAvgWeight.text =
-                        String.format("%.2f", Utils.kgToLb(lastWeight.toDouble()))
-                            .plus(" ${Constant.DEF_LB}")
+                            String.format("%.2f", Utils.kgToLb(lastWeight.toDouble()))
+                                    .plus(" ${Constant.DEF_LB}")
                 }
                 binding!!.tvAvgWeight.backgroundTintList = ColorStateList.valueOf(
-                    Color.rgb(246, 176, 39)
+                        Color.rgb(246, 176, 39)
                 )
 
             } catch (e: Exception) {
@@ -445,6 +469,7 @@ class ReportActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         changeSelection(3)
     }
@@ -489,7 +514,7 @@ class ReportActivity : BaseActivity() {
         val builder = AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle)
         builder.setCancelable(false)
         val v: View = (this).getLayoutInflater()
-            .inflate(R.layout.dialog_weight_with_date, null)
+                .inflate(R.layout.dialog_weight_with_date, null)
         val dialogBinding: DialogWeightWithDateBinding? = DataBindingUtil.bind(v)
         builder.setView(v)
         dialogBinding!!.editWeight.requestFocus()
@@ -504,7 +529,8 @@ class ReportActivity : BaseActivity() {
 
             dialogBinding!!.tvKG.background = resources.getDrawable(R.color.green_text, null)
             dialogBinding!!.tvLB.background = resources.getDrawable(R.color.gray_light_, null)
-        } else if (weightUnit == Constant.DEF_LB && lastWeight != 0f) {
+        }
+        else if (weightUnit == Constant.DEF_LB && lastWeight != 0f) {
             dialogBinding!!.tvKG.isSelected = false
             dialogBinding!!.tvLB.isSelected = true
             boolKg = false
@@ -514,7 +540,8 @@ class ReportActivity : BaseActivity() {
 
             dialogBinding!!.tvKG.background = resources.getDrawable(R.color.gray_light_, null)
             dialogBinding!!.tvLB.background = resources.getDrawable(R.color.green_text, null)
-        } else {
+        }
+        else {
             dialogBinding!!.tvKG.isSelected = true
             dialogBinding!!.tvLB.isSelected = false
             dialogBinding!!.tvKG.background = resources.getDrawable(R.color.green_text, null)
@@ -536,17 +563,17 @@ class ReportActivity : BaseActivity() {
                     dialogBinding!!.tvLB.isSelected = false
 
                     dialogBinding!!.tvKG.background =
-                        resources.getDrawable(R.color.green_text, null)
+                            resources.getDrawable(R.color.green_text, null)
                     dialogBinding!!.tvLB.background =
-                        resources.getDrawable(R.color.gray_light_, null)
+                            resources.getDrawable(R.color.gray_light_, null)
 
                     dialogBinding!!.editWeight.hint = Constant.DEF_KG
 
                     if (dialogBinding!!.editWeight.text.toString() != "") {
                         dialogBinding!!.editWeight.setText(
-                            Utils.lbToKg(
-                                dialogBinding!!.editWeight.text.toString().toDouble()
-                            ).toString()
+                                Utils.lbToKg(
+                                        dialogBinding!!.editWeight.text.toString().toDouble()
+                                ).toString()
                         )
                     }
                 }
@@ -564,17 +591,17 @@ class ReportActivity : BaseActivity() {
                     dialogBinding!!.tvLB.isSelected = true
 
                     dialogBinding!!.tvLB.background =
-                        resources.getDrawable(R.color.green_text, null)
+                            resources.getDrawable(R.color.green_text, null)
                     dialogBinding!!.tvKG.background =
-                        resources.getDrawable(R.color.gray_light_, null)
+                            resources.getDrawable(R.color.gray_light_, null)
 
                     dialogBinding!!.editWeight.hint = Constant.DEF_LB
 
                     if (dialogBinding!!.editWeight.text.toString() != "") {
                         dialogBinding!!.editWeight.setText(
-                            Utils.kgToLb(
-                                dialogBinding!!.editWeight.text.toString().toDouble()
-                            ).toString()
+                                Utils.kgToLb(
+                                        dialogBinding!!.editWeight.text.toString().toDouble()
+                                ).toString()
                         )
                     }
                 }
@@ -584,47 +611,47 @@ class ReportActivity : BaseActivity() {
         }
 
         dialogBinding!!.dtpWeightSet
-            .setDays(369)
-            .setOffset(365)
-            .setListener { dateSelected ->
-                dateSelect =
-                    Utils.parseTime(dateSelected.toDate().time, Constant.WEIGHT_TABLE_DATE_FORMAT)
-                if (dbHelper.weightExistOrNot(dateSelect)) {
-                    val weight = dbHelper.getWeightForDate(dateSelect)
+                .setDays(369)
+                .setOffset(365)
+                .setListener { dateSelected ->
+                    dateSelect = Utils.parseTime(dateSelected.toDate().time, Constant.WEIGHT_TABLE_DATE_FORMAT)
 
-                    if (dialogBinding!!.tvKG.isSelected) {
-                        boolKg = true
+                    if (dbHelper.weightExistOrNot(dateSelect)) {
+                        val weight = dbHelper.getWeightForDate(dateSelect)
 
-                        dialogBinding!!.tvKG.isSelected = true
-                        dialogBinding!!.tvLB.isSelected = false
+                        if (dialogBinding!!.tvKG.isSelected) {
+                            boolKg = true
 
-                        dialogBinding!!.tvKG.background =
-                            resources.getDrawable(R.color.green_text, null)
-                        dialogBinding!!.tvLB.background =
-                            resources.getDrawable(R.color.gray_light_, null)
-                        dialogBinding!!.editWeight.setText(Utils.truncateUptoTwoDecimal(weight))
+                            dialogBinding!!.tvKG.isSelected = true
+                            dialogBinding!!.tvLB.isSelected = false
+
+                            dialogBinding!!.tvKG.background =
+                                    resources.getDrawable(R.color.green_text, null)
+                            dialogBinding!!.tvLB.background =
+                                    resources.getDrawable(R.color.gray_light_, null)
+                            dialogBinding!!.editWeight.setText(Utils.truncateUptoTwoDecimal(weight))
+                        } else {
+                            boolKg = false
+                            dialogBinding!!.tvKG.isSelected = false
+                            dialogBinding!!.tvLB.isSelected = true
+
+                            dialogBinding!!.tvLB.background =
+                                    resources.getDrawable(R.color.green_text, null)
+                            dialogBinding!!.tvKG.background =
+                                    resources.getDrawable(R.color.gray_light_, null)
+                            dialogBinding!!.editWeight.setText(
+                                    Utils.kgToLb(
+                                            weight.toDouble()
+                                    ).toString()
+                            )
+                        }
                     } else {
-                        boolKg = false
-                        dialogBinding!!.tvKG.isSelected = false
-                        dialogBinding!!.tvLB.isSelected = true
-
-                        dialogBinding!!.tvLB.background =
-                            resources.getDrawable(R.color.green_text, null)
-                        dialogBinding!!.tvKG.background =
-                            resources.getDrawable(R.color.gray_light_, null)
-                        dialogBinding!!.editWeight.setText(
-                                Utils.kgToLb(
-                                    weight.toDouble()
-                                ).toString()
-                        )
+                        dialogBinding!!.editWeight.setText("0.0")
                     }
-                } else {
-                    dialogBinding!!.editWeight.setText("0.0")
-                }
 //                Toast.makeText(context, "Selected date is ${DateUtils.getDate(dateSelect.toDate().time, Locale.getDefault())}", Toast.LENGTH_SHORT).show()
-            }
-            .showTodayButton(false)
-            .init()
+                }
+                .showTodayButton(false)
+                .init()
 
         dialogBinding!!.dtpWeightSet.setDate(DateTime.now())
 
@@ -639,8 +666,8 @@ class ReportActivity : BaseActivity() {
                     strUnit = Constant.DEF_KG
                 } else {
                     strKG =
-                        Utils.lbToKg(dialogBinding.editWeight.text.toString().toDouble())
-                            .roundToInt().toFloat()
+                            Utils.lbToKg(dialogBinding.editWeight.text.toString().toDouble())
+                                    .roundToInt().toFloat()
                     strUnit = Constant.DEF_LB
                 }
 
@@ -681,6 +708,18 @@ class ReportActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

@@ -1,5 +1,5 @@
 
-package com.reminder
+package com.reminderNew
 
 import android.content.ContentValues
 import android.content.Context
@@ -14,7 +14,7 @@ class ReminderDatabase(context: Context?) :
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_REMINDERS_TABLE = ("CREATE TABLE " + TABLE_REMINDERS +
                 "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + KEY_TITLE + " TEXT,"
                 + KEY_DATE + " TEXT,"
                 + KEY_TIME + " INTEGER,"
@@ -96,7 +96,7 @@ class ReminderDatabase(context: Context?) :
             val reminderList: ArrayList<Reminder> = ArrayList()
 
             // Select all Query
-            val selectQuery = "SELECT * FROM $TABLE_REMINDERS"
+            val selectQuery = "SELECT * FROM $TABLE_REMINDERS ORDER BY $KEY_ID DESC"
             val db = this.writableDatabase
             val cursor = db.rawQuery(selectQuery, null)
 

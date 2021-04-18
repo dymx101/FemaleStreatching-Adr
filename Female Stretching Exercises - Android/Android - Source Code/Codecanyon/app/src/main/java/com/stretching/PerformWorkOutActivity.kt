@@ -2,6 +2,7 @@ package com.stretching
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -17,10 +18,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.WorkoutProgressIndicatorAdapter
 import com.stretching.databinding.ActivityPerformWorkoutBinding
+import com.stretching.databinding.BottomSheetSoundOptionBinding
 import com.stretching.databinding.DialogQuiteWorkoutBinding
 import com.stretching.interfaces.AdsCallback
 import com.stretching.interfaces.DialogDismissListener
@@ -28,11 +31,12 @@ import com.stretching.objects.HomeExTableClass
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.objects.Music
 import com.stretching.utils.*
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
+import com.stretching.interfaces.CallbackListener
 import java.util.*
 
 
-class PerformWorkOutActivity : BaseActivity() {
+class PerformWorkOutActivity : BaseActivity(), CallbackListener {
 
     val TAG = PerformWorkOutActivity::class.java.name + Constant.ARROW
     var binding: ActivityPerformWorkoutBinding? = null
@@ -111,6 +115,15 @@ class PerformWorkOutActivity : BaseActivity() {
         workoutProgressIndicatorAdapter!!.setTotalExercise(exercisesList!!.size)
 
         initMusic(true)
+
+        if (Utils.getPref(this, Constant.PREF_IS_SOUND_MUTE, false)){
+            binding!!.imgSound.setImageResource(R.drawable.ic_mute_sound)
+        }else{
+            binding!!.imgSound.setImageResource(R.drawable.ic_sound_round)
+        }
+
+
+
     }
 
     private fun initMusic(isPlayMusic: Boolean) {
@@ -418,22 +431,38 @@ class PerformWorkOutActivity : BaseActivity() {
     }
 
     private fun goToCompleteScreen() {
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleFullAd(this, object : AdsCallback {
+                override fun startNextScreenAfterAd() {
+                    startCompleteActivity()
+                }
 
-        AdUtils.initFullAdd(this, object : AdsCallback {
-            override fun startNextScreenAfterAd() {
-                var i = Intent(this@PerformWorkOutActivity, CompletedActivity::class.java)
-                i.putExtra("workoutPlanData", Gson().toJson(workoutPlanData))
-                i.putExtra("ExcList", Gson().toJson(exercisesList))
-                i.putExtra("duration", totalExTime)
-                startActivity(i)
-                finish()
-            }
+            })
+        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookFullAd(this, object : AdsCallback {
+                override fun startNextScreenAfterAd() {
+                    startCompleteActivity()
+                }
 
-        })
+            })
+        }else{
+            startCompleteActivity()
+        }
+
 
     }
 
+    fun startCompleteActivity() {
+        val i = Intent(this@PerformWorkOutActivity, CompletedActivity::class.java)
+        i.putExtra("workoutPlanData", Gson().toJson(workoutPlanData))
+        i.putExtra("ExcList", Gson().toJson(exercisesList))
+        i.putExtra("duration", totalExTime)
+        startActivity(i)
+        finish()
+    }
+
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         initMusic(false)
         resumeTimer()
@@ -457,7 +486,7 @@ class PerformWorkOutActivity : BaseActivity() {
 
         fun onSoundClick() {
             pauseTimer()
-            showSoundOptionDialog(this@PerformWorkOutActivity, object : DialogDismissListener {
+            showSoundOptionDialogPerForm(this@PerformWorkOutActivity, object : DialogDismissListener {
                 override fun onDialogDismiss() {
                     resumeTimer()
                 }
@@ -466,11 +495,11 @@ class PerformWorkOutActivity : BaseActivity() {
 
         fun onReadyToGoClick() {
             // pauseTimer()
-            val i = Intent(this@PerformWorkOutActivity, PauseBeforeStartActivity::class.java)
-            i.putExtra("workoutPlanData", Gson().toJson(currentExe))
-            i.putExtra("nextPos", currentPos + 1)
-            i.putExtra("totalEx", exercisesList!!.size)
-            startActivity(i)
+            /*  val i = Intent(this@PerformWorkOutActivity, PauseBeforeStartActivity::class.java)
+              i.putExtra("workoutPlanData", Gson().toJson(currentExe))
+              i.putExtra("nextPos", currentPos + 1)
+              i.putExtra("totalEx", exercisesList!!.size)
+              startActivity(i)*/
         }
 
         fun onMusicClick() {
@@ -550,6 +579,65 @@ class PerformWorkOutActivity : BaseActivity() {
             }
         }
 
+    }
+
+
+    var dialogSoundOptionBindingPerForm: BottomSheetSoundOptionBinding? = null
+    lateinit var dialogSoundOptionPerForm: BottomSheetDialog
+
+    fun showSoundOptionDialogPerForm(mContext: Context, listner: DialogDismissListener) {
+        val v: View = (mContext as Activity).getLayoutInflater()
+            .inflate(R.layout.bottom_sheet_sound_option, null)
+        dialogSoundOptionBindingPerForm = DataBindingUtil.bind(v)
+        dialogSoundOptionPerForm = BottomSheetDialog(mContext)
+        dialogSoundOptionPerForm.setContentView(v)
+
+        dialogSoundOptionBindingPerForm!!.switchMute.isChecked =
+            Utils.getPref(this, Constant.PREF_IS_SOUND_MUTE, false)
+        dialogSoundOptionBindingPerForm!!.switchCoachTips.isChecked =
+            Utils.getPref(this, Constant.PREF_IS_COACH_SOUND_ON, true)
+        dialogSoundOptionBindingPerForm!!.switchVoiceGuide.isChecked =
+            Utils.getPref(this, Constant.PREF_IS_INSTRUCTION_SOUND_ON, true)
+
+        dialogSoundOptionBindingPerForm!!.switchMute.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding!!.imgSound.setImageResource(R.drawable.ic_mute_sound)
+                dialogSoundOptionBindingPerForm!!.switchCoachTips.isChecked = false
+                dialogSoundOptionBindingPerForm!!.switchVoiceGuide.isChecked = false
+                Utils.setPref(this, Constant.PREF_IS_SOUND_MUTE, true)
+            } else {
+                binding!!.imgSound.setImageResource(R.drawable.ic_sound_round)
+                Utils.setPref(this, Constant.PREF_IS_SOUND_MUTE, false)
+            }
+        }
+
+        dialogSoundOptionBindingPerForm!!.switchCoachTips.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                dialogSoundOptionBindingPerForm!!.switchMute.isChecked = false
+                Utils.setPref(this, Constant.PREF_IS_COACH_SOUND_ON, true)
+            } else {
+                Utils.setPref(this, Constant.PREF_IS_COACH_SOUND_ON, false)
+            }
+        }
+
+        dialogSoundOptionBindingPerForm!!.switchVoiceGuide.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                dialogSoundOptionBindingPerForm!!.switchMute.isChecked = false
+                Utils.setPref(this, Constant.PREF_IS_INSTRUCTION_SOUND_ON, true)
+            } else {
+                Utils.setPref(this, Constant.PREF_IS_INSTRUCTION_SOUND_ON, false)
+            }
+        }
+
+        dialogSoundOptionBindingPerForm!!.llDone.setOnClickListener {
+            dialogSoundOptionPerForm.dismiss()
+        }
+
+        dialogSoundOptionPerForm.setOnDismissListener {
+            listner.onDialogDismiss()
+        }
+
+        dialogSoundOptionPerForm.show()
     }
 
     private fun playMusic() {
@@ -679,7 +767,7 @@ class PerformWorkOutActivity : BaseActivity() {
         try {
             val calValue = Constant.SEC_DURATION_CAL * totalExTime
 
-            dbHelper.addHistory(
+            /*dbHelper.addHistory(
                 exercisesList!![0].planId!!,
                 dbHelper.getPlanNameByPlanId(exercisesList!![0].planId!!),
                 Utils.parseTime(Date().time, Constant.DATE_TIME_24_FORMAT),
@@ -692,9 +780,9 @@ class PerformWorkOutActivity : BaseActivity() {
                 "0",
                 dbHelper.getPlanDayNameByDayId(exercisesList!![0].dayId!!),
                 exercisesList!![0].dayId!!
-            )
+            )*/
 
-            //LocalDB.setLastUnCompletedExPos(this, arrDayExTableClass[0].planId.toInt(), arrDayExTableClass[0].dayId, viewPagerWorkout.currentItem)
+//            LocalDB.setLastUnCompletedExPos(this, arrDayExTableClass[0].planId.toInt(), arrDayExTableClass[0].dayId, viewPagerWorkout.currentItem)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -722,5 +810,17 @@ class PerformWorkOutActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 }

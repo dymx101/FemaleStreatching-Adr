@@ -1,6 +1,7 @@
 package com.stretching
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -14,8 +15,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.databinding.ActivityExerciesVideoBinding
 import com.stretching.objects.HomeExTableClass
-import com.stretching.objects.HomePlanTableClass
 import com.stretching.utils.AdUtils
+import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 import java.util.*
 
@@ -31,6 +32,23 @@ class ExerciseVideoActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitialized
         binding = DataBindingUtil.setContentView(this, R.layout.activity_exercies_video)
 
 //        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView, Constant.REC_BANNER_TYPE)
+            
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         initIntentParam()
         init()
     }
@@ -52,14 +70,19 @@ class ExerciseVideoActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitialized
 
     private fun init() {
         binding!!.handler = ClickHandler()
+        YouTubeInitializationResult.SERVICE_MISSING
 
-        if (workoutPlanData!!.exVideo.isNullOrEmpty().not()) {
-            binding!!.youtubeView.initialize(getString(R.string.youtube_api_key), this)
-            binding!!.adView.visibility =View.GONE
-        } else {
-            binding!!.youtubeView.visibility = View.GONE
-            binding!!.cardVideo.visibility = View.GONE
-            binding!!.cardAnimation.visibility = View.GONE
+        try {
+            if (workoutPlanData!!.exVideo.isNullOrEmpty().not()) {
+                binding!!.youtubeView.initialize(getString(R.string.youtube_api_key), this)
+                binding!!.adView.visibility =View.GONE
+            } else {
+                binding!!.youtubeView.visibility = View.GONE
+                binding!!.cardVideo.visibility = View.GONE
+                binding!!.cardAnimation.visibility = View.GONE
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         binding!!.adView.adListener = object :AdListener(){
@@ -75,7 +98,11 @@ class ExerciseVideoActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitialized
         }
 
 
-        fillData()
+        try {
+            fillData()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 
@@ -118,6 +145,7 @@ class ExerciseVideoActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitialized
             binding!!.youtubeView.visibility = View.VISIBLE
             binding!!.cardVideo.visibility = View.GONE
             binding!!.cardAnimation.visibility = View.VISIBLE
+            binding!!.llAdViewFacebook.visibility=View.GONE
         }
 
         fun onAnimationClick() {
@@ -125,6 +153,7 @@ class ExerciseVideoActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitialized
             binding!!.youtubeView.visibility = View.GONE
             binding!!.cardVideo.visibility = View.VISIBLE
             binding!!.cardAnimation.visibility = View.GONE
+            binding!!.llAdViewFacebook.visibility=View.VISIBLE
             player?.pause()
         }
     }
@@ -144,8 +173,12 @@ class ExerciseVideoActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitialized
         p0: YouTubePlayer.Provider?,
         p1: YouTubeInitializationResult?
     ) {
-
+        Log.e("TAG", "onInitializationFailure:::Fail Youtuber:::  "+p0.toString()+"  "+p1.toString() )
     }
 
 
+    override fun onResume() {
+
+        super.onResume()
+    }
 }

@@ -1,23 +1,17 @@
 package com.stretching.adapter
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.stretching.R
-import com.stretching.WhatsYourGoalActivity
 import com.stretching.databinding.ItemHomeWeekGoalBinding
-import com.stretching.databinding.ItemWhatsYourGoalBinding
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
 import java.util.*
 import kotlin.collections.ArrayList
 

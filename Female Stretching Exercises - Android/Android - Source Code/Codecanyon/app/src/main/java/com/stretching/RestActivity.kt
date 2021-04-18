@@ -4,19 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
-import com.google.android.youtube.player.YouTubeBaseActivity
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.stretching.databinding.ActivityExerciesVideoBinding
-import com.stretching.databinding.ActivityPauseBeforeStartBinding
 import com.stretching.databinding.ActivityRestBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomeExTableClass
 import com.stretching.utils.*
 import com.stretching.utils.AdUtils
@@ -26,7 +23,7 @@ import com.stretching.utils.Utils
 import java.util.*
 
 
-class RestActivity : BaseActivity() {
+class RestActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityRestBinding? = null
     var timer: CountDownTimerWithPause? = null
@@ -42,7 +39,17 @@ class RestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_rest)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.REC_BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility= View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookMediumRectangleAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility= View.GONE
+        }
+
         initIntentParam()
         init()
     }
@@ -151,11 +158,10 @@ class RestActivity : BaseActivity() {
 
             override fun onTick(millisUntilFinished: Long) {
                 timeCountDown++
-                binding!!.tvSecond.text =
-                    Utils.secToString(((millisUntilFinished / 1000)).toInt(), "mm:ss")
-                /* Debug.e("timeCountDown = " ,""+timeCountDown)
-                 Debug.e("millisUntilFinished time = " ,""+(millisUntilFinished/1000))
-                 Debug.e("Rest time = " ,""+((millisUntilFinished/1000)))*/
+                restTime = (millisUntilFinished/1000)
+                binding!!.tvSecond.text = Utils.secToString(((millisUntilFinished / 1000)).toInt(), "mm:ss")
+                Log.e("TAG", "onTick:::::time "+Utils.secToString(((millisUntilFinished / 1000)).toInt(), "mm:ss")+"    "+
+                        millisUntilFinished+"    "+millisUntilFinished/1000)
                 if (((millisUntilFinished / 1000)) < 4) {
                     //Debug.e("Rest time = " ,""+((millisUntilFinished/1000) - timeCountDown))
                     MyApplication.speechText(
@@ -185,10 +191,10 @@ class RestActivity : BaseActivity() {
         }
 
         fun onPlusTimeClick() {
-            Debug.e("old seconds = ", restTime.toString())
-            Debug.e("time completed seconds = ", timeCountDown.toString())
-            restTime = (restTime - timeCountDown) + 20
-            Debug.e("New seconds = ", restTime.toString())
+            Debug.e("Timer:::::old seconds = ", restTime.toString()+"  "+(restTime - timeCountDown) +"  "+timeCountDown.toString())
+//            restTime = (restTime - timeCountDown) + 20
+            restTime += 20
+            Debug.e("Timer:::::New seconds = ", restTime.toString() +"  "+(restTime - timeCountDown)+"  "+timeCountDown.toString())
             timer?.cancel()
             countDownRest()
         }
@@ -202,6 +208,7 @@ class RestActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         resumeTimer()
     }
@@ -235,6 +242,18 @@ class RestActivity : BaseActivity() {
         i.putExtra("isRestSkip",true)
         setResult(Activity.RESULT_OK,i)
         super.onBackPressed()
+
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
 
     }
 }

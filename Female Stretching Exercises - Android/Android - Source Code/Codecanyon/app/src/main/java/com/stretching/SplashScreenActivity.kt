@@ -1,35 +1,29 @@
 package com.stretching
 
-import android.app.AlertDialog
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
-import android.net.Uri
+import android.content.*
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.RemoteException
-import android.provider.Settings
 import com.android.vending.billing.IInAppBillingService
 import com.stretching.inapp.IabHelper
 import com.stretching.utils.Constant
-import com.stretching.utils.Debug
-import com.stretching.utils.RequestParamsUtils
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
+import com.stretching.interfaces.CallbackListener
 import org.json.JSONObject
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 
-class SplashScreenActivity : BaseActivity() {
+class SplashScreenActivity : BaseActivity(), CallbackListener {
 
     internal var handler = Handler()
     internal var bindService: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+
         DataHelper(this).checkDBExist()
 
         val serviceIntent = Intent("com.android.vending.billing.InAppBillingService.BIND")
@@ -41,24 +35,23 @@ class SplashScreenActivity : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        if (Utils.isOnline(this)){
+            successCall()
+        }else{
+            openInternetDialog(this)
+        }
+
     }
 
+    fun successCall(){
+        if (Utils.isOnline(this)){
 
-    fun showAlertDialog() {
-        val builder = AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle)
-        builder.setTitle("Important")
-            .setMessage(getActivity().resources.getString(R.string.permission_msg))
-            .setPositiveButton(android.R.string.ok) { dialog, which -> dialog.dismiss() }
-            .setNegativeButton(getActivity().resources.getString(R.string.permission_setting)) { dialog, which ->
-                dialog.dismiss()
-                finish()
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }.show()
+            checkPermissions(this)
+        }
+
     }
+
 
     fun startapp(sleepTime: Long) {
         handler.postDelayed(startApp, sleepTime)
@@ -168,6 +161,18 @@ class SplashScreenActivity : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+        successCall()
     }
 
 }

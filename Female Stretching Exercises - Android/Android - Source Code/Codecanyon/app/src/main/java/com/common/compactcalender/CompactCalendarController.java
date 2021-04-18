@@ -18,8 +18,7 @@ import android.widget.OverScroller;
 
 
 import com.stretching.R;
-import com.stretching.utils.Utils;
-import com.utillity.db.DataHelper;
+import com.stretching.db.DataHelper;
 
 import java.util.Calendar;
 import java.util.Date;

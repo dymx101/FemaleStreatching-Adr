@@ -26,10 +26,11 @@ import com.stretching.objects.HomePlanTableClass
 import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
+import com.stretching.interfaces.CallbackListener
 
 
-class EditPlanActivity : BaseActivity() {
+class EditPlanActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityEditPlanBinding? = null
     var editPlanAdapter: EditPlanAdapter? = null
@@ -41,7 +42,21 @@ class EditPlanActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_plan)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
         initIntentParam()
         init()
     }
@@ -141,6 +156,7 @@ class EditPlanActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -226,6 +242,18 @@ class EditPlanActivity : BaseActivity() {
             setResult(Activity.RESULT_OK)
             getExerciseData()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

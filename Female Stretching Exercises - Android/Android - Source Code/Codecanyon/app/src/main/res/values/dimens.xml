@@ -12,6 +12,7 @@
 
     <dimen name="np_dob_selected_text_size">24sp</dimen>
     <dimen name="np_dob_text_size">24sp</dimen>
+    <dimen name="dp50">50dp</dimen>
 
     <integer name="viewfliper_animation">700</integer>
 </resources>

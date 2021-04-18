@@ -90,12 +90,14 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -266,6 +268,22 @@
 
 
         </androidx.core.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:id="@+id/llAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/llAdViewFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp50"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:visibility="visible" />
 
     </LinearLayout>
 

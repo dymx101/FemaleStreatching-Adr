@@ -2,7 +2,6 @@ package com.stretching
 
 import android.app.Activity
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
@@ -12,10 +11,11 @@ import com.stretching.databinding.ActivitySetReminderBoxBinding
 import com.stretching.objects.ReminderTableClass
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
+import com.stretching.interfaces.CallbackListener
 
 
-class SetReminderBoxActivity : BaseActivity() {
+class SetReminderBoxActivity : BaseActivity(), CallbackListener {
     val TAG = SetReminderBoxActivity::class.java.name + Constant.ARROW
 
     var binding: ActivitySetReminderBoxBinding? = null
@@ -98,12 +98,25 @@ class SetReminderBoxActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

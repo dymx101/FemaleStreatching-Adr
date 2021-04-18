@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import com.stretching.databinding.ActivitySettingBinding
-import com.stretching.databinding.DialogSelectTtsEngineBinding
-import com.stretching.databinding.DialogSetDurationBinding
-import com.stretching.databinding.DialogTestVoiceFailBinding
+import com.stretching.databinding.*
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.DialogDismissListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.utils.AdUtils
@@ -17,7 +15,7 @@ import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class SettingActivity : BaseActivity() {
+class SettingActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivitySettingBinding? = null
 
@@ -26,7 +24,22 @@ class SettingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         initDrawerMenu(true)
         init()
     }
@@ -69,6 +82,7 @@ class SettingActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         changeSelection(6)
     }
@@ -291,6 +305,18 @@ class SettingActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

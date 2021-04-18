@@ -2,45 +2,25 @@ package com.stretching
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.common.compactcalender.CompactCalendarView
 import com.common.compactcalender.Event
-import com.common.swipedragrecyclerview.OnDragListener
-import com.common.swipedragrecyclerview.OnSwipeListener
-import com.common.swipedragrecyclerview.RecyclerHelper
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.stretching.adapter.EditPlanAdapter
 import com.stretching.adapter.HistoryExpandableAdapter
-import com.stretching.adapter.RecentAdapter
-import com.stretching.databinding.ActivityEditPlanBinding
 import com.stretching.databinding.ActivityHistoryBinding
-import com.stretching.databinding.ActivityRecentBinding
-import com.stretching.databinding.ActivityRestBinding
-import com.stretching.interfaces.AdsCallback
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
-import com.stretching.objects.HistoryData
-import com.stretching.objects.HomeTrainingPlans
 import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
-import com.stretching.utils.ErrorAlertDialog
 import com.stretching.utils.Utils
-import kotlinx.android.synthetic.main.activity_history.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HistoryActivity : BaseActivity() {
+class HistoryActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityHistoryBinding? = null
     var historyExpandableAdapter: HistoryExpandableAdapter? = null
@@ -50,7 +30,22 @@ class HistoryActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
         initIntentParam()
         init()
     }
@@ -100,9 +95,9 @@ class HistoryActivity : BaseActivity() {
                 } else {
                     val i = Intent(this@HistoryActivity, ExercisesListActivity::class.java)
                     i.putExtra("workoutPlanData", Gson().toJson(childItem!!.planDetail))
-                    i.putExtra(Constant.IS_PURCHASE,false)
                     i.putExtra(Constant.extra_day_id, childItem!!.DayId)
                     i.putExtra("day_name", childItem!!.DayName)
+                    i.putExtra(Constant.IS_PURCHASE,false)
                     startActivity(i)
                 }
 
@@ -154,6 +149,7 @@ class HistoryActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -181,6 +177,18 @@ class HistoryActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

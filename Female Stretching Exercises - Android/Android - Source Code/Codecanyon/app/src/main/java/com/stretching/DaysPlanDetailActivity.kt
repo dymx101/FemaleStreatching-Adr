@@ -3,22 +3,21 @@ package com.stretching
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.WeekPlanAdapter
 import com.stretching.databinding.ActivityDaysPlanDetailBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.objects.PWeeklyDayData
 import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import java.io.Serializable
 
 
-class DaysPlanDetailActivity : BaseActivity() {
+class DaysPlanDetailActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityDaysPlanDetailBinding? = null
     var weekPlanAdapter: WeekPlanAdapter? = null
@@ -29,7 +28,22 @@ class DaysPlanDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_days_plan_detail)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         initIntentParam()
         init()
     }
@@ -100,6 +114,7 @@ class DaysPlanDetailActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         fillData()
     }
@@ -131,6 +146,18 @@ class DaysPlanDetailActivity : BaseActivity() {
         fun onBackClick() {
             finish()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 

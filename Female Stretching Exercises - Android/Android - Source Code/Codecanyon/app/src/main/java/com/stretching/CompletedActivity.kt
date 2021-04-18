@@ -12,9 +12,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.databinding.ActivityCompletedBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.DialogDismissListener
 import com.stretching.objects.HomeExTableClass
 import com.stretching.objects.HomePlanTableClass
+import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.MySoundUtil
 import com.stretching.utils.Utils
@@ -22,7 +24,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class CompletedActivity : BaseActivity() {
+class CompletedActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityCompletedBinding? = null
     var workoutPlanData: HomePlanTableClass? = null
@@ -33,12 +35,26 @@ class CompletedActivity : BaseActivity() {
 
     private lateinit var mySoundUtil: MySoundUtil
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_completed)
 
         initIntentParam()
         init()
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this, binding!!.llAdViewFacebook)
+        } else {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
     }
 
     private fun initIntentParam() {
@@ -122,6 +138,7 @@ class CompletedActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -400,5 +417,17 @@ class CompletedActivity : BaseActivity() {
         if (requestCode == 7983 && resultCode == Activity.RESULT_OK) {
             fillData()
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 }

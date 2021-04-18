@@ -1,7 +1,6 @@
 package com.stretching
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -42,6 +41,7 @@ import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.stretching.adapter.SideMenuAdapter
 import com.stretching.databinding.*
+import com.stretching.interfaces.AdsCallback
 import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.DateEventListener
 import com.stretching.interfaces.DialogDismissListener
@@ -49,7 +49,8 @@ import com.stretching.objects.HomeExTableClass
 import com.stretching.objects.SideMenuItem
 import com.stretching.utils.*
 import com.stretching.utils.permission.ManagePermissionsImp
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
+import com.stretching.utils.Utils.isOnline
 import kotlinx.android.synthetic.main.dialog_logout.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.android.synthetic.main.side_menu.view.*
@@ -74,11 +75,11 @@ open class BaseActivity() : AppCompatActivity() {
         intentFilter.addAction(Constant.FINISH_ACTIVITY)
         commonReciever = MyEventServiceReciever()
         LocalBroadcastManager.getInstance(this).registerReceiver(
-            commonReciever, intentFilter
+                commonReciever, intentFilter
         )
         val isKeepOn = Utils.getPref(this, Constant.PREF_IS_KEEP_SCREEN_ON, false)
         if (isKeepOn) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
         dbHelper = DataHelper(this)
@@ -146,7 +147,7 @@ open class BaseActivity() : AppCompatActivity() {
             customSideMenu = layoutInflater.inflate(R.layout.side_menu, null, false) as ViewGroup
             navHeader = customSideMenu.navHeader
             var mRecyclerView = customSideMenu.mRecyclerView
-            var exitTxt =customSideMenu.llExit
+            var exitTxt = customSideMenu.llExit
             navHeader.llUserDetail.setOnClickListener {
 
 //                val intent = Intent(getActivity(), ProfileActivity::class.java)
@@ -173,41 +174,41 @@ open class BaseActivity() : AppCompatActivity() {
             var data = ArrayList<SideMenuItem>()
 
             data.add(
-                SideMenuItem(
-                    "1",
-                    R.drawable.ic_menu_training_plan,
-                    getString(R.string.menu_training_plans)
-                )
+                    SideMenuItem(
+                            "1",
+                            R.drawable.ic_menu_training_plan,
+                            getString(R.string.menu_training_plans)
+                    )
             )
             data.add(
-                SideMenuItem(
-                    "2",
-                    R.drawable.ic_menu_library,
-                    getString(R.string.menu_discover)
-                )
+                    SideMenuItem(
+                            "2",
+                            R.drawable.ic_menu_library,
+                            getString(R.string.menu_discover)
+                    )
             )
             data.add(
-                SideMenuItem(
-                    "3",
-                    R.drawable.ic_menu_my_training,
-                    getString(R.string.menu_my_training)
-                )
+                    SideMenuItem(
+                            "3",
+                            R.drawable.ic_menu_my_training,
+                            getString(R.string.menu_my_training)
+                    )
             )
             data.add(SideMenuItem("4", R.drawable.ic_menu_report, getString(R.string.menu_report)))
             data.add(
-                SideMenuItem(
-                    "5",
-                    R.drawable.ic_menu_remind,
-                    getString(R.string.menu_reminder)
-                )
+                    SideMenuItem(
+                            "5",
+                            R.drawable.ic_menu_remind,
+                            getString(R.string.menu_reminder)
+                    )
             )
             // data.add(SideMenuItem("6", R.drawable.ic_language, getString(R.string.menu_language)))
             data.add(
-                SideMenuItem(
-                    "7",
-                    R.drawable.ic_menu_setting,
-                    getString(R.string.menu_setting)
-                )
+                    SideMenuItem(
+                            "7",
+                            R.drawable.ic_menu_setting,
+                            getString(R.string.menu_setting)
+                    )
             )
 
 
@@ -304,12 +305,12 @@ open class BaseActivity() : AppCompatActivity() {
             })
 
             result = DrawerBuilder()
-                .withActivity(this)
-                .withCloseOnClick(true)
-                .withSelectedItemByPosition(-1)
-                .withCustomView(customSideMenu)
-                .withDrawerWidthDp(280)
-                .build()
+                    .withActivity(this)
+                    .withCloseOnClick(true)
+                    .withSelectedItemByPosition(-1)
+                    .withCustomView(customSideMenu)
+                    .withDrawerWidthDp(280)
+                    .build()
 
 
             imgMenu.visibility = View.VISIBLE
@@ -354,6 +355,7 @@ open class BaseActivity() : AppCompatActivity() {
         pbutton.setTextColor(Color.BLACK)
     }
 
+
     open fun changeSelection(index: Int) {
         if (result != null && menuAdapter != null) {
             menuAdapter!!.changeSelection(index)
@@ -382,8 +384,7 @@ open class BaseActivity() : AppCompatActivity() {
 
     fun logout() {
 
-        LocalBroadcastManager.getInstance(getActivity())
-            .sendBroadcast(Intent(Constant.FINISH_ACTIVITY))
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(Intent(Constant.FINISH_ACTIVITY))
 
     }
 
@@ -528,10 +529,10 @@ open class BaseActivity() : AppCompatActivity() {
 
     override fun onResume() {
 
-        if (dialogPermission == null)
-            checkPermissions(getActivity())
-        else if (dialogPermission != null && dialogPermission!!.isShowing.not())
-            checkPermissions(getActivity())
+        /* if (dialogPermission == null)
+             checkPermissions(getActivity())
+         else if (dialogPermission != null && dialogPermission!!.isShowing.not())
+             checkPermissions(getActivity())*/
 
         super.onResume()
     }
@@ -548,25 +549,28 @@ open class BaseActivity() : AppCompatActivity() {
     fun checkPermissions(activity: AppCompatActivity) {
         // Initialize a list of required permissions to request runtime
         val list = listOf(
-            Manifest.permission.INTERNET,
-            Manifest.permission.ACCESS_NETWORK_STATE,
-            "com.android.vending.BILLING"
-        )
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                "com.android.vending.BILLING")
 
         PermissionHelper.checkPermissions(
-            activity,
-            list,
-            object : ManagePermissionsImp.IPermission {
-                override fun onPermissionDenied() {
-                    showAlert()
-                }
-
-                override fun onPermissionGranted() {
-                    if (activity is SplashScreenActivity) {
-                        activity.startapp(3000)
+                activity,
+                list,
+                object : ManagePermissionsImp.IPermission {
+                    override fun onPermissionDenied() {
+//                        showAlert()
+                        if (activity is SplashScreenActivity) {
+                            activity.startapp(1000)
+                        }
                     }
-                }
-            })
+
+                    override fun onPermissionGranted() {
+                        if (activity is SplashScreenActivity) {
+                            activity.startapp(1000)
+                            Log.e("TAG", "onPermissionGranted:::: " )
+                        }
+                    }
+                })
     }
 
     var dialogPermission: AlertDialog? = null
@@ -577,10 +581,10 @@ open class BaseActivity() : AppCompatActivity() {
         builder.setMessage(getString(R.string.err_need_permission_msg))
         builder.setPositiveButton(R.string.btn_ok) { dialog, which ->
             startActivity(
-                Intent(
-                    android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + BuildConfig.APPLICATION_ID)
-                )
+                    Intent(
+                            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                    )
             )
             finish()
         }
@@ -590,9 +594,9 @@ open class BaseActivity() : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
     ) {
 
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -604,6 +608,13 @@ open class BaseActivity() : AppCompatActivity() {
             return
         }
         AlertDialogHelper.showNoInternetDialog(context, callbackListener)
+    }
+
+    fun isInternetAvailable_(context: Context, callbackListener: CallbackListener) {
+        if (Utils.isInternetConnected(context)) {
+            callbackListener.onSuccess()
+            return
+        }
     }
 
     fun showHttpError() {
@@ -618,15 +629,15 @@ open class BaseActivity() : AppCompatActivity() {
     fun showLogoutPopup(view: View) {
         if (logoutPopupWindow == null) {
             popupLogoutBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(getActivity()),
-                R.layout.popup_logout,
-                null,
-                false
+                    LayoutInflater.from(getActivity()),
+                    R.layout.popup_logout,
+                    null,
+                    false
             )
             logoutPopupWindow = PopupWindow(
-                popupLogoutBinding!!.root,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                    popupLogoutBinding!!.root,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             )
             logoutPopupWindow!!.isOutsideTouchable = true
             logoutPopupWindow!!.isFocusable = true
@@ -646,8 +657,8 @@ open class BaseActivity() : AppCompatActivity() {
 
     lateinit var setWorkOutTimeDialog: Dialog
     fun showChangeTimeDialog(
-        item: HomeExTableClass,
-        listener: DialogInterface
+            item: HomeExTableClass,
+            listener: DialogInterface
     ) {
         var second = item.exTime!!.toInt()
 
@@ -655,10 +666,10 @@ open class BaseActivity() : AppCompatActivity() {
         setWorkOutTimeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         var dialogChangeWorkoutTimeBinding =
-            DataBindingUtil.inflate<DialogChangeWorkoutTimeBinding>(
-                getLayoutInflater(),
-                R.layout.dialog_change_workout_time, null, false
-            )
+                DataBindingUtil.inflate<DialogChangeWorkoutTimeBinding>(
+                        getLayoutInflater(),
+                        R.layout.dialog_change_workout_time, null, false
+                )
 
         setWorkOutTimeDialog.setContentView(dialogChangeWorkoutTimeBinding.root)
 
@@ -669,7 +680,7 @@ open class BaseActivity() : AppCompatActivity() {
             dialogChangeWorkoutTimeBinding.tvTime.text = "X ${item.exTime}"
         } else {
             dialogChangeWorkoutTimeBinding.tvTime.text =
-                Utils.secToString(item.exTime!!.toInt(), Constant.WORKOUT_TIME_FORMAT)
+                    Utils.secToString(item.exTime!!.toInt(), Constant.WORKOUT_TIME_FORMAT)
         }
 
         if (item.exVideo.isNullOrEmpty()) {
@@ -680,7 +691,7 @@ open class BaseActivity() : AppCompatActivity() {
 
         dialogChangeWorkoutTimeBinding.viewFlipper.removeAllViews()
         val listImg: ArrayList<String>? =
-            Utils.ReplaceSpacialCharacters(item.exPath!!)?.let { Utils.getAssetItems(this, it) }
+                Utils.ReplaceSpacialCharacters(item.exPath!!)?.let { Utils.getAssetItems(this, it) }
 
         if (listImg != null) {
             for (i in 0 until listImg.size) {
@@ -688,8 +699,8 @@ open class BaseActivity() : AppCompatActivity() {
                 //            Glide.with(mContext).load("//android_asset/burpee/".plus(i.toString()).plus(".png")).into(imgview)
                 Glide.with(this).load(listImg.get(i)).into(imgview)
                 imgview.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
                 )
                 dialogChangeWorkoutTimeBinding.viewFlipper.addView(imgview)
             }
@@ -706,7 +717,7 @@ open class BaseActivity() : AppCompatActivity() {
                 dialogChangeWorkoutTimeBinding.tvTime.text = "X ${second}"
             } else {
                 dialogChangeWorkoutTimeBinding.tvTime.text =
-                    Utils.secToString(second, Constant.WORKOUT_TIME_FORMAT)
+                        Utils.secToString(second, Constant.WORKOUT_TIME_FORMAT)
             }
         }
 
@@ -716,7 +727,7 @@ open class BaseActivity() : AppCompatActivity() {
                 dialogChangeWorkoutTimeBinding.tvTime.text = "X ${second}"
             } else {
                 dialogChangeWorkoutTimeBinding.tvTime.text =
-                    Utils.secToString(second, Constant.WORKOUT_TIME_FORMAT)
+                        Utils.secToString(second, Constant.WORKOUT_TIME_FORMAT)
             }
         }
 
@@ -737,7 +748,7 @@ open class BaseActivity() : AppCompatActivity() {
                 dialogChangeWorkoutTimeBinding.tvTime.text = "X ${second}"
             } else {
                 dialogChangeWorkoutTimeBinding.tvTime.text =
-                    Utils.secToString(second!!.toInt(), Constant.WORKOUT_TIME_FORMAT)
+                        Utils.secToString(second!!.toInt(), Constant.WORKOUT_TIME_FORMAT)
             }
             listener.dismiss()
         }
@@ -749,23 +760,23 @@ open class BaseActivity() : AppCompatActivity() {
         }
 
         setWorkOutTimeDialog.getWindow()!!
-            .setBackgroundDrawableResource(android.R.color.transparent);
+                .setBackgroundDrawableResource(android.R.color.transparent);
         setWorkOutTimeDialog.show()
     }
 
     fun showExcDetailDialog(
-        excList: MutableList<HomeExTableClass>,
-        position: Int
+            excList: MutableList<HomeExTableClass>,
+            position: Int
     ) {
         var currPos = position
         val excDetailDialog = Dialog(getActivity())
         excDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         var dialogWorkoutDetailBinding =
-            DataBindingUtil.inflate<DialogChangeWorkoutTimeBinding>(
-                getLayoutInflater(),
-                R.layout.dialog_change_workout_time, null, false
-            )
+                DataBindingUtil.inflate<DialogChangeWorkoutTimeBinding>(
+                        getLayoutInflater(),
+                        R.layout.dialog_change_workout_time, null, false
+                )
 
         excDetailDialog.setContentView(dialogWorkoutDetailBinding.root)
 
@@ -783,7 +794,7 @@ open class BaseActivity() : AppCompatActivity() {
                 dialogWorkoutDetailBinding.tvTime.text = "X ${item.exTime}"
             } else {
                 dialogWorkoutDetailBinding.tvTime.text =
-                    Utils.secToString(item.exTime!!.toInt(), Constant.WORKOUT_TIME_FORMAT)
+                        Utils.secToString(item.exTime!!.toInt(), Constant.WORKOUT_TIME_FORMAT)
             }
 
             if (item.exVideo.isNullOrEmpty()) {
@@ -794,7 +805,7 @@ open class BaseActivity() : AppCompatActivity() {
 
             dialogWorkoutDetailBinding.viewFlipper.removeAllViews()
             val listImg: ArrayList<String>? =
-                Utils.ReplaceSpacialCharacters(item.exPath!!)?.let { Utils.getAssetItems(this, it) }
+                    Utils.ReplaceSpacialCharacters(item.exPath!!)?.let { Utils.getAssetItems(this, it) }
 
             if (listImg != null) {
                 for (i in 0 until listImg.size) {
@@ -802,8 +813,8 @@ open class BaseActivity() : AppCompatActivity() {
                     //            Glide.with(mContext).load("//android_asset/burpee/".plus(i.toString()).plus(".png")).into(imgview)
                     Glide.with(this).load(listImg.get(i)).into(imgview)
                     imgview.layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
                     )
                     dialogWorkoutDetailBinding.viewFlipper.addView(imgview)
                 }
@@ -840,7 +851,7 @@ open class BaseActivity() : AppCompatActivity() {
         }
 
         excDetailDialog.getWindow()!!
-            .setBackgroundDrawableResource(android.R.color.transparent);
+                .setBackgroundDrawableResource(android.R.color.transparent);
         excDetailDialog.show()
 
     }
@@ -851,31 +862,27 @@ open class BaseActivity() : AppCompatActivity() {
 
     fun showSoundOptionDialog(mContext: Context, listner: DialogDismissListener) {
         val v: View = (mContext as Activity).getLayoutInflater()
-            .inflate(R.layout.bottom_sheet_sound_option, null)
+                .inflate(R.layout.bottom_sheet_sound_option, null)
         dialogSoundOptionBinding = DataBindingUtil.bind(v)
         dialogSoundOption = BottomSheetDialog(mContext)
         dialogSoundOption.setContentView(v)
 
         dialogSoundOptionBinding!!.switchMute.isChecked =
-            Utils.getPref(this@BaseActivity, Constant.PREF_IS_SOUND_MUTE, false)
+                Utils.getPref(this@BaseActivity, Constant.PREF_IS_SOUND_MUTE, false)
         dialogSoundOptionBinding!!.switchCoachTips.isChecked =
-            Utils.getPref(this@BaseActivity, Constant.PREF_IS_COACH_SOUND_ON, true)
+                Utils.getPref(this@BaseActivity, Constant.PREF_IS_COACH_SOUND_ON, true)
         dialogSoundOptionBinding!!.switchVoiceGuide.isChecked =
-            Utils.getPref(this@BaseActivity, Constant.PREF_IS_INSTRUCTION_SOUND_ON, true)
+                Utils.getPref(this@BaseActivity, Constant.PREF_IS_INSTRUCTION_SOUND_ON, true)
 
-        dialogSoundOptionBinding!!.switchMute.setOnCheckedChangeListener(object :
-            CompoundButton.OnCheckedChangeListener {
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-                if (isChecked) {
-                    dialogSoundOptionBinding!!.switchCoachTips.isChecked = false
-                    dialogSoundOptionBinding!!.switchVoiceGuide.isChecked = false
-                    Utils.setPref(this@BaseActivity, Constant.PREF_IS_SOUND_MUTE, true)
-                } else {
-                    Utils.setPref(this@BaseActivity, Constant.PREF_IS_SOUND_MUTE, false)
-                }
+        dialogSoundOptionBinding!!.switchMute.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                dialogSoundOptionBinding!!.switchCoachTips.isChecked = false
+                dialogSoundOptionBinding!!.switchVoiceGuide.isChecked = false
+                Utils.setPref(this@BaseActivity, Constant.PREF_IS_SOUND_MUTE, true)
+            } else {
+                Utils.setPref(this@BaseActivity, Constant.PREF_IS_SOUND_MUTE, false)
             }
-
-        })
+        }
 
         dialogSoundOptionBinding!!.switchCoachTips.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -905,437 +912,6 @@ open class BaseActivity() : AppCompatActivity() {
 
         dialogSoundOption.show()
     }
-/*
-
-    @SuppressLint("SetTextI18n")
-    fun showHeightWeightDialog(listner: DialogDismissListener) {
-        val builder = AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle)
-        builder.setCancelable(false)
-
-        val dialogLayout = layoutInflater.inflate(R.layout.dialog_height_weight, null)
-
-        var boolKg: Boolean
-        var boolInch: Boolean
-
-        val editWeight = dialogLayout.findViewById<CEditTextView>(R.id.editWeight)
-        val tvKG = dialogLayout.findViewById<CTextView>(R.id.tvKG)
-        val tvLB = dialogLayout.findViewById<CTextView>(R.id.tvLB)
-        val editHeightCM = dialogLayout.findViewById<CEditTextView>(R.id.editHeightCM)
-        val tvCM = dialogLayout.findViewById<CTextView>(R.id.tvCM)
-        val tvIN = dialogLayout.findViewById<CTextView>(R.id.tvIN)
-        val editHeightFT = dialogLayout.findViewById<CEditTextView>(R.id.editHeightFT)
-        val editHeightIn = dialogLayout.findViewById<CEditTextView>(R.id.editHeightIn)
-        val llInch = dialogLayout.findViewById<LinearLayout>(R.id.llInch)
-
-        editWeight.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                editWeight.setText(" ")
-            } else {
-                if (editWeight.text.toString().isEmpty()) {
-                    editWeight.setText("0.0 KG")
-                    Log.e("TAG", "showHeightWeightDialog::::If::: "+editWeight.text )
-                }else {
-                    Log.e("TAG", "showHeightWeightDialog::::Else::: "+editWeight.text )
-                    editWeight.setText(Utils.getPref(this, Constant.PREF_LAST_INPUT_WEIGHT, 0f).toString())
-                }
-            }
-        }
-
-        editHeightCM.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                editHeightCM.setText(editHeightCM.text.toString().substringBefore(" " + Constant.DEF_CM))
-            } else {
-                editHeightCM.setText(editHeightCM.text.toString() + " " + Constant.DEF_CM)
-            }
-        }
-
-        editHeightFT.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                editHeightFT.setText(editHeightFT.text.toString().substringBefore(" " + Constant.DEF_FT))
-            } else {
-                editHeightFT.setText(editHeightFT.text.toString() + " " + Constant.DEF_FT)
-            }
-        }
-
-        editHeightIn.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                editHeightIn.setText(editHeightIn.text.toString().substringBefore(" " + Constant.DEF_IN))
-            } else {
-                editHeightIn.setText(editHeightIn.text.toString() + " " + Constant.DEF_IN)
-            }
-        }
-
-
-        boolKg = true
-        try {
-            if (Utils.getPref(this, Constant.PREF_WEIGHT_UNIT, Constant.DEF_KG) == Constant.DEF_KG) {
-
-                editWeight.setText(Utils.getPref(this, Constant.PREF_LAST_INPUT_WEIGHT, 0f).toString())
-
-                tvKG.setTextColor(ContextCompat.getColor(this, R.color.white))
-                tvLB.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-
-                tvKG.isSelected = true
-                tvLB.isSelected = false
-            } else {
-                boolKg = false
-
-                editWeight.setText(
-                    Utils.kgToLb(
-                        Utils.getPref(
-                            this,
-                            Constant.PREF_LAST_INPUT_WEIGHT,
-                            0f
-                        ).toDouble()
-                    ).toString()
-                )
-
-                tvKG.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-                tvLB.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-                tvKG.isSelected = false
-                tvLB.isSelected = true
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        boolInch = true
-        try {
-            if (Utils.getPref(this, Constant.PREF_HEIGHT_UNIT, Constant.DEF_CM) == Constant.DEF_IN) {
-
-                editHeightCM.visibility = View.GONE
-                llInch.visibility = View.VISIBLE
-
-                tvIN.setTextColor(ContextCompat.getColor(this, R.color.white))
-                tvCM.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-
-                tvIN.isSelected = true
-                tvCM.isSelected = false
-
-                editHeightFT.setText(
-                    Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0).toString()
-                )
-                editHeightIn.setText(
-                    Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toString()
-                )
-                Log.e("TAG", "showHeightWeightDialog::::IFFFFFFF " )
-            } else {
-                boolInch = false
-
-                editHeightCM.visibility = View.VISIBLE
-                llInch.visibility = View.GONE
-
-                tvIN.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-                tvCM.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-                tvIN.isSelected = false
-                tvCM.isSelected = true
-
-                val inch = Utils.ftInToInch(
-                    Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0),
-                    Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toDouble()
-                )
-
-                editHeightCM.setText(Utils.inchToCm(inch).roundToInt().toDouble().toString())
-                Log.e("TAG", "showHeightWeightDialog::::::ELSE:::::: " )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        tvKG.setOnClickListener {
-            try {
-                if (boolInch) {
-                    boolInch = false
-
-                    editHeightCM.visibility = View.VISIBLE
-                    llInch.visibility = View.GONE
-
-                    tvIN.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-                    tvCM.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-                    tvIN.isSelected = false
-                    tvCM.isSelected = true
-
-                    var inch = 0.0
-                    if (editHeightFT.text.toString() != "" && editHeightFT.text.toString() != "") {
-                        inch = Utils.ftInToInch(
-                            editHeightFT.text.toString().toInt(),
-                            editHeightIn.text.toString().toDouble()
-                        )
-                    } else if (editHeightFT.text.toString() != "" && editHeightIn.text.toString() == "") {
-                        inch = Utils.ftInToInch(editHeightFT.text.toString().toInt(), 0.0)
-                    } else if (editHeightFT.text.toString() == "" && editHeightIn.text.toString() != "") {
-                        inch = Utils.ftInToInch(1, editHeightIn.text.toString().toDouble())
-                    }
-
-                    editHeightCM.setText(Utils.inchToCm(inch).roundToInt().toDouble().toString())
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            try {
-                if (!boolKg) {
-                    boolKg = true
-
-                    tvKG.setTextColor(ContextCompat.getColor(this, R.color.white))
-                    tvLB.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-
-                    tvKG.isSelected = true
-                    tvLB.isSelected = false
-
-                    editWeight.hint = Constant.DEF_KG
-
-                    if (editWeight.text.toString() != "") {
-                        editWeight.setText(
-                            Utils.lbToKg(editWeight.text.toString().toDouble()).toString()
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        tvLB.setOnClickListener {
-            try {
-                if (boolKg) {
-                    boolKg = false
-
-
-                    tvKG.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-                    tvLB.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-                    tvKG.isSelected = false
-                    tvLB.isSelected = true
-
-                    editWeight.hint = Constant.DEF_LB
-
-                    if (editWeight.text.toString() != "") {
-                        editWeight.setText(
-                            Utils.kgToLb(editWeight.text.toString().toDouble()).toString()
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            try {
-                editHeightCM.visibility = View.GONE
-                llInch.visibility = View.VISIBLE
-
-                tvIN.setTextColor(ContextCompat.getColor(this, R.color.white))
-                tvCM.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-
-                tvIN.isSelected = true
-                tvCM.isSelected = false
-
-                try {
-                    if (!boolInch) {
-                        boolInch = true
-
-                        if (editHeightCM.text.toString() != "") {
-                            val inch = Utils.cmToInch(editHeightCM.text.toString().toDouble())
-                            editHeightFT.setText(Utils.calcInchToFeet(inch).toString())
-                            editHeightIn.setText(Utils.calcInFromInch(inch).toString())
-                        }
-
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        tvCM.setOnClickListener {
-            try {
-                if (boolInch) {
-                    boolInch = false
-
-                    editHeightCM.visibility = View.VISIBLE
-                    llInch.visibility = View.GONE
-
-                    tvIN.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-                    tvCM.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-                    tvIN.isSelected = false
-                    tvCM.isSelected = true
-
-                    var inch = 0.0
-                    if (editHeightFT.text.toString() != "" && editHeightFT.text.toString() != "") {
-                        inch = Utils.ftInToInch(
-                            editHeightFT.text.toString().toInt(),
-                            editHeightIn.text.toString().toDouble()
-                        )
-                    } else if (editHeightFT.text.toString() != "" && editHeightIn.text.toString() == "") {
-                        inch = Utils.ftInToInch(editHeightFT.text.toString().toInt(), 0.0)
-                    } else if (editHeightFT.text.toString() == "" && editHeightIn.text.toString() != "") {
-                        inch = Utils.ftInToInch(1, editHeightIn.text.toString().toDouble())
-                    }
-
-                    editHeightCM.setText(Utils.inchToCm(inch).roundToInt().toDouble().toString())
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            try {
-                if (!boolKg) {
-                    boolKg = true
-
-                    tvKG.setTextColor(ContextCompat.getColor(this, R.color.white))
-                    tvLB.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-
-                    tvKG.isSelected = true
-                    tvLB.isSelected = false
-
-                    editWeight.hint = Constant.DEF_KG
-
-                    if (editWeight.text.toString() != "") {
-                        editWeight.setText(
-                            Utils.lbToKg(editWeight.text.toString().toDouble()).toString()
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        tvIN.setOnClickListener {
-            try {
-                if (boolKg) {
-                    boolKg = false
-
-
-                    tvKG.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-                    tvLB.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-                    tvKG.isSelected = false
-                    tvLB.isSelected = true
-
-                    editWeight.hint = Constant.DEF_LB
-
-                    if (editWeight.text.toString() != "") {
-                        editWeight.setText(
-                            Utils.kgToLb(editWeight.text.toString().toDouble()).toString()
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            try {
-                editHeightCM.visibility = View.GONE
-                llInch.visibility = View.VISIBLE
-
-                tvIN.setTextColor(ContextCompat.getColor(this, R.color.white))
-                tvCM.setTextColor(ContextCompat.getColor(this, R.color.col_666))
-
-                tvIN.isSelected = true
-                tvCM.isSelected = false
-
-                try {
-                    if (!boolInch) {
-                        boolInch = true
-
-                        if (editHeightCM.text.toString() != "") {
-                            val inch = Utils.cmToInch(editHeightCM.text.toString().toDouble())
-                            editHeightFT.setText(Utils.calcInchToFeet(inch).toString())
-                            editHeightIn.setText(Utils.calcInFromInch(inch).toString())
-                        }
-
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        builder.setView(dialogLayout)
-
-        val dob = Utils.getPref(this, Constant.PREF_DOB, "")
-        var posBtnText = ""
-        if (dob.isNullOrEmpty()) {
-            posBtnText = getString(R.string.next)
-        } else {
-            posBtnText = getString(R.string.set)
-        }
-
-        builder.setPositiveButton(posBtnText) { dialog, which ->
-
-            try {
-                if (boolInch) {
-                    Utils.setPref(
-                        this,
-                        Constant.PREF_LAST_INPUT_FOOT,
-                        editHeightFT.text.toString().toInt()
-                    )
-                    Utils.setPref(
-                        this,
-                        Constant.PREF_LAST_INPUT_INCH,
-                        editHeightIn.text.toString().toFloat()
-                    )
-                    Utils.setPref(this, Constant.PREF_HEIGHT_UNIT, Constant.DEF_IN)
-
-                } else {
-                    val inch = Utils.cmToInch(editHeightCM.text.toString().toDouble())
-                    Utils.setPref(this, Constant.PREF_LAST_INPUT_FOOT, Utils.calcInchToFeet(inch))
-                    Utils.setPref(
-                        this,
-                        Constant.PREF_LAST_INPUT_INCH,
-                        Utils.calcInFromInch(inch).toFloat()
-                    )
-                    Utils.setPref(this, Constant.PREF_HEIGHT_UNIT, Constant.DEF_CM)
-
-                }
-
-
-                val strKG: Float
-                if (boolKg) {
-                    strKG = editWeight.text.toString().toFloat()
-                    Utils.setPref(this, Constant.PREF_WEIGHT_UNIT, Constant.DEF_KG)
-                    Utils.setPref(this, Constant.PREF_LAST_INPUT_WEIGHT, strKG)
-                } else {
-                    strKG =
-                        Utils.lbToKg(editWeight.text.toString().toDouble()).roundToInt().toFloat()
-                    Utils.setPref(this, Constant.PREF_WEIGHT_UNIT, Constant.DEF_LB)
-                    Utils.setPref(this, Constant.PREF_LAST_INPUT_WEIGHT, strKG)
-                }
-
-                val currentDate = Utils.parseTime(Date().time, Constant.WEIGHT_TABLE_DATE_FORMAT)
-
-                if (dbHelper.weightExistOrNot(currentDate)) {
-                    dbHelper.updateWeight(currentDate, strKG.toString(), "")
-                } else {
-                    dbHelper.addUserWeight(strKG.toString(), currentDate, "")
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            if (dob.isNullOrEmpty()) {
-                showGenderDOBDialog(this, listner)
-            } else {
-                listner.onDialogDismiss()
-            }
-            dialog.dismiss()
-        }
-        builder.setNegativeButton(R.string.btn_cancel) { dialog, which ->
-            dialog.dismiss()
-            listner.onDialogDismiss()
-        }
-        builder.create().show()
-    }
-*/
 
     fun showHeightWeightDialog(listner: DialogDismissListener) {
         val builder = AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle)
@@ -1394,7 +970,7 @@ open class BaseActivity() : AppCompatActivity() {
                 }
             }
         }
-        editWeight.addTextChangedListener(object : TextWatcher {
+        editWeight.addTextChangedListener(object :TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString().equals("0.0 KG").not() || s.toString().equals("0.0 LB").not()){
                     editWeightStr = s.toString()
@@ -1422,7 +998,7 @@ open class BaseActivity() : AppCompatActivity() {
 //                editHeightCM.setSelection(editHeightCM.text!!.length)
             } else {
                 if (Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0).toString() == "0"
-                    && Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0f).toString().equals("0.0")) {
+                        && Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0f).toString().equals("0.0")) {
                     if (editHeightCMStr.isEmpty()) {
                         editHeightCM.setText("0.0 CM")
                     }else{
@@ -1431,8 +1007,8 @@ open class BaseActivity() : AppCompatActivity() {
                     editHeightCM.setSelection(editHeightCM.text!!.length)
                 } else {
                     val inch = Utils.ftInToInch(
-                        Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0),
-                        Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toDouble())
+                            Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0),
+                            Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toDouble())
                     editHeightCM.setText(Utils.inchToCm(inch).roundToInt().toDouble().toString())
                     editHeightCM.setSelection(editHeightCM.text!!.length)
                 }
@@ -1612,12 +1188,12 @@ open class BaseActivity() : AppCompatActivity() {
                 tvIN.isSelected = false
                 tvCM.isSelected = true
 
-                /* if (Utils.getPref(this,Constant.PREF_LAST_INPUT_FOOT,0).toString().equals("0")
-                         && Utils.getPref(this,Constant.PREF_LAST_INPUT_INCH,0).toString().equals("0")){
+               /* if (Utils.getPref(this,Constant.PREF_LAST_INPUT_FOOT,0).toString().equals("0")
+                        && Utils.getPref(this,Constant.PREF_LAST_INPUT_INCH,0).toString().equals("0")){
 
-                 }else{
+                }else{
 
-                 }*/
+                }*/
                 checkLbKg(editWeight, editHeightCM, editHeightFT, editHeightIn)
 
                 /*val inch = Utils.ftInToInch(
@@ -1651,8 +1227,8 @@ open class BaseActivity() : AppCompatActivity() {
                     var inch = 0.0
                     if (editHeightFT.text.toString() != "" && editHeightFT.text.toString() != "") {
                         inch = Utils.ftInToInch(
-                            editHeightFT.text.toString().toInt(),
-                            editHeightIn.text.toString().toDouble()
+                                editHeightFT.text.toString().toInt(),
+                                editHeightIn.text.toString().toDouble()
                         )
                     } else if (editHeightFT.text.toString() != "" && editHeightIn.text.toString() == "") {
                         inch = Utils.ftInToInch(editHeightFT.text.toString().toInt(), 0.0)
@@ -1680,7 +1256,7 @@ open class BaseActivity() : AppCompatActivity() {
 
                     if (editWeight.text.toString() != "") {
                         editWeight.setText(
-                            Utils.lbToKg(editWeight.text.toString().toDouble()).toString()
+                                Utils.lbToKg(editWeight.text.toString().toDouble()).toString()
                         )
                     }
                 }
@@ -1707,7 +1283,7 @@ open class BaseActivity() : AppCompatActivity() {
 
                     if (editWeight.text.toString() != "") {
                         editWeight.setText(
-                            Utils.kgToLb(editWeight.text.toString().toDouble()).toString()
+                                Utils.kgToLb(editWeight.text.toString().toDouble()).toString()
                         )
                     }
                 }
@@ -1767,8 +1343,8 @@ open class BaseActivity() : AppCompatActivity() {
                         var inch = 0.0
                         if (editHeightFT.text.toString() != "" && editHeightIn.text.toString() != "") {
                             inch = Utils.ftInToInch(
-                                editHeightFT.text.toString().toInt(),
-                                editHeightIn.text.toString().toDouble()
+                                    editHeightFT.text.toString().toInt(),
+                                    editHeightIn.text.toString().toDouble()
                             )
                         } else if (editHeightFT.text.toString() != "" && editHeightIn.text.toString() == "") {
                             inch = Utils.ftInToInch(editHeightFT.text.toString().toInt(), 0.0)
@@ -1797,7 +1373,7 @@ open class BaseActivity() : AppCompatActivity() {
 
                     if (editWeight.text.toString() != "") {
                         editWeight.setText(
-                            Utils.lbToKg(editWeight.text.toString().toDouble()).toString()
+                                Utils.lbToKg(editWeight.text.toString().toDouble()).toString()
                         )
                     }
                 }
@@ -1824,7 +1400,7 @@ open class BaseActivity() : AppCompatActivity() {
 
                     if (editWeight.text.toString() != "") {
                         editWeight.setText(
-                            Utils.kgToLb(editWeight.text.toString().toDouble()).toString()
+                                Utils.kgToLb(editWeight.text.toString().toDouble()).toString()
                         )
                     }
                 }
@@ -1900,7 +1476,7 @@ open class BaseActivity() : AppCompatActivity() {
                     Utils.setPref(this, Constant.PREF_LAST_INPUT_WEIGHT, strKG)
                 } else {
                     strKG =
-                        Utils.lbToKg(editWeight.text.toString().toDouble()).roundToInt().toFloat()
+                            Utils.lbToKg(editWeight.text.toString().toDouble()).roundToInt().toFloat()
                     Utils.setPref(this, Constant.PREF_WEIGHT_UNIT, Constant.DEF_LB)
                     Utils.setPref(this, Constant.PREF_LAST_INPUT_WEIGHT, strKG)
                 }
@@ -1937,10 +1513,10 @@ open class BaseActivity() : AppCompatActivity() {
         /*for weight*/
 
         if (Utils.getPref(this, Constant.PREF_LAST_INPUT_WEIGHT, 0f).toString().equals("0.0")
-            && Utils.getPref(this, Constant.CHECK_LB_KG, Constant.DEF_KG).equals(Constant.DEF_KG)) {
+                && Utils.getPref(this, Constant.CHECK_LB_KG, Constant.DEF_KG).equals(Constant.DEF_KG)) {
             editWeight.setText("0.0 KG")
         } else if (Utils.getPref(this, Constant.PREF_LAST_INPUT_WEIGHT, 0f).toString().equals("0.0")
-            && Utils.getPref(this, Constant.CHECK_LB_KG, Constant.DEF_LB).equals(Constant.DEF_LB)) {
+                && Utils.getPref(this, Constant.CHECK_LB_KG, Constant.DEF_LB).equals(Constant.DEF_LB)) {
             editWeight.setText("0.0 LB")
         }
         editWeight.setSelection(editWeight.text!!.length)
@@ -1950,11 +1526,11 @@ open class BaseActivity() : AppCompatActivity() {
                 Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0f))
 
         if (Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0).toString().equals("0")
-            && Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0f).toString().equals("0.0")) {
+                && Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0f).toString().equals("0.0")) {
             editHeightCM.setText("0.0 CM")
         } else {
             val inch = Utils.ftInToInch(Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0),
-                Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toDouble())
+                    Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0F).toDouble())
             Log.e("TAG", "checkLbKg:::::FIFIIF "+Utils.getPref(this, Constant.PREF_LAST_INPUT_FOOT, 0)+" "+
                     Utils.getPref(this, Constant.PREF_LAST_INPUT_INCH, 0f))
             editHeightCM.setText(Utils.inchToCm(inch).roundToInt().toDouble().toString())
@@ -1978,7 +1554,6 @@ open class BaseActivity() : AppCompatActivity() {
 
     }
 
-
     private val DEFAULT_MIN_YEAR = 1960
     private var yearPos = 0
     private var monthPos = 0
@@ -1993,13 +1568,13 @@ open class BaseActivity() : AppCompatActivity() {
     private var viewTextSize = 0
 
     fun showGenderDOBDialog(
-        mContext: Context,
-        listner: DialogDismissListener
+            mContext: Context,
+            listner: DialogDismissListener
     ) {
         val builder = AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle)
         builder.setCancelable(false)
         val v: View = (mContext as Activity).getLayoutInflater()
-            .inflate(R.layout.dialog_gender_dob, null)
+                .inflate(R.layout.dialog_gender_dob, null)
         val dialogbinding: DialogGenderDobBinding? = DataBindingUtil.bind(v)
 
         builder.setView(dialogbinding!!.root)
@@ -2074,7 +1649,7 @@ open class BaseActivity() : AppCompatActivity() {
         val builder = AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle)
         builder.setCancelable(false)
         val v: View = (mContext as Activity).getLayoutInflater()
-            .inflate(R.layout.dialog_dob, null)
+                .inflate(R.layout.dialog_dob, null)
         val dialogbinding: DialogDobBinding? = DataBindingUtil.bind(v)
 
         builder.setView(dialogbinding!!.root)
@@ -2165,42 +1740,28 @@ open class BaseActivity() : AppCompatActivity() {
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365
     }
 
-    var hourOfDay = 0
-    var minute = 0
-    var seconds = 0
-
-    fun showTimePickerDialog(context: Context, date: Date, eventListener: DateEventListener?) {
+    fun showTimePickerDialog(context: Context, date: Date, eventListener: DateEventListener?,hour:Int,minute:Int) {
         val c = Calendar.getInstance()
         c.time = date
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
 
         val timePicker = TimePickerDialog(
-            context,
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                Debug.e(
-                    "TAG",
-                    "onTimeSet() called with: view = [$view], hourOfDay = [$hourOfDay], minute = [$minute]"
-                )
+                context,
+                TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                    Debug.e(
+                            "TAG",
+                            "onTimeSet() called with: view = [$view], hourOfDay = [$hourOfDay], minute = [$minute]"
+                    )
 
-            /*    mHour = hourOfDay
-                mMinute = minute
-                mTime = if (minute < 10) {
-                    "$hourOfDay:0$minute"
-                } else {
-                    "$hourOfDay:$minute"
-                }*/
-
-
-
-                //Date date = new Date(selectedyear, selectedmonth, selectedday, hourOfDay, minute, 0);
-                val date = Utils.parseTime(
-                    c.get(Calendar.DAY_OF_MONTH)
-                        .toString() + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR) + " " + hourOfDay + ":" + minute + ":00",
-                    "dd/MM/yyyy HH:mm:ss"
-                )
-                eventListener?.onDateSelected(date, hourOfDay, minute)
-            }, hour, minute, false
+                    //Date date = new Date(selectedyear, selectedmonth, selectedday, hourOfDay, minute, 0);
+                    val date = Utils.parseTime(
+                            c.get(Calendar.DAY_OF_MONTH)
+                                    .toString() + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR) + " " + hourOfDay + ":" + minute + ":00",
+                            "dd/MM/yyyy HH:mm:ss"
+                    )
+                    eventListener?.onDateSelected(date, hourOfDay, minute)
+                }, hour, minute, false
         )
         timePicker.show()
     }
@@ -2212,7 +1773,7 @@ open class BaseActivity() : AppCompatActivity() {
         dialog.setCancelable(false)
 
         val v: View = (mContext as Activity).getLayoutInflater()
-            .inflate(R.layout.dialog_unloack_training, null)
+                .inflate(R.layout.dialog_unloack_training, null)
         val dialogbinding: DialogUnloackTrainingBinding? = DataBindingUtil.bind(v)
 
         dialogbinding!!.imgBack.setOnClickListener {
@@ -2225,21 +1786,51 @@ open class BaseActivity() : AppCompatActivity() {
         }
 
         dialogbinding.llWatchVideo.setOnClickListener {
-            showVideoAd(object : CallbackListener {
-                override fun onSuccess() {
-                    dialog.dismiss()
-                }
+            if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+                /*showVideoAd(object : CallbackListener {
+                    override fun onSuccess() {
+                        dialog.dismiss()
+                    }
 
-                override fun onCancel() {
-                    dialog.dismiss()
-                    finish()
-                }
+                    override fun onCancel() {
+                        dialog.dismiss()
+                        finish()
+                    }
 
-                override fun onRetry() {
-                    dialog.dismiss()
-                }
+                    override fun onRetry() {
+                        dialog.dismiss()
+                    }
 
-            })
+                })*/
+                AdUtils.loadGoogleFullAd(mContext,object : AdsCallback{
+                    override fun startNextScreenAfterAd() {
+                        dialog.dismiss()
+                    }
+
+                })
+            }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+                AdUtils.loadFacebookFullAd(mContext,object :AdsCallback{
+                    override fun startNextScreenAfterAd() {
+                        dialog.dismiss()
+                    }
+
+                })
+
+               /* AdUtils.loadFacebookVideoAd(mContext,object :CallbackListener{
+                    override fun onSuccess() {
+
+                    }
+
+                    override fun onCancel() {
+
+                    }
+
+                    override fun onRetry() {
+
+                    }
+
+                })*/
+            }
         }
 
         val width = resources.displayMetrics.widthPixels
@@ -2267,10 +1858,8 @@ open class BaseActivity() : AppCompatActivity() {
 
     fun loadVideoAd(adLoadCallback: RewardedAdLoadCallback) {
         if (mRewardedVideoAd!!.isLoaded.not())
-            mRewardedVideoAd!!.loadAd(
-                getString(R.string.REWARD_VIDEO),
-                AdRequest.Builder().build()
-            )
+            mRewardedVideoAd!!.loadAd(Constant.GOOGLE_REWARDED_VIDEO,
+                    AdRequest.Builder().build())
     }
 
     fun showVideoAd(listner: CallbackListener) {
@@ -2336,5 +1925,30 @@ open class BaseActivity() : AppCompatActivity() {
             loadVideoAd(adLoadCallback)
         }
 
+    }
+
+    fun openInternetDialog(callbackListener: CallbackListener) {
+        if (!isOnline(this)) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("No internet Connection")
+            builder.setCancelable(false)
+            builder.setMessage("Please turn on internet connection to continue")
+            builder.setNegativeButton("Retry") { dialog, _ ->
+                dialog!!.dismiss()
+                openInternetDialog(callbackListener)
+                callbackListener.onRetry()
+
+            }
+            builder.setPositiveButton("Close") { dialog, _ ->
+                dialog!!.dismiss()
+                val homeIntent = Intent(Intent.ACTION_MAIN)
+                homeIntent.addCategory(Intent.CATEGORY_HOME)
+                homeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(homeIntent)
+                finishAffinity()
+            }
+            val alertDialog = builder.create()
+            alertDialog.show()
+        }
     }
 }

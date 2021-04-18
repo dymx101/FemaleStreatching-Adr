@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import com.stretching.HomeActivity
 import com.stretching.R
 import com.stretching.objects.ReminderTableClass
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,12 +68,14 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
 
         val builder = NotificationCompat.Builder(context, channelId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSmallIcon(R.drawable.ic_notifications_active)
             builder.color = ContextCompat.getColor(context,R.color.primary)
         } else {
             builder.setSmallIcon(R.drawable.ic_notifications_active)
-        }
+        }*/
+        builder.setSmallIcon(R.drawable.ic_notifications_active)
+        builder.color = ContextCompat.getColor(context,R.color.colorAccent)
 
         builder.setStyle(NotificationCompat.BigTextStyle().bigText("Your body needs energy! You haven't exercised in ${getCurrentFullDayName()}!"))
         builder.setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))

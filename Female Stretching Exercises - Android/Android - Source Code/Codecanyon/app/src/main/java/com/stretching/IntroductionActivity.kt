@@ -16,11 +16,12 @@ import androidx.databinding.DataBindingUtil
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.databinding.ActivityIntroductionBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.utils.Utils
 
 
-class IntroductionActivity : BaseActivity() {
+class IntroductionActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityIntroductionBinding? = null
     var workoutPlanData: HomePlanTableClass? = null
@@ -95,6 +96,7 @@ class IntroductionActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -104,6 +106,18 @@ class IntroductionActivity : BaseActivity() {
         fun onCancelClick() {
             finish()
         }
+
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
 
     }
 

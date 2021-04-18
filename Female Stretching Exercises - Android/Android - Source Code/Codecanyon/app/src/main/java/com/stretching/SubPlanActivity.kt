@@ -11,13 +11,15 @@ import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.WorkoutListAdapter
 import com.stretching.databinding.ActivityExerciseListBinding
 import com.stretching.databinding.ActivitySubPlanBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.objects.HomeTrainingPlans
+import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class SubPlanActivity : BaseActivity() {
+class SubPlanActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivitySubPlanBinding? = null
     var workoutPlanData: HomePlanTableClass? = null
@@ -29,6 +31,21 @@ class SubPlanActivity : BaseActivity() {
 
         initIntentParam()
         init()
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
     }
 
     private fun initIntentParam() {
@@ -82,6 +99,7 @@ class SubPlanActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -131,6 +149,18 @@ class SubPlanActivity : BaseActivity() {
             }
             startActivity(i)
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 

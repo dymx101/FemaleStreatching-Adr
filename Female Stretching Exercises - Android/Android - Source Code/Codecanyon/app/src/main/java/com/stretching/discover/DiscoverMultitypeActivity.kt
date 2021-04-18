@@ -9,13 +9,13 @@ import com.drakeet.multitype.MultiTypeAdapter
 import com.stretching.BaseActivity
 import com.stretching.R
 import com.stretching.databinding.ActivityDiscoverMultiTypeBinding
-import com.stretching.interfaces.DateEventListener
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.utils.Utils
 import java.util.*
 
 
-class DiscoverMultitypeActivity : BaseActivity() {
+class DiscoverMultitypeActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityDiscoverMultiTypeBinding? = null
 
@@ -32,6 +32,7 @@ class DiscoverMultitypeActivity : BaseActivity() {
         initDrawerMenu(true)
         init()
     }
+
 
     private fun initIntentParam() {
         try {
@@ -70,6 +71,7 @@ class DiscoverMultitypeActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         changeSelection(1)
     }
@@ -78,7 +80,7 @@ class DiscoverMultitypeActivity : BaseActivity() {
     inner class ClickHandler {
 
         fun onAddReminderClick(){
-            showTimePickerDialog(this@DiscoverMultitypeActivity, Date(),object :DateEventListener{
+            /*showTimePickerDialog(this@DiscoverMultitypeActivity, Date(),object :DateEventListener{
                 override fun onDateSelected(
                     date: Date,
                     hourOfDay: Int,
@@ -86,7 +88,7 @@ class DiscoverMultitypeActivity : BaseActivity() {
                 ) {
                     showDaySelectionDialog()
                 }
-            })
+            })*/
         }
     }
 
@@ -122,6 +124,18 @@ class DiscoverMultitypeActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

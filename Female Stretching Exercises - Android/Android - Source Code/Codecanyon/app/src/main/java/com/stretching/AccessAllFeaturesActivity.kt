@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.android.vending.billing.IInAppBillingService
 import com.stretching.databinding.ActivityAccessAllFeatureBinding
 import com.stretching.inapp.*
+import com.stretching.interfaces.CallbackListener
 import com.stretching.utils.Constant
 import com.stretching.utils.Debug
 import com.stretching.utils.Utils
@@ -20,7 +21,8 @@ import org.json.JSONObject
 import java.util.*
 
 
-class AccessAllFeaturesActivity : BaseActivity(),IabBroadcastReceiver.IabBroadcastListener {
+class AccessAllFeaturesActivity : BaseActivity(),IabBroadcastReceiver.IabBroadcastListener,
+    CallbackListener {
 
     var binding: ActivityAccessAllFeatureBinding? = null
     // Todo inapp purchase declaration
@@ -84,6 +86,7 @@ class AccessAllFeaturesActivity : BaseActivity(),IabBroadcastReceiver.IabBroadca
 
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -328,6 +331,7 @@ class AccessAllFeaturesActivity : BaseActivity(),IabBroadcastReceiver.IabBroadca
     }
 
     fun getSKUDetail() {
+
         try {
             val querySkus = Bundle()
             val productIds = ArrayList<String>(1)
@@ -369,6 +373,7 @@ class AccessAllFeaturesActivity : BaseActivity(),IabBroadcastReceiver.IabBroadca
                             e.printStackTrace()
                         }
                     }
+                    binding!!.llFrame.visibility=View.VISIBLE
                 }
             }
         } catch (e: RemoteException) {
@@ -456,6 +461,18 @@ class AccessAllFeaturesActivity : BaseActivity(),IabBroadcastReceiver.IabBroadca
                 Log.d(TAG, "onActivityResult handled by IABUtil.")
             }
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

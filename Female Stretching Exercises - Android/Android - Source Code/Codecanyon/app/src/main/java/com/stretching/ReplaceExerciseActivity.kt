@@ -15,16 +15,15 @@ import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.ReplaceExerciseAdapter
 import com.stretching.databinding.ActivityReplaceExerciseBinding
 import com.stretching.databinding.DialogChangeWorkoutTimeBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
-import com.stretching.objects.ExTableClass
 import com.stretching.objects.HomeExTableClass
 import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
 
 
-class ReplaceExerciseActivity : BaseActivity() {
+class ReplaceExerciseActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityReplaceExerciseBinding? = null
     var replaceExerciseAdapter: ReplaceExerciseAdapter? = null
@@ -35,11 +34,30 @@ class ReplaceExerciseActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_replace_exercise)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         initIntentParam()
         init()
     }
 
+    override fun onResume() {
+        openInternetDialog(this)
+        super.onResume()
+    }
     private fun initIntentParam() {
         try {
             if (intent.extras != null) {
@@ -254,6 +272,18 @@ class ReplaceExerciseActivity : BaseActivity() {
                 finish()
             }
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 

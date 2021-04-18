@@ -1,4 +1,4 @@
-package com.reminder
+package com.reminderNew
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -32,7 +32,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         dataBaseHelper = ReminderDatabase(context)
         val id = intent.getStringExtra(Constant.EXTRA_REMINDER_ID)
-
+        Log.e("TAG", "onReceive:Start ServiceL:::: $id")
         try {
             reminderClass = dataBaseHelper.getReminder(id!!.toInt())!!
             if (reminderClass.active == "true") {
@@ -46,7 +46,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
                 for (i in 0 until arrOfDays.size) {
                     arrOfDays[i] = arrOfDays[i].replace("'", "")
-                    Log.e("TAG", "onReceive:Arraydays:::::  "+arrOfDays[i] )
+                    Log.e("TAG", "onReceive:Arraydays:::::  " + arrOfDays[i])
                 }
 
                 val dayNumber = getDayNumber(getCurrentDayName().toUpperCase())
@@ -66,17 +66,45 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // Put Reminder ID in Intent Extra
         val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra(Constant.EXTRA_REMINDER_ID, Integer.toString(ID))
-        mPendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 
-        Log.e("TAG", "setAlarm::::::::::SET $ID")
+        intent.putExtra(Constant.EXTRA_REMINDER_ID, Integer.toString(ID))
+//        mPendingIntent = PendingIntent.getBroadcast(context, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+//        mPendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        mPendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+//        mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
         // Calculate notification time
         val c = Calendar.getInstance()
         val currentTime = c.timeInMillis
         val diffTime = calendar.timeInMillis - currentTime
 
-        // Start alarm using notification time
-        mAlarmManager!![AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + diffTime] = mPendingIntent
+        /*         Start alarm using notification time
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.e("TAG", "setAlarm::::Ifff::: " )
+            mAlarmManager!!.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + diffTime, mPendingIntent)
+        } else {
+            Log.e("TAG", "setAlarm:::ElsE:::::::: " )
+            mAlarmManager!!.setExact(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + diffTime, mPendingIntent);
+        }*/
+
+//        mAlarmManager!![AlarmManager.RTC_WAKEUP, calendar.timeInMillis] = mPendingIntent
+        mAlarmManager!!.setExact(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,mPendingIntent)
+
+//        mAlarmManager!![AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + diffTime] = mPendingIntent
+
+        // Restart alarm if device is rebooted
+        Log.e("TAG", "setAlarm::::::::::SET $ID  ${SystemClock.elapsedRealtime() + diffTime}   ${SystemClock.elapsedRealtime()}  $diffTime"  )
+
+        /*if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            mAlarmManager!!.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + diffTime, mPendingIntent);
+        } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            mAlarmManager!!.setExact(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + diffTime, mPendingIntent);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mAlarmManager!!.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + diffTime, mPendingIntent)
+            };
+        }*/
 
         // Restart alarm if device is rebooted
         val receiver = ComponentName(context, BootReceiver::class.java)
@@ -86,15 +114,21 @@ class AlarmReceiver : BroadcastReceiver() {
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
             PackageManager.DONT_KILL_APP
         )
+
+
     }
 
     fun setRepeatAlarm(context: Context, calendar: Calendar, ID: Int, RepeatTime: Long) {
         mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
+        val intent_id = System.currentTimeMillis().toInt()
         // Put Reminder ID in Intent Extra
         val intent = Intent(context, AlarmReceiver::class.java)
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+
         intent.putExtra(Constant.EXTRA_REMINDER_ID, Integer.toString(ID))
-        mPendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+//        mPendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        mPendingIntent = PendingIntent.getBroadcast(context, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+//        mPendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         // Calculate notification timein
         val c = Calendar.getInstance()
@@ -102,11 +136,26 @@ class AlarmReceiver : BroadcastReceiver() {
         val diffTime = calendar.timeInMillis - currentTime
 
         // Start alarm using initial notification time and repeat interval time
+        /* mAlarmManager!!.setRepeating(
+             AlarmManager.ELAPSED_REALTIME,
+             SystemClock.elapsedRealtime() + diffTime,
+             RepeatTime, mPendingIntent
+         )*/
         mAlarmManager!!.setRepeating(
-            AlarmManager.ELAPSED_REALTIME,
+            AlarmManager.RTC_WAKEUP,
             SystemClock.elapsedRealtime() + diffTime,
             RepeatTime, mPendingIntent
         )
+
+        /* if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+             mAlarmManager!!.set(AlarmManager.RTC_WAKEUP, diffTime, mPendingIntent);
+         } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+             mAlarmManager!!.setExact(AlarmManager.RTC_WAKEUP, diffTime, mPendingIntent);
+         } else {
+             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                 mAlarmManager!!.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, diffTime, mPendingIntent)
+             };
+         }*/
 
         // Restart alarm if device is rebooted
         val receiver = ComponentName(context, BootReceiver::class.java)
@@ -136,8 +185,6 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 
-
-
     private fun fireNotification(context: Context, reminderClass: Reminder) {
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -154,12 +201,14 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         val builder = NotificationCompat.Builder(context, channelId.toString())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSmallIcon(R.drawable.ic_alert_sound)
-            builder.color = ContextCompat.getColor(context,R.color.accent)
+            builder.color = ContextCompat.getColor(context, R.color.colorAccent)
         } else {
             builder.setSmallIcon(R.drawable.ic_alert_sound)
-        }
+        }*/
+        builder.setSmallIcon(R.drawable.ic_alert_sound)
+        builder.color = ContextCompat.getColor(context,R.color.colorAccent)
 
         builder.setStyle(NotificationCompat.BigTextStyle().bigText("Your body needs energy! You haven't exercised in ${getCurrentFullDayName()}!"))
         builder.setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
@@ -169,7 +218,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val notificationIntent = Intent(context, HomeActivity::class.java)
         notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val intent = PendingIntent.getActivity(context, 0,notificationIntent, 0)
+        val intent = PendingIntent.getActivity(context, 0, notificationIntent, 0)
         builder.setContentIntent(intent)
 
         notificationManager.notify(reminderClass.iD.toInt(), builder.build())
@@ -225,13 +274,13 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun getDayNumber(dayName: String): String {
         var dayNumber = ""
         when (dayName) {
-            "SUN" -> dayNumber = "1"
-            "MON" -> dayNumber = "2"
-            "TUE" -> dayNumber = "3"
-            "WED" -> dayNumber = "4"
-            "THU" -> dayNumber = "5"
-            "FRI" -> dayNumber = "6"
-            "SAT" -> dayNumber = "7"
+            "MON" -> dayNumber = "1"
+            "TUE" -> dayNumber = "2"
+            "WED" -> dayNumber = "3"
+            "THU" -> dayNumber = "4"
+            "FRI" -> dayNumber = "5"
+            "SAT" -> dayNumber = "6"
+            "SUN" -> dayNumber = "7"
         }
         return dayNumber
     }

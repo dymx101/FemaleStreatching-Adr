@@ -10,7 +10,6 @@
 
     </style>
 
-
     <style name="AppTheme_Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="colorPrimary">@color/primary</item>
@@ -20,12 +19,13 @@
 
     </style>
 
-    <style name="AppTheme_Main" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="Main_Activity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowDisablePreview">true</item>
+
 
     </style>
 

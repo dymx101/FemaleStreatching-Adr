@@ -10,11 +10,12 @@ import android.view.Window
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.stretching.adapter.ImageListRecyclerAdapter
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.CustomGallery
 import kotlinx.android.synthetic.main.activity_custom_gallery.*
 import java.util.*
 
-class CustomGalleryActivity : BaseActivity() {
+class CustomGalleryActivity : BaseActivity(), CallbackListener {
 
 
 
@@ -23,7 +24,10 @@ class CustomGalleryActivity : BaseActivity() {
     private val imagesUri: HashMap<String, CustomGallery>? = null
     private var limit = 5
 
-
+    override fun onResume() {
+        openInternetDialog(this)
+        super.onResume()
+    }
     private// show newest photo at beginning of the list
     val galleryPhotos: ArrayList<CustomGallery>
         get() {
@@ -144,6 +148,18 @@ class CustomGalleryActivity : BaseActivity() {
         } else {
             tvTitleText!!.setText("Select Images")
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

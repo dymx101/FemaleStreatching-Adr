@@ -15,6 +15,10 @@ import androidx.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Jhonny Barrios on 22/02/2017.
  */
@@ -107,6 +111,11 @@ public class HorizontalPicker extends LinearLayout implements HorizontalPickerLi
         imgNextMonth.setOnClickListener(rvDays);
         tvToday.setOnClickListener(rvDays);
         tvMonth.setTextColor(mMonthAndYearTextColor != -1 ? mMonthAndYearTextColor : getColor(R.color.primaryTextColor));
+
+        DateFormat dateFormat = new SimpleDateFormat("MMMM YYYY");
+        Date date = new Date();
+        tvMonth.setText(dateFormat.format(date));
+
         tvToday.setVisibility(showTodayButton ? VISIBLE : INVISIBLE);
         tvToday.setTextColor(mTodayButtonTextColor != -1 ? mTodayButtonTextColor : getColor(R.color.colorPrimary));
         int mBackgroundColor = getBackgroundColor();

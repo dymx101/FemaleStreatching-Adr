@@ -15,8 +15,6 @@
     <color name="primary">#1b263a</color>
     <color name="primaryDark">#1c212c</color>
     <color name="accent">#ed37dd</color>
-    <color name="colorDrawerBg">#F8F8F8</color>
-    <color name="colorIconMenu">#000000</color>
 
     <color name="list_devider">#e6e6e6</color>
     <color name="gray_light_">#999999</color>
@@ -44,13 +42,17 @@
     <color name="side_menu_selected_bg_color">#EEEDEF</color>
 
     <color name="orange">#FC7F49</color>
+    <color name="colorDrawerBg">#F8F8F8</color>
+    <color name="colorIconMenu">#000000</color>
 
     <!-- Todo BMI Chart Background -->
     <color name="colorFirst">#91CEC0</color>
     <color name="colorSecond">#154C83</color>
     <color name="colorThird">#1DC974</color>
+    <color name="notification_theme">#80DEEA</color>
+
     <color name="colorFour">#CCC504</color>
     <color name="colorFive">#E09C55</color>
     <color name="colorSix">#CF2E2E</color>
-
+    <color name="notification_color">#000000</color>
 </resources>

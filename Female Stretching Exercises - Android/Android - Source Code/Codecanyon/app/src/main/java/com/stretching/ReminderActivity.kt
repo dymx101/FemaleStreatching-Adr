@@ -5,15 +5,17 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.reminder.AlarmReceiver
-import com.reminder.Reminder
-import com.reminder.ReminderDatabase
+import com.reminderNew.AlarmReceiver
+import com.reminderNew.Reminder
+import com.reminderNew.ReminderDatabase
 import com.stretching.adapter.ReminderAdapter
 import com.stretching.databinding.ActivityReminderBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.DateEventListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.objects.ReminderTableClass
@@ -23,7 +25,7 @@ import com.stretching.utils.Utils
 import java.util.*
 
 
-class ReminderActivity : BaseActivity() {
+class ReminderActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityReminderBinding? = null
     var reminderAdapter: ReminderAdapter? = null
@@ -46,6 +48,8 @@ class ReminderActivity : BaseActivity() {
     private var mHour: Int = 0
     private var mMinute: Int = 0
     private var mDay: Int = 0
+    private var mcalendarCurrent: Calendar? = null
+
     private var mRepeatTime: Long = 0
     private var mCalendar: Calendar? = null
     private val mReceivedReminder: Reminder? = null
@@ -64,8 +68,21 @@ class ReminderActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reminder)
 
-        AdUtils.loadBannerAd(binding!!.adView, this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
         initIntentParam()
+
         init()
         initReminder()
     }
@@ -74,8 +91,8 @@ class ReminderActivity : BaseActivity() {
         // Obtain Date and Time details
 
         // Obtain Date and Time details
-
-        rb= ReminderDatabase(this)
+        mcalendarCurrent = Calendar.getInstance()
+        rb = ReminderDatabase(this)
         mRepeatNo = 1.toString()
         mCalendar = Calendar.getInstance()
         mAlarmReceiver = AlarmReceiver()
@@ -133,33 +150,54 @@ class ReminderActivity : BaseActivity() {
 
             override fun onRepeatClick(position: Int, view: View) {
                 val item = reminderAdapter!!.getItem(position)
-                showDaySelectionDialog(item, true, null, null)
+                showDaySelectionDialog(item, true)
             }
 
-            override fun onTimeClick(position: Int, view: View) {
-                val time = Utils.parseTime(reminderAdapter!!.getItem(position)!!.time!!, "hh:mm")
-                showTimePickerDialog(this@ReminderActivity, time, object : DateEventListener {
-                    override fun onDateSelected(date: Date, hourOfDay: Int, minute: Int) {
+            override fun onTimeClick(position: Int, view: View, hour: Int, minute: Int) {
+                val time = Utils.parseTime(
+                    reminderAdapter!!.getItem(position)!!.time!!.toString(),
+                    "hh:mm"
+                )
+                showTimePickerDialog(this@ReminderActivity, time,
+                    object : DateEventListener {
+                        override fun onDateSelected(date: Date, hourOfDay: Int, minute: Int) {
 
-                        rb!!.updateReminderTime(reminderAdapter!!.getItem(position)!!.iD.toString(), "$hourOfDay:$minute")
-                        Log.e("TAG", "onDateSelected::::Time and hour::::  $hourOfDay $minute  $mHour  $mMinute")
-                        init()
-                        val mcalender2 = Calendar.getInstance()
-                        mcalender2[Calendar.MONTH] = --mMonth
-                        mcalender2[Calendar.YEAR] = mYear
-                        mcalender2[Calendar.DAY_OF_MONTH] = mDay
-                        mcalender2[Calendar.HOUR_OF_DAY] = hourOfDay
-                        mcalender2[Calendar.MINUTE] = minute
-                        mcalender2[Calendar.SECOND] = 0
-                        mAlarmReceiver!!.setAlarm(this@ReminderActivity,mcalender2!!,reminderAdapter!!.getItem(position)!!.iD)
+                            rb!!.updateReminderTime(
+                                reminderAdapter!!.getItem(position)!!.iD.toString(),
+                                "$hourOfDay:$minute"
+                            )
+                            Log.e(
+                                "TAG",
+                                "onDateSelected::::Time and hour::::  $hourOfDay $minute  $mHour  $mMinute"
+                            )
+                            init()
+                            val mcalender2 = Calendar.getInstance()
+                            mcalender2[Calendar.MONTH] = --mMonth
+                            mcalender2[Calendar.YEAR] = mYear
+                            if (mHour <= mcalendarCurrent!!.get(Calendar.HOUR_OF_DAY) && mMinute < mcalendarCurrent!!.get(
+                                    Calendar.MINUTE
+                                )
+                            ) {
+                                mDay += 1
+                            }
+                            mcalender2[Calendar.DAY_OF_MONTH] = mDay
+                            mcalender2[Calendar.HOUR_OF_DAY] = hourOfDay
+                            mcalender2[Calendar.MINUTE] = minute
+                            mcalender2[Calendar.SECOND] = 0
+                            mAlarmReceiver!!.setAlarm(
+                                this@ReminderActivity,
+                                mcalender2!!,
+                                reminderAdapter!!.getItem(position)!!.iD
+                            )
 
 
 //                        dbHelper.updateReminderTimes(reminderAdapter!!.getItem(position)!!.iD.toString(), Utils.parseTime(date.time, "HH:mm"))
-                        fillData()
+                            fillData()
 //                        setResult(Activity.RESULT_OK)
 //                        Utils.startAlarm(reminderAdapter!!.getItem(position)!!.iD.toString().toInt(), hourOfDay, minute, this@ReminderActivity)
+                        }
                     }
-                })
+                    , hour, minute)
             }
 
             override fun onDeleteClick(position: Int, view: View) {
@@ -172,24 +210,30 @@ class ReminderActivity : BaseActivity() {
             }
 
             override fun onSwitchChecked(position: Int, isChecked: Boolean, view: View) {
-               /* if (isChecked) {
-                    dbHelper.updateReminder(
-                        reminderAdapter!!.getItem(position).iD.toString(),
-                        "true"
-                    )
-                } else {
-                    dbHelper.updateReminder(
-                        reminderAdapter!!.getItem(position).iD.toString(),
-                        "false"
-                    )
-                }*/
+                /* if (isChecked) {
+                     dbHelper.updateReminder(
+                         reminderAdapter!!.getItem(position).iD.toString(),
+                         "true"
+                     )
+                 } else {
+                     dbHelper.updateReminder(
+                         reminderAdapter!!.getItem(position).iD.toString(),
+                         "false"
+                     )
+                 }*/
 
                 try {
                     val rb = ReminderDatabase(this@ReminderActivity)
                     if (isChecked) {
-                        rb.updateReminderActive(reminderAdapter!!.getItem(position).iD.toString(), "true")
+                        rb.updateReminderActive(
+                            reminderAdapter!!.getItem(position).iD.toString(),
+                            "true"
+                        )
                     } else {
-                        rb.updateReminderActive(reminderAdapter!!.getItem(position).iD.toString(), "false")
+                        rb.updateReminderActive(
+                            reminderAdapter!!.getItem(position).iD.toString(),
+                            "false"
+                        )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -240,7 +284,7 @@ class ReminderActivity : BaseActivity() {
                 val rb = ReminderDatabase(this)
                 rb.deleteReminder(reminderAdapter!!.getItem(adapterPosition).iD.toString())
                 reminderAdapter!!.removeAt(adapterPosition)
-                mAlarmReceiver!!.cancelAlarm(this,reminderAdapter!!.getItem(adapterPosition).iD)
+                mAlarmReceiver!!.cancelAlarm(this, reminderAdapter!!.getItem(adapterPosition).iD)
                 dialog.cancel()
                 setResult(Activity.RESULT_OK)
             } catch (e: Exception) {
@@ -263,6 +307,7 @@ class ReminderActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         changeSelection(4)
     }
@@ -272,27 +317,24 @@ class ReminderActivity : BaseActivity() {
 
         fun onAddReminderClick() {
             initReminder()
-            showTimePickerDialog(this@ReminderActivity, Date(), object : DateEventListener {
-                override fun onDateSelected(date: Date, hourOfDay: Int, minute: Int) {
-                    showDaySelectionDialog(null, false, hourOfDay, minute)
-                    mHour = hourOfDay
-                    mMinute = minute
-                    mTime = if (minute < 10) {
-                        "$hourOfDay:0$minute"
-                    } else {
-                        "$hourOfDay:$minute"
+            showTimePickerDialog(this@ReminderActivity, Date(),
+                object : DateEventListener {
+                    override fun onDateSelected(date: Date, hourOfDay: Int, minute: Int) {
+                        showDaySelectionDialog(null, false)
+                        mHour = hourOfDay
+                        mMinute = minute
+                        mTime = if (minute < 10) {
+                            "$hourOfDay:0$minute"
+                        } else {
+                            "$hourOfDay:$minute"
+                        }
                     }
                 }
-            })
+                , mHour, mMinute)
         }
     }
 
-    private fun showDaySelectionDialog(
-        item: Reminder?,
-        isFromEdit: Boolean,
-        hourOfDay: Int?,
-        minute: Int?
-    ) {
+    private fun showDaySelectionDialog(item: Reminder?, isFromEdit: Boolean) {
 
         val daysList = arrayOf<CharSequence>(
             "Sunday",
@@ -335,61 +377,62 @@ class ReminderActivity : BaseActivity() {
         builder.setPositiveButton(R.string.btn_ok) { dialog, which ->
 
             if (isFromEdit) {
-//                dbHelper.updateReminderDays(item!!.iD.toString(), arrayList.joinToString(","))
-                rb!!.updateReminderDays(item!!.iD.toString(),getDayInString(arrayList))
+                rb!!.updateReminderDays(item!!.iD.toString(), getDayInString(arrayList))
                 init()
             } else {
 
-                /*         val reminderClass = ReminderTableClass()
-                         reminderClass.remindTime = String.format("%02d:%02d", hourOfDay, minute)
+                if (arrayList.size == 0) {
+                    Toast.makeText(this, "Please Select at least one day", Toast.LENGTH_LONG)
+                        .show()
+                } else {
 
-                         reminderClass.days = arrayList.joinToString(",")
-                         reminderClass.isActive = "true"
-
-                         val mCount = DataHelper(this).addReminder(reminderClass)
-
-                         Utils.startAlarm(mCount, hourOfDay!!, minute!!, this)*/
-
-                val ID = rb!!.addReminder(
-                    Reminder(
-                        mTitle, mDate, mTime, mRepeat, mRepeatNo, mRepeatType,
-                        mActive, getDayInString(arrayList)
+                    val ID = rb!!.addReminder(
+                        Reminder(
+                            mTitle, mDate, mTime, mRepeat, mRepeatNo, mRepeatType,
+                            mActive, getDayInString(arrayList)
+                        )
                     )
-                )
 
-                mCalendar!![Calendar.MONTH] = --mMonth
-                mCalendar!![Calendar.YEAR] = mYear
-                mCalendar!![Calendar.DAY_OF_MONTH] = mDay
-                mCalendar!![Calendar.HOUR_OF_DAY] = mHour
-                mCalendar!![Calendar.MINUTE] = mMinute
-                mCalendar!![Calendar.SECOND] = 0
+                    mCalendar!![Calendar.MONTH] = --mMonth
+                    mCalendar!![Calendar.YEAR] = mYear
+                    if (mHour <= mcalendarCurrent!!.get(Calendar.HOUR_OF_DAY) && mMinute < mcalendarCurrent!!.get(
+                            Calendar.MINUTE
+                        )
+                    ) {
+                        mDay += 1
+                    }
+                    mCalendar!![Calendar.DAY_OF_MONTH] = mDay
+                    mCalendar!![Calendar.HOUR_OF_DAY] = mHour
+                    mCalendar!![Calendar.MINUTE] = mMinute
+                    mCalendar!![Calendar.SECOND] = 0
 
-                when (mRepeatType) {
-                    "Minute" -> {
-                        mRepeatTime = mRepeatNo!!.toInt() * milMinute
+                    when (mRepeatType) {
+                        "Minute" -> {
+                            mRepeatTime = mRepeatNo!!.toInt() * milMinute
+                        }
+                        "Hour" -> {
+                            mRepeatTime = mRepeatNo!!.toInt() * milHour
+                        }
+                        "Day" -> {
+                            mRepeatTime = mRepeatNo!!.toInt() * milDay
+                        }
+                        "Week" -> {
+                            mRepeatTime = mRepeatNo!!.toInt() * milWeek
+                        }
+                        "Month" -> {
+                            mRepeatTime = mRepeatNo!!.toInt() * milMonth
+                        }
                     }
-                    "Hour" -> {
-                        mRepeatTime = mRepeatNo!!.toInt() * milHour
-                    }
-                    "Day" -> {
-                        mRepeatTime = mRepeatNo!!.toInt() * milDay
-                    }
-                    "Week" -> {
-                        mRepeatTime = mRepeatNo!!.toInt() * milWeek
-                    }
-                    "Month" -> {
-                        mRepeatTime = mRepeatNo!!.toInt() * milMonth
-                    }
+
+                    AlarmReceiver().setAlarm(applicationContext, mCalendar!!, ID)
+
+
+                    Utils.setPref(this, Constant.PREF_IS_REMINDER_SET, true)
                 }
-
-                AlarmReceiver().setAlarm(applicationContext, mCalendar!!, ID)
-
-
-                Utils.setPref(this, Constant.PREF_IS_REMINDER_SET, true)
+                fillData()
+                setResult(Activity.RESULT_OK)
+                dialog.dismiss()
             }
-            fillData()
-            setResult(Activity.RESULT_OK)
-            dialog.dismiss()
         }
         builder.setNegativeButton(R.string.btn_cancel) { dialog, which -> dialog.dismiss() }
         builder.create().show()
@@ -427,6 +470,18 @@ class ReminderActivity : BaseActivity() {
     override fun onBackPressed() {
         setResult(Activity.RESULT_OK)
         super.onBackPressed()
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

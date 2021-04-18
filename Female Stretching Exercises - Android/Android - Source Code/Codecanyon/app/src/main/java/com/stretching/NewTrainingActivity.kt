@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.NewTrainingAdapter
 import com.stretching.databinding.ActivityNewTrainingBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.objects.MyTrainingCatExTableClass
@@ -26,7 +27,7 @@ import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class NewTrainingActivity : BaseActivity() {
+class NewTrainingActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityNewTrainingBinding? = null
     var newTrainingAdapter: NewTrainingAdapter? = null
@@ -39,7 +40,22 @@ class NewTrainingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_new_training)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
         initIntentParam()
         init()
     }
@@ -127,6 +143,7 @@ class NewTrainingActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -253,6 +270,18 @@ class NewTrainingActivity : BaseActivity() {
                 e.printStackTrace()
             }
         }
+
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
 
     }
 }

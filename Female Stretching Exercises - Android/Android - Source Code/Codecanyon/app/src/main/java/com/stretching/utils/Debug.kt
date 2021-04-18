@@ -7,7 +7,7 @@ import android.util.Log
 
 internal object Debug {
 
-    val DEBUG = false
+    val DEBUG = true
     val DEBUG_IS_HIDE_AD = false
     val DEBUG_IS_PURCHASE = false
 

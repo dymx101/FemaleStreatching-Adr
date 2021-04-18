@@ -32,7 +32,8 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,9 +66,9 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_12sdp"
                         android:background="@drawable/btn_bg_round_gradiant"
+                        android:onClick="@{(v)->handler.onSetGoalClick()}"
                         android:paddingStart="@dimen/_25sdp"
                         android:paddingEnd="@dimen/_25sdp"
-                        android:onClick="@{(v)->handler.onSetGoalClick()}"
                         android:text="@string/set_a_goal" />
 
                 </LinearLayout>
@@ -211,10 +212,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
+                                android:onClick="@{(v)->handler.onEditWeekGoalClick()}"
                                 android:orientation="horizontal"
                                 android:paddingStart="@dimen/_15sdp"
-                                android:paddingEnd="@dimen/_15sdp"
-                                android:onClick="@{(v)->handler.onEditWeekGoalClick()}">
+                                android:paddingEnd="@dimen/_15sdp">
 
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_width="@dimen/_12sdp"
@@ -227,16 +228,16 @@
                                     style="@style/txt_green_16"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    tools:text="1"
-                                    android:textAllCaps="true" />
+                                    android:textAllCaps="true"
+                                    tools:text="1" />
 
                                 <com.common.view.CMTextView
                                     android:id="@+id/tvTotalGoalCount"
                                     style="@style/txt_fff_16"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    tools:text="/4"
-                                    android:textAllCaps="true" />
+                                    android:textAllCaps="true"
+                                    tools:text="/4" />
 
                             </LinearLayout>
 
@@ -282,18 +283,18 @@
                                 android:drawablePadding="7dp"
                                 android:paddingStart="@dimen/_15sdp"
                                 android:paddingEnd="@dimen/_15sdp"
-                                tools:text="09:13"
-                                android:textAllCaps="true" />
+                                android:textAllCaps="true"
+                                tools:text="09:13" />
 
                             <com.common.view.CMTextView
                                 android:id="@+id/tvViewAll"
                                 style="@style/txt_green_14"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:onClick="@{(v)->handler.onRecentViewAllClick()}"
                                 android:paddingStart="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_15sdp"
-                                android:text="@string/view_all"
-                                android:onClick="@{(v)->handler.onRecentViewAllClick()}"/>
+                                android:text="@string/view_all" />
 
                         </LinearLayout>
 
@@ -302,10 +303,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:gravity="center_vertical"
+                            android:onClick="@{(v)->handler.onRecentViewClick()}"
                             android:orientation="horizontal"
                             android:paddingStart="@dimen/_15sdp"
-                            android:paddingEnd="@dimen/_15sdp"
-                            android:onClick="@{(v)->handler.onRecentViewClick()}">
+                            android:paddingEnd="@dimen/_15sdp">
 
                             <com.common.view.RoundRectCornerImageView
                                 android:id="@+id/imgRecentWorkout"
@@ -391,12 +392,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_12sdp"
                             android:layout_marginEnd="@dimen/_12sdp"
+                            android:onClick="@{(v)->handler.onMyTrainingClick()}"
                             app:cardBackgroundColor="@color/whats_your_goal_card_bg_color"
                             app:cardCornerRadius="7dp"
                             app:cardElevation="3dp"
                             app:cardPreventCornerOverlap="true"
-                            app:cardUseCompatPadding="true"
-                            android:onClick="@{(v)->handler.onMyTrainingClick()}">
+                            app:cardUseCompatPadding="true">
 
                             <FrameLayout
                                 android:layout_width="match_parent"
@@ -449,10 +450,10 @@
                                 android:drawableTop="@drawable/icon_back_to_top"
                                 android:drawablePadding="2dp"
                                 android:gravity="center"
+                                android:onClick="@{(v)->handler.onBackToTopClick()}"
                                 android:paddingTop="@dimen/_15sdp"
                                 android:paddingBottom="@dimen/_10sdp"
-                                android:text="@string/back_to_top"
-                                android:onClick="@{(v)->handler.onBackToTopClick()}"/>
+                                android:text="@string/back_to_top" />
 
                         </LinearLayout>
 
@@ -464,6 +465,23 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <RelativeLayout
+
+            android:id="@+id/llAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/llAdViewFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp50"
+            android:background="@color/primary"
+            android:orientation="vertical"
+            android:visibility="visible" />
     </LinearLayout>
 
 </layout>

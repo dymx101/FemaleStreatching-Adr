@@ -4,7 +4,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import com.google.gson.Gson
 import com.stretching.objects.Music
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
 import kotlin.random.Random
 
 class MusicUtil(var context: Context) {
@@ -20,10 +20,10 @@ class MusicUtil(var context: Context) {
     }
 
     fun playMusic(item: Music) {
-        if (item.isPro ?: false && Utils.isPurchased(context).not())
+        if (item.isPro == true && Utils.isPurchased(context).not())
             return
 
-        if (item.isFromRaw ?: false) {
+        if (item.isFromRaw == true) {
             try {
                 val resID: Int = context.resources.getIdentifier(item.fileName, "raw", context.getPackageName())
                 stopMusic()

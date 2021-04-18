@@ -51,7 +51,7 @@
                 app:cardCornerRadius="4dp"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:onClick="@{(v)->handler.onVideoClick()}">
 
                 <LinearLayout
@@ -86,6 +86,7 @@
                 app:cardBackgroundColor="#33000000"
                 android:layout_gravity="center_vertical"
                 app:cardCornerRadius="4dp"
+                android:visibility="gone"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true"
                 android:onClick="@{(v)->handler.onAnimationClick()}">
@@ -120,7 +121,8 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:fillViewport="true"
             android:descendantFocusability="blocksDescendants">
 
@@ -142,6 +144,7 @@
 
                     <com.google.android.youtube.player.YouTubePlayerView
                         android:id="@+id/youtube_view"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -179,13 +182,32 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:visibility="gone"
                         ads:adSize="MEDIUM_RECTANGLE"
-                        ads:adUnitId="@string/BANNER" />
+                         />
+
 
                 </LinearLayout>
 
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <RelativeLayout
+
+            android:layout_marginTop="@dimen/_10sdp"
+            android:id="@+id/llAdView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/llAdViewFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp50"
+            android:background="@color/primary"
+            android:orientation="vertical"
+            android:visibility="gone" />
 
     </LinearLayout>
 

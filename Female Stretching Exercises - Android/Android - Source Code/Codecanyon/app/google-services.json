@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "50849853855",
+    "project_id": "female-gym",
+    "storage_bucket": "female-gym.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50849853855:android:0bbf4c9dd2e67bd29c4daa",
+        "android_client_info": {
+          "package_name": "com.mihw.femalegym"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50849853855-h61ta7kgi0r5et41ravjn3hnpgjek86a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHQ45vTr1jtOzbJHv8AA4MWj_p6Z7IabM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50849853855-h61ta7kgi0r5et41ravjn3hnpgjek86a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

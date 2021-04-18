@@ -11,10 +11,11 @@ import com.stretching.databinding.ActivitySetReminderBinding
 import com.stretching.objects.ReminderTableClass
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
+import com.stretching.interfaces.CallbackListener
 
 
-class SetReminderActivity : BaseActivity() {
+class SetReminderActivity : BaseActivity(), CallbackListener {
     val TAG = SetReminderActivity::class.java.name + Constant.ARROW
 
     var binding: ActivitySetReminderBinding? = null
@@ -98,12 +99,25 @@ class SetReminderActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 

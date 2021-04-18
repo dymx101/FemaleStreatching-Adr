@@ -1,5 +1,5 @@
 
-package com.reminder
+package com.reminderNew
 
 // Class to create DateTime objects for easy sorting
 class DateTimeSorter {

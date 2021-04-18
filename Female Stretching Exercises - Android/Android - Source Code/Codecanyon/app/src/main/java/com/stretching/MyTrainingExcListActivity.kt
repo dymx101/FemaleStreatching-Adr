@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken
 import com.stretching.adapter.MyTrainingExcAdapter
 import com.stretching.adapter.NewTrainingAdapter
 import com.stretching.databinding.ActivityMyTrainingExcListBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.objects.HomePlanTableClass
 import com.stretching.objects.MyTrainingCatExTableClass
@@ -24,7 +25,7 @@ import com.stretching.utils.Utils
 import java.util.ArrayList
 
 
-class MyTrainingExcListActivity : BaseActivity() {
+class MyTrainingExcListActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityMyTrainingExcListBinding? = null
     var myTrainingExcAdapter: MyTrainingExcAdapter? = null
@@ -145,6 +146,7 @@ class MyTrainingExcListActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -289,5 +291,17 @@ class MyTrainingExcListActivity : BaseActivity() {
         editExcAdapter!!.add(exData!!)
         isNeedToSave = true
         // editExcAdapter!!.addAll(touchHelper.list as ArrayList<MyTrainingCatExTableClass>)
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 }

@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stretching.R
-import com.stretching.WhatsYourGoalActivity
 import com.stretching.databinding.ItemRecentBinding
 import com.stretching.objects.HistoryDetailsClass
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
-import com.utillity.db.DataHelper
+import com.stretching.db.DataHelper
 import kotlin.collections.ArrayList
 
 

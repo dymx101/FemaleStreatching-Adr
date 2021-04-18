@@ -42,7 +42,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="0.0 KG"
                     android:inputType="numberDecimal"
                     android:maxLength="22"
                     android:maxLines="1"
@@ -91,7 +90,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="0.0 CM"
                     android:inputType="numberDecimal"
                     android:maxLength="22"
                     android:maxLines="1"
@@ -103,6 +101,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <com.common.view.CEditTextView
@@ -111,7 +110,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="0.0 FT"
                         android:inputType="numberDecimal"
                         android:maxLength="22"
                         android:maxLines="1"
@@ -123,7 +121,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="0.0 IN"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:inputType="numberDecimal"
                         android:maxLength="22"

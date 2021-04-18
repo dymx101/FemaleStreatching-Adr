@@ -4,19 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.reminder.Reminder
+import com.reminderNew.Reminder
 import com.stretching.R
-import com.stretching.WhatsYourGoalActivity
-import com.stretching.databinding.*
-import com.stretching.objects.ReminderTableClass
+import com.stretching.databinding.ItemReminderBinding
 import com.stretching.utils.Utils
 
 
 class ReminderAdapter(internal var context: Context) :
-    RecyclerView.Adapter<ReminderAdapter.MyViewHolder>() {
+        RecyclerView.Adapter<ReminderAdapter.MyViewHolder>() {
 
     private val data = mutableListOf<Reminder>()
     internal var mEventListener: EventListener? = null
@@ -62,8 +59,8 @@ class ReminderAdapter(internal var context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val rowSideMenuBinding = DataBindingUtil.inflate<ItemReminderBinding>(
-            inflater,
-            R.layout.item_reminder, parent, false
+                inflater,
+                R.layout.item_reminder, parent, false
         )
         return MyViewHolder(rowSideMenuBinding)
     }
@@ -78,15 +75,15 @@ class ReminderAdapter(internal var context: Context) :
         val strDays = item.days!!.split(",").sorted()
         holder.rowSideMenuBinding.tvDays.text = ""
 
-        for (i in 0 until strDays.size) {
+        for (i in strDays.indices) {
             if (holder.rowSideMenuBinding.tvDays.text.isEmpty()) {
                 holder.rowSideMenuBinding.tvDays.text =
-                    Utils.getShortDayName(strDays[i]).toLowerCase()
+                        Utils.getShortDayName(strDays[i])
             } else {
                 holder.rowSideMenuBinding.tvDays.append(
-                    (", ").plus(
-                        Utils.getShortDayName(strDays[i]).toLowerCase()
-                    )
+                        (", ").plus(
+                                Utils.getShortDayName(strDays[i])
+                        )
                 )
             }
         }
@@ -99,7 +96,8 @@ class ReminderAdapter(internal var context: Context) :
 
         holder.rowSideMenuBinding.tvTime.setOnClickListener {
             if (mEventListener != null) {
-                mEventListener!!.onTimeClick(position, holder.rowSideMenuBinding.root)
+                mEventListener!!.onTimeClick(position, holder.rowSideMenuBinding.root,data[position].time!!.split(":")[0].toInt(),
+                    data[position].time!!.split(":")[1].toInt())
             }
         }
 
@@ -112,9 +110,9 @@ class ReminderAdapter(internal var context: Context) :
         holder.rowSideMenuBinding.switchReminder.setOnCheckedChangeListener { buttonView, isChecked ->
             if (mEventListener != null) {
                 mEventListener!!.onSwitchChecked(
-                    position,
-                    isChecked,
-                    holder.rowSideMenuBinding.root
+                        position,
+                        isChecked,
+                        holder.rowSideMenuBinding.root
                 )
             }
         }
@@ -127,11 +125,11 @@ class ReminderAdapter(internal var context: Context) :
     }
 
     inner class MyViewHolder(internal var rowSideMenuBinding: ItemReminderBinding) :
-        RecyclerView.ViewHolder(rowSideMenuBinding.root)
+            RecyclerView.ViewHolder(rowSideMenuBinding.root)
 
     interface EventListener {
         fun onRepeatClick(position: Int, view: View)
-        fun onTimeClick(position: Int, view: View)
+        fun onTimeClick(position: Int, view: View,hour:Int,minute:Int)
         fun onDeleteClick(position: Int, view: View)
         fun onSwitchChecked(position: Int, isChecked: Boolean, view: View)
     }

@@ -2,26 +2,21 @@ package com.stretching
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
-import com.google.android.youtube.player.YouTubeBaseActivity
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.stretching.databinding.ActivityExerciesVideoBinding
 import com.stretching.databinding.ActivityPauseBeforeStartBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.HomeExTableClass
-import com.stretching.objects.HomePlanTableClass
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 import java.util.*
 
 
-class PauseBeforeStartActivity : BaseActivity() {
+class PauseBeforeStartActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityPauseBeforeStartBinding? = null
     var nextExercise: HomeExTableClass? = null
@@ -36,6 +31,10 @@ class PauseBeforeStartActivity : BaseActivity() {
         init()
     }
 
+    override fun onResume() {
+        openInternetDialog(this)
+        super.onResume()
+    }
     private fun initIntentParam() {
         try {
             if (intent.extras != null) {
@@ -102,6 +101,15 @@ class PauseBeforeStartActivity : BaseActivity() {
             startActivity(i)
             finish()
         }
+    }
+
+    override fun onSuccess() {
+    }
+
+    override fun onCancel() {
+    }
+
+    override fun onRetry() {
     }
 
 

@@ -1,4 +1,4 @@
-package com.utillity.db
+package com.stretching.db
 
 import android.content.ContentValues
 import android.content.Context
@@ -162,8 +162,31 @@ class DataHelper(private val mContext: Context) {
                 throw RuntimeException("Error creating source database", e)
             }
         }
-//        return SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READWRITE)
-        return SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READWRITE)
+        val database = SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READWRITE)
+        if (database.version == 0){
+            updateTableData(database)
+            database.version = 1
+        }
+        return database
+    }
+
+    private fun updateTableData(database: SQLiteDatabase?) {
+        updateData(database,"Fast relieve shoulder tension and prevent tightness",27)
+    }
+
+    private fun updateData(database: SQLiteDatabase?, planText: String, id: Int) {
+        try {
+            database!!.execSQL("UPDATE $PlanTable SET $PlanText='$planText' WHERE $PlanId='$id'")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        try {
+            database!!.execSQL("UPDATE $PlanTable SET $ShortDes='$planText' WHERE $PlanId='$id'")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
     }
 
     private fun copyDatabase(dbFile: File): Boolean {
@@ -267,7 +290,9 @@ class DataHelper(private val mContext: Context) {
             cursor = db.rawQuery(query, null)
             if (cursor != null && cursor.count > 0) {
                 while (cursor.moveToNext()) {
-                    var parentPlanIdsStr = cursor.getString(cursor.getColumnIndexOrThrow(ParentPlanId))
+                    var parentPlanIdsStr = cursor.getString(cursor.getColumnIndexOrThrow(
+                        ParentPlanId
+                    ))
 
                     if(parentPlanIdsStr.isNullOrEmpty().not() && parentPlanIdsStr.equals("0").not())
                     {
@@ -282,13 +307,19 @@ class DataHelper(private val mContext: Context) {
                                 cursor.getString(cursor.getColumnIndexOrThrow(PlanProgress))
                             aClass.planText = cursor.getString(cursor.getColumnIndexOrThrow(PlanText))
                             aClass.planLvl = cursor.getString(cursor.getColumnIndexOrThrow(PlanLvl))
-                            aClass.planImage = cursor.getString(cursor.getColumnIndexOrThrow(PlanImage))
+                            aClass.planImage = cursor.getString(cursor.getColumnIndexOrThrow(
+                                PlanImage
+                            ))
                             aClass.planDays = cursor.getString(cursor.getColumnIndexOrThrow(PlanDays))
                             aClass.planType = cursor.getString(cursor.getColumnIndexOrThrow(PlanType))
                             aClass.planWorkouts =
                                 cursor.getString(cursor.getColumnIndexOrThrow(PlanWorkouts))
-                            aClass.planMinutes = cursor.getString(cursor.getColumnIndexOrThrow(PlanMinutes))
-                            aClass.planTestDes = cursor.getString(cursor.getColumnIndexOrThrow(TestDes))
+                            aClass.planMinutes = cursor.getString(cursor.getColumnIndexOrThrow(
+                                PlanMinutes
+                            ))
+                            aClass.planTestDes = cursor.getString(cursor.getColumnIndexOrThrow(
+                                TestDes
+                            ))
                             aClass.parentPlanId = parentPlanId
                             aClass.planThumbnail =
                                 cursor.getString(cursor.getColumnIndexOrThrow(PlanThumbnail))
@@ -1460,7 +1491,7 @@ class DataHelper(private val mContext: Context) {
         try {
             db = getReadWriteDB()
 
-            val query = "select strftime('%W', ${HDateTime}) $WeekNumber," +
+            val query = "select strftime('%W', $HDateTime) $WeekNumber," +
                     "    max(date($HDateTime, 'weekday 0' ,'-6 day')) $weekStart," +
                     "    max(date($HDateTime, 'weekday 0', '-0 day')) $WeekEnd " +
                     "from $HistoryTable " +
@@ -1521,7 +1552,7 @@ class DataHelper(private val mContext: Context) {
             db = getReadWriteDB()
 
             val query =
-                "SELECT sum($HBurnKcal) as ${HBurnKcal} from $HistoryTable WHERE date('$strWeekStart') <= date($HDateTime) AND date('$strWeekEnd') >= date($HDateTime)"
+                "SELECT sum($HBurnKcal) as $HBurnKcal from $HistoryTable WHERE date('$strWeekStart') <= date($HDateTime) AND date('$strWeekEnd') >= date($HDateTime)"
 
             cursor = db.rawQuery(query, null)
 
@@ -1587,7 +1618,7 @@ class DataHelper(private val mContext: Context) {
             db = getReadWriteDB()
 //            val query = "SELECT * FROM tbl_history WHERE date('$strWeekStart') <= date(datetime) AND date('$strWeekEnd') >= date(datetime)"
             val query =
-                "SELECT * FROM $HistoryTable WHERE date('$strWeekStart') <= date(${HDateTime}) AND date('$strWeekEnd') >= date(${HDateTime}) Order by $HId Desc "
+                "SELECT * FROM $HistoryTable WHERE date('$strWeekStart') <= date($HDateTime) AND date('$strWeekEnd') >= date($HDateTime) Order by $HId Desc "
 
             cursor = db.rawQuery(query, null)
 
@@ -1961,7 +1992,8 @@ class DataHelper(private val mContext: Context) {
             var query = ""
 
             query =
-                "SELECT $PlanId, group_concat(DISTINCT(CAST($DayName as INTEGER))) as $DayName, $WeekName, $DayId, $IsCompleted from $PlanDaysTable GROUP BY CAST($WeekName as INTEGER)"
+//                "SELECT $PlanId, group_concat(DISTINCT(CAST($DayName as INTEGER))) as $DayName, $WeekName, $DayId, $IsCompleted from $PlanDaysTable GROUP BY CAST($WeekName as INTEGER)"
+                "SELECT  max($DayId) as DayId, $PlanId, group_concat(DISTINCT(CAST($DayName as INTEGER))) as $DayName, $WeekName, $IsCompleted from $PlanDaysTable GROUP BY CAST($WeekName as INTEGER)"
 
             cursor = db.rawQuery(query, null)
 
@@ -2513,7 +2545,9 @@ class DataHelper(private val mContext: Context) {
                         cursor.getString(cursor.getColumnIndexOrThrow(ExDescription))
                     aClass.exVideo = cursor.getString(cursor.getColumnIndexOrThrow(ExVideo))
                     aClass.planSort = cursor.getString(cursor.getColumnIndexOrThrow(PlanSort))
-                    aClass.defaultPlanSort = cursor.getString(cursor.getColumnIndexOrThrow(DefaultSort))
+                    aClass.defaultPlanSort = cursor.getString(cursor.getColumnIndexOrThrow(
+                        DefaultSort
+                    ))
                     arrDayExClass.add(aClass)
                 }
             }
@@ -2570,7 +2604,9 @@ class DataHelper(private val mContext: Context) {
                     aClass.catId = cursor.getString(cursor.getColumnIndexOrThrow(PlanId))
                     aClass.exId = cursor.getString(cursor.getColumnIndexOrThrow(ExId))
                     aClass.exTime = cursor.getString(cursor.getColumnIndexOrThrow(ExTime))
-                    aClass.exReplaceTime = cursor.getString(cursor.getColumnIndexOrThrow(UpdatedExTime))
+                    aClass.exReplaceTime = cursor.getString(cursor.getColumnIndexOrThrow(
+                        UpdatedExTime
+                    ))
                     aClass.exName = cursor.getString(cursor.getColumnIndexOrThrow(ExName))
                     aClass.exUnit = cursor.getString(cursor.getColumnIndexOrThrow(ExUnit))
                     aClass.exPath = cursor.getString(cursor.getColumnIndexOrThrow(ExPath))

@@ -7,17 +7,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.AppBarLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.stretching.adapter.WorkoutListAdapter
 import com.stretching.databinding.ActivityAddExerciseDetailBinding
-import com.stretching.databinding.ActivityExerciseListBinding
-import com.stretching.databinding.ActivityIntroductionBinding
-import com.stretching.databinding.ActivitySubPlanBinding
-import com.stretching.objects.HomeTrainingPlans
+import com.stretching.interfaces.CallbackListener
 import com.stretching.objects.MyTrainingCatExTableClass
 import com.stretching.objects.MyTrainingCategoryTableClass
 import com.stretching.utils.AdUtils
@@ -26,7 +20,7 @@ import com.stretching.utils.Utils
 import java.util.ArrayList
 
 
-class AddExerciseDetailActivity : BaseActivity() {
+class AddExerciseDetailActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityAddExerciseDetailBinding? = null
     var workoutPlanData: MyTrainingCatExTableClass? = null
@@ -40,7 +34,22 @@ class AddExerciseDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_exercise_detail)
 
-        AdUtils.loadBannerAd(binding!!.adView,this)
+//        AdUtils.loadBannerAd(binding!!.adView,this)
+
+//        AdUtils.loadBannerGoogleAd(this,binding!!.llAdView,Constant.BANNER_TYPE)
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this,binding!!.llAdViewFacebook)
+        }else{
+            binding!!.llAdViewFacebook.visibility=View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
         initIntentParam()
         init()
     }
@@ -146,6 +155,7 @@ class AddExerciseDetailActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
     }
 
@@ -203,6 +213,18 @@ class AddExerciseDetailActivity : BaseActivity() {
             setResult(Activity.RESULT_OK, i)
             finish()
         }
+
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
 
     }
 

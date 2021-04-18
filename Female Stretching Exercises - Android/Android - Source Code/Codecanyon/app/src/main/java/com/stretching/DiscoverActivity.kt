@@ -2,7 +2,6 @@ package com.stretching
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
@@ -13,25 +12,29 @@ import com.stretching.adapter.PainReliefPagerAdapter
 import com.stretching.adapter.PostureCorrectionAdapter
 import com.stretching.adapter.TrainingGoalAdapter
 import com.stretching.databinding.ActivityDiscoverBinding
+import com.stretching.interfaces.AdsCallback
+import com.stretching.interfaces.CallbackListener
 import com.stretching.interfaces.TopBarClickListener
 import com.stretching.objects.HomePlanTableClass
+import com.stretching.utils.AdUtils
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class DiscoverActivity : BaseActivity() {
+class DiscoverActivity : BaseActivity(), CallbackListener {
 
     var binding: ActivityDiscoverBinding? = null
     var painReliefPagerAdapter: PainReliefPagerAdapter? = null
     var flexibilityViewPagerAdapter: PainReliefPagerAdapter? = null
     var beginnerViewPagerAdapter: PainReliefPagerAdapter? = null
+    var fatBurningViewPagerAdapter: PainReliefPagerAdapter? = null
     var trainingGoalAdapter: TrainingGoalAdapter? = null
     var bodyFocusAdapter: TrainingGoalAdapter? = null
     var durationAdapter: DurationAdapter? = null
     var postureCorrectionAdapter: PostureCorrectionAdapter? = null
-    var fatBurningViewPagerAdapter: PainReliefPagerAdapter? = null
+    var onClickAd = 1
 
     var randomPlan: HomePlanTableClass? = null
 
@@ -45,6 +48,21 @@ class DiscoverActivity : BaseActivity() {
         initIntentParam()
         initDrawerMenu(true)
         init()
+
+        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+            AdUtils.loadGoogleBannerAd(this, binding!!.llAdView, Constant.BANNER_TYPE)
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+            AdUtils.loadFacebookBannerAd(this, binding!!.llAdViewFacebook)
+        } else {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
+        if (Utils.isPurchased(this)) {
+            binding!!.llAdViewFacebook.visibility = View.GONE
+        }
+
+
     }
 
     private fun initIntentParam() {
@@ -75,15 +93,31 @@ class DiscoverActivity : BaseActivity() {
         painReliefPagerAdapter!!.setEventListener(object : PainReliefPagerAdapter.EventListener {
             override fun onItemClick(position: Int, view: View) {
                 val item = painReliefPagerAdapter!!.getItem(position)
-                Log.e("TAG", "onItemClick:painReliefPagerAdapter::::: ${Gson().toJson(item)}" )
-                val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
-                i.putExtra("workoutPlanData", Gson().toJson(item))
-                if (item.isPro){
-                    i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
-                    i.putExtra(Constant.IS_PURCHASE, false)
+                if (!item.isPro) {
+                    if (onClickAd == Constant.FIRST_CLICK_COUNT && Constant.FIRST_CLICK_COUNT != 0) {
+                        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+                            AdUtils.loadGoogleFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenpainRelief(position)
+                                }
+                            })
+                        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+                            AdUtils.loadFacebookFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenpainRelief(position)
+                                }
+                            })
+                        } else {
+                            startNextScreenpainRelief(position)
+                        }
+                        onClickAd = 1
+                    } else {
+                        startNextScreenpainRelief(position)
+                        onClickAd += 1
+                    }
+                } else {
+                    startNextScreenpainRelief(position)
                 }
-                startActivity(i)
             }
 
         })
@@ -102,14 +136,31 @@ class DiscoverActivity : BaseActivity() {
             PainReliefPagerAdapter.EventListener {
             override fun onItemClick(position: Int, view: View) {
                 val item = flexibilityViewPagerAdapter!!.getItem(position)
-                val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
-                i.putExtra("workoutPlanData", Gson().toJson(item))
-                if (item.isPro){
-                    i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
-                    i.putExtra(Constant.IS_PURCHASE, false)
+                if (!item.isPro) {
+                    if (onClickAd == Constant.FIRST_CLICK_COUNT && Constant.FIRST_CLICK_COUNT != 0) {
+                        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+                            AdUtils.loadGoogleFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenflexibility(position)
+                                }
+                            })
+                        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+                            AdUtils.loadFacebookFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenflexibility(position)
+                                }
+                            })
+                        } else {
+                            startNextScreenflexibility(position)
+                        }
+                        onClickAd = 1
+                    } else {
+                        startNextScreenflexibility(position)
+                        onClickAd += 1
+                    }
+                } else {
+                    startNextScreenflexibility(position)
                 }
-                startActivity(i)
             }
 
         })
@@ -126,15 +177,34 @@ class DiscoverActivity : BaseActivity() {
 
         beginnerViewPagerAdapter!!.setEventListener(object : PainReliefPagerAdapter.EventListener {
             override fun onItemClick(position: Int, view: View) {
+
                 val item = beginnerViewPagerAdapter!!.getItem(position)
-                val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
-                i.putExtra("workoutPlanData", Gson().toJson(item))
-                if (item.isPro){
-                    i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
-                    i.putExtra(Constant.IS_PURCHASE, false)
+
+                if (!item.isPro) {
+                    if (onClickAd == Constant.FIRST_CLICK_COUNT && Constant.FIRST_CLICK_COUNT != 0) {
+                        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+                            AdUtils.loadGoogleFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreembeginner(position)
+                                }
+                            })
+                        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+                            AdUtils.loadFacebookFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreembeginner(position)
+                                }
+                            })
+                        } else {
+                            startNextScreembeginner(position)
+                        }
+                        onClickAd = 1
+                    } else {
+                        startNextScreembeginner(position)
+                        onClickAd += 1
+                    }
+                } else {
+                    startNextScreembeginner(position)
                 }
-                startActivity(i)
             }
 
         })
@@ -152,15 +222,34 @@ class DiscoverActivity : BaseActivity() {
         fatBurningViewPagerAdapter!!.setEventListener(object :
             PainReliefPagerAdapter.EventListener {
             override fun onItemClick(position: Int, view: View) {
+
                 val item = fatBurningViewPagerAdapter!!.getItem(position)
-                val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
-                i.putExtra("workoutPlanData", Gson().toJson(item))
-                if (item.isPro){
-                    i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
-                    i.putExtra(Constant.IS_PURCHASE, false)
+                if (!item.isPro) {
+
+                    if (onClickAd == Constant.FIRST_CLICK_COUNT && Constant.FIRST_CLICK_COUNT != 0) {
+                        if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_GOOGLE) {
+                            AdUtils.loadGoogleFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenfatBurning(position)
+                                }
+                            })
+                        } else if (Constant.AD_TYPE_FB_GOOGLE == Constant.AD_FACEBOOK) {
+                            AdUtils.loadFacebookFullAd(this@DiscoverActivity, object : AdsCallback {
+                                override fun startNextScreenAfterAd() {
+                                    startNextScreenfatBurning(position)
+                                }
+                            })
+                        } else {
+                            startNextScreenfatBurning(position)
+                        }
+                        onClickAd = 1
+                    } else {
+                        startNextScreenfatBurning(position)
+                        onClickAd += 1
+                    }
+                } else {
+                    startNextScreenfatBurning(position)
                 }
-                startActivity(i)
             }
 
         })
@@ -172,9 +261,9 @@ class DiscoverActivity : BaseActivity() {
                 val item = trainingGoalAdapter!!.getItem(position)
                 val i = Intent(this@DiscoverActivity, DiscoverDetailActivity::class.java)
                 i.putExtra("workoutPlanData", Gson().toJson(item))
-                if (item.isPro){
+                if (item.isPro) {
                     i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
+                } else {
                     i.putExtra(Constant.IS_PURCHASE, false)
                 }
                 startActivity(i)
@@ -190,9 +279,9 @@ class DiscoverActivity : BaseActivity() {
                 val item = postureCorrectionAdapter!!.getItem(position)
                 val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
                 i.putExtra("workoutPlanData", Gson().toJson(item))
-                if (item.isPro){
+                if (item.isPro) {
                     i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
+                } else {
                     i.putExtra(Constant.IS_PURCHASE, false)
                 }
                 startActivity(i)
@@ -205,9 +294,10 @@ class DiscoverActivity : BaseActivity() {
             override fun onItemClick(position: Int, view: View) {
                 val item = bodyFocusAdapter!!.getItem(position)
                 val i = Intent(this@DiscoverActivity, DiscoverDetailActivity::class.java)
-                if (item.isPro){
+                i.putExtra("workoutPlanData", Gson().toJson(item))
+                if (item.isPro) {
                     i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
+                } else {
                     i.putExtra(Constant.IS_PURCHASE, false)
                 }
                 startActivity(i)
@@ -220,9 +310,10 @@ class DiscoverActivity : BaseActivity() {
             override fun onItemClick(position: Int, view: View) {
                 val item = durationAdapter!!.getItem(position)
                 val i = Intent(this@DiscoverActivity, DiscoverDetailActivity::class.java)
-                if (item.isPro){
+                i.putExtra("workoutPlanData", Gson().toJson(item))
+                if (item.isPro) {
                     i.putExtra(Constant.IS_PURCHASE, true)
-                }else {
+                } else {
                     i.putExtra(Constant.IS_PURCHASE, false)
                 }
                 startActivity(i)
@@ -231,6 +322,54 @@ class DiscoverActivity : BaseActivity() {
 
         fillData()
 
+    }
+
+    private fun startNextScreenfatBurning(position: Int) {
+        val item = fatBurningViewPagerAdapter!!.getItem(position)
+        val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
+        i.putExtra("workoutPlanData", Gson().toJson(item))
+        if (item.isPro) {
+            i.putExtra(Constant.IS_PURCHASE, true)
+        } else {
+            i.putExtra(Constant.IS_PURCHASE, false)
+        }
+        startActivity(i)
+    }
+
+    private fun startNextScreembeginner(position: Int) {
+        val item = beginnerViewPagerAdapter!!.getItem(position)
+        val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
+        i.putExtra("workoutPlanData", Gson().toJson(item))
+        if (item.isPro) {
+            i.putExtra(Constant.IS_PURCHASE, true)
+        } else {
+            i.putExtra(Constant.IS_PURCHASE, false)
+        }
+        startActivity(i)
+    }
+
+    private fun startNextScreenflexibility(position: Int) {
+        val item = flexibilityViewPagerAdapter!!.getItem(position)
+        val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
+        i.putExtra("workoutPlanData", Gson().toJson(item))
+        if (item.isPro) {
+            i.putExtra(Constant.IS_PURCHASE, true)
+        } else {
+            i.putExtra(Constant.IS_PURCHASE, false)
+        }
+        startActivity(i)
+    }
+
+    private fun startNextScreenpainRelief(position: Int) {
+        val item = painReliefPagerAdapter!!.getItem(position)
+        val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
+        i.putExtra("workoutPlanData", Gson().toJson(item))
+        if (item.isPro) {
+            i.putExtra(Constant.IS_PURCHASE, true)
+        } else {
+            i.putExtra(Constant.IS_PURCHASE, false)
+        }
+        startActivity(i)
     }
 
     private fun fillData() {
@@ -244,24 +383,26 @@ class DiscoverActivity : BaseActivity() {
             getBodyFocusData()
             getDurationData()
 
-            val lastDate = Utils.getPref(this,Constant.PREF_RANDOM_DISCOVER_PLAN_DATE,"")
-            val currDate = Utils.parseTime(Date(),"dd-MM-yyyy")
-            val currDateStr = Utils.parseTime(currDate.time,"dd-MM-yyyy")
-            val str = Utils.getPref(this,Constant.PREF_RANDOM_DISCOVER_PLAN,"")
-            if(lastDate.isNullOrEmpty().not() && currDateStr.equals(lastDate) && str.isNullOrEmpty().not())
-            {
-                randomPlan = Gson().fromJson(str, object : TypeToken<HomePlanTableClass>() {}.type)!!
+            val lastDate = Utils.getPref(this, Constant.PREF_RANDOM_DISCOVER_PLAN_DATE, "")
+            val currDate = Utils.parseTime(Date(), "dd-MM-yyyy")
+            val currDateStr = Utils.parseTime(currDate.time, "dd-MM-yyyy")
+            val str = Utils.getPref(this, Constant.PREF_RANDOM_DISCOVER_PLAN, "")
+            if (lastDate.isNullOrEmpty()
+                    .not() && currDateStr.equals(lastDate) && str.isNullOrEmpty().not()
+            ) {
+                randomPlan =
+                    Gson().fromJson(str, object : TypeToken<HomePlanTableClass>() {}.type)!!
 
-            }else {
+            } else {
                 randomPlan = dbHelper.getRandomDiscoverPlan()
-                Utils.setPref(this,Constant.PREF_RANDOM_DISCOVER_PLAN_DATE,currDateStr)
-                Utils.setPref(this,Constant.PREF_RANDOM_DISCOVER_PLAN,Gson().toJson(randomPlan))
+                Utils.setPref(this, Constant.PREF_RANDOM_DISCOVER_PLAN_DATE, currDateStr)
+                Utils.setPref(this, Constant.PREF_RANDOM_DISCOVER_PLAN, Gson().toJson(randomPlan))
             }
             binding!!.imgCover.setImageResource(Utils.getDrawableId(randomPlan!!.planImage, this))
             binding!!.tvTitle.text = randomPlan!!.planName
             if (randomPlan!!.shortDes.isNullOrEmpty().not())
                 binding!!.tvDesc.text = randomPlan!!.shortDes
-            else{
+            else {
                 binding!!.tvDesc.text = randomPlan!!.introduction
             }
 
@@ -282,7 +423,9 @@ class DiscoverActivity : BaseActivity() {
 
     private fun getPainReliefData() {
         painReliefPagerAdapter!!.addAll(
-            dbHelper.getDiscoverPlanList(Constant.Discover_Pain_Relief).reversed() as ArrayList<HomePlanTableClass>)
+            dbHelper.getDiscoverPlanList(Constant.Discover_Pain_Relief)
+                .reversed() as ArrayList<HomePlanTableClass>
+        )
     }
 
     fun getTrainingData() {
@@ -316,6 +459,7 @@ class DiscoverActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
         changeSelection(1)
     }
@@ -329,11 +473,10 @@ class DiscoverActivity : BaseActivity() {
             finish()
         }
 
-        fun onTopPlanClick(){
+        fun onTopPlanClick() {
 
             val i = Intent(this@DiscoverActivity, ExercisesListActivity::class.java)
             i.putExtra("workoutPlanData", Gson().toJson(randomPlan))
-            i.putExtra(Constant.IS_PURCHASE,false)
             startActivity(i)
         }
 
@@ -348,6 +491,18 @@ class DiscoverActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 
 }

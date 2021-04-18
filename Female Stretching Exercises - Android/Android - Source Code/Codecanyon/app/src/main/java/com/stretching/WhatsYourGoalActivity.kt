@@ -8,11 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stretching.adapter.WhatsYourGoalAdapter
 import com.stretching.databinding.ActivityWhatsYourGoalBinding
+import com.stretching.interfaces.CallbackListener
 import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 
 
-class WhatsYourGoalActivity : BaseActivity() {
+class WhatsYourGoalActivity : BaseActivity(), CallbackListener {
     val TAG = WhatsYourGoalActivity::class.java.name + Constant.ARROW
 
     var binding: ActivityWhatsYourGoalBinding? = null
@@ -80,6 +81,7 @@ class WhatsYourGoalActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        openInternetDialog(this)
         super.onResume()
 
     }
@@ -97,5 +99,17 @@ class WhatsYourGoalActivity : BaseActivity() {
         var name: String? = null
         var img: Int = 0
         var isSelected = false
+    }
+
+    override fun onSuccess() {
+
+    }
+
+    override fun onCancel() {
+
+    }
+
+    override fun onRetry() {
+
     }
 }
