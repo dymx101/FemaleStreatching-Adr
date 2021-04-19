@@ -51,11 +51,15 @@
 			<li><a href="#project_structure">Project Structure</a></li>
 			<li><a href="#Reskin_project_image">Reskin Project Images</a></li>
 			<li><a href="#update_package_name_android">Update Package Name</a></li>
-			<li><a href="#update_admob">Update Ads (Admob) IDs</a></li>
-			<li><a href="#in_app_purchase">In-App Purchase</a></li>
+			<li><a href="#in_app_purchase">Subscription</a></li>
+			<li><a href="#google_service_json">Firebase Push Notification</a></li>
+			<li><a href="#app_id">Change Application Id</a></li>
+			<li><a href="#facebook_ad_setup">Facebook Ad Integration Setup</a></li>
+			<li><a href="#sqlite_database_add">Step new exercise add or Edit</a></li>
+			<li><a href="#setting_changes">Setting Changes</a></li>
+			<li><a href="#add_music">Music add Step</a></li>
 		</ol>
 		<hr>
-		
 		
 
 		
@@ -136,22 +140,11 @@
 		<img src="assets/images/rename_package_android.png" alt="Project Structure" class="img-fluid" />
 		<hr>
 		
-	
-
-
-		<h3 id="update_admob"><strong>5) Update Ads (Admob) IDs</strong> - <a href="#toc">top</a></h3>
-		
-		<p>To update ads id select the Constant  class from the left side bar. change the Banner and Interstitial Ids	</p>
-
-		<img src="assets/images/admob_android.png" alt="Reskin Project Image" class="img-fluid" />
-		<p></p>
-
-	
-		<hr>
 
 
 
-		<h3 id="in_app_purchase"><strong>6) In-App Purchase</strong> - <a href="#toc">top</a></h3>
+
+		<h3 id="in_app_purchase"><strong>5) Subscription</strong> - <a href="#toc">top</a></h3>
 	
 	    <p>Now Let's set up the purchasing product in your play console.</p>
 	    <p>1) First, Login to your play console and click CREATE APPLICATION.</p>
@@ -170,6 +163,104 @@
         <p></p>
 		
 		<hr>
+
+
+<h3 id="google_service_json"><strong>6) Firebase Push Notification</strong> - <a href="#toc">top</a></h3>
+
+		<p>1) First of fall create project on firebase console and submit your package name with project </p>
+	
+
+	    <p>2) Then download google-service.json file and add google-service.json file find in app folder and paste your google-service.json file.</p>
+
+	    <p>3) Now fire your custom notification in firebase cloud messeging.</p>
+
+
+	    <img src="assets/images/google_service_file.png" alt="google_service_file" class="img-fluid" />
+        <p></p>
+		
+		<hr>
+
+		<h3 id="app_id"><strong>7) Change Application Id</strong> - <a href="#toc">top</a></h3>
+		<p>To change Application Id find whole project by click double shift and enter build.gradle file. com.demo to com.demo.secinddemo like your application id. </p>
+		<img src="assets/images/change_app_id.png" alt="change_app_id" class="img-fluid" />
+        <p></p>
+		
+		<hr>
+
+
+		<h3 id="facebook_ad_setup"><strong>8) Facebook Ad Integration Setup</strong> - <a href="#toc">top</a></h3>
+		<p>Facebook audience network in sign up account. Now we can get placement id for our display ad.</p>
+		
+		<h4>Create a new placement</h4>
+		<p>1) Go to Monetization Manager.</p>
+		<p>2) Find and select the property where you want to create an ad placement. Click , then Manage Property.</p>
+		<p>3) Select the Ad Space, then click + Create placement.
+	          Or, you can create a placement from your platform overview by clicking , then Create placement.</p>
+
+	          <p>4) Name the placement and choose the Ad Space. Then, select the ad Display format. Learn more about ad formats.</p>
+	          <p>5) Click Create placement to finish. Then copy placement id from Monetization Manager. </p>
+	          <p>6) Now change your placement id below picture .</p>
+
+<img src="assets/images/fb_change_id.png" alt="chnage_fb_id" class="img-fluid" />
+
+<p></p>
+<h3>Google Admob ad</h3>
+<p>7) You can change your google admob id below picture.</p>
+<img src="assets/images/google_change_id.png" alt="google_change_id" class="img-fluid" />
+
+<hr>
+
+
+<h3 id="sqlite_database_add"><strong>9) Step new exercise add or Edit</strong> - <a href="#toc">top</a></h3>
+<p>1) Open your database file from app -> res - > assest folder.</p>
+<p>2) ArmWorkout.db file open in sqlite database software and connect your database.</p>
+<p>3) Now you can change your exercise or add your exercise in follow below picture.</p>
+<img src="assets/images/exercise_add.png" alt="exercise_add" class="img-fluid" />
+
+<p></p>
+<p>Above picture on follow step.</p>
+<p>1 -> Click on ExerciseTable  </p>
+<p>2 -> Click on + symbol for add new data</p>
+<p>3 -> fill up data </p>
+<p>4 -> when your finish fill up data then click done .</p>
+
+<p>Now must be change database version 0 to 1 through query. as you can see below picture.</p>
+<p></p>
+<img src="assets/images/exercise_add_query.png" alt="exercise_add_query" class="img-fluid" />
+<p></p>
+<p>Now android side Insert or Update query fire for get new data and as you can see your data successfully added or updated.</p>
+
+        <p></p>
+		
+		<hr>
+
+<h3 id="setting_changes"><strong>10) Setting Changes</strong> - <a href="#toc">top</a></h3>
+<img src="assets/images/setting.png" alt="exercise_add_query" class="img-fluid" />
+<P>1) Rate us</P>
+<p>Change your url</p>
+<img src="assets/images/rate_us.png" alt="rate_us" class="img-fluid" />
+<P>1) Send Feedback</P>
+<p>Change your feedback own gmail</p>
+<img src="assets/images/contact_us.png" alt="contact_us" class="img-fluid" />
+<P>1) Privacy Policy</P>
+<p>Chnage your own privacy policy link</p>
+<img src="assets/images/pp_link.png" alt="pp_link" class="img-fluid" />
+<p></p>
+
+<h3 id="add_music"><strong>11) Music add Step</strong> - <a href="#toc">top</a></h3>
+<img src="assets/images/add_music.png" alt="add_music" class="img-fluid" />
+<p>Above picture on follow step.</p>
+<p>1 -> Click on MusicTable  </p>
+<p>2 -> Click on + symbol for add new data</p>
+<p>3 -> fill up data </p>
+<p>4 -> when your finish fill up data then click done .</p>
+
+<p></p>
+<img src="assets/images/add_mp3.png" alt="add_mp3" class="img-fluid" />
+<p>Now you must be android studio in row folder in add your mp3 file so you can see your add another music.</p>
+<p></p>
+<hr>
+
 
 
 
