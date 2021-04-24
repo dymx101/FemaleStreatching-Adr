@@ -24,6 +24,7 @@ internal object AdUtils {
 
 
     fun loadGoogleBannerAd(context: Context, llAdview: RelativeLayout, type: String) {
+        return
         try {
             Log.e(
                 "TAG",
