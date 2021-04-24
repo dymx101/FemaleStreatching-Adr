@@ -1,9 +1,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Female Stretching</string>
-    <string name="youtube_api_key">AIzaSyAoyJpy8xbelBg5uuoAfa_c2E4v262OiSE</string>
-    <string name="admob_app_id">ca-app-pub-8345504790828586~2581666151</string>
+    <string name="youtube_api_key" translatable="false">AIzaSyAoyJpy8xbelBg5uuoAfa_c2E4v262OiSE</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-8345504790828586~2581666151</string>
 
-    <string name="number_picker_formatter">%02d</string>
+    <string name="number_picker_formatter" translatable="false">%02d</string>
 
     <string name="btn_ok">Ok</string>
     <string name="btn_cancel">Cancel</string>
@@ -119,7 +119,7 @@
     <string name="weight">Weight</string>
     <string name="kg">KG</string>
     <string name="lb">LB</string>
-    <string name="bmi">BMI</string>
+    <string name="bmi" translatable="false">BMI</string>
     <string name="tap_here_to_input_your_height">Tap <b>here</b> to input your height</string>
     <string name="sync_to_google_fit">Sync to Google Fit</string>
     <string name="i_feel">I feel</string>
@@ -154,7 +154,7 @@
     <string name="device_tts_setting">Device TTS Setting</string>
     <string name="health_data">Health Data</string>
     <string name="remind_me_to_workout_every_day">Remind me to workout every day</string>
-    <string name="metric_and_imperial_units"><![CDATA[Metric & Imperial Units]]></string>
+    <string name="metric_and_imperial_units" translatable="false"><![CDATA[Metric & Imperial Units]]></string>
     <string name="language_options">Language options</string>
     <string name="keep_the_screen_on">Keep the screen on</string>
     <string name="general_settings">General Settings</string>
@@ -196,7 +196,7 @@
     <string name="delete_confirmation_msg">Are you sure you want to delete it?</string>
     <string name="week">Week</string>
 
-    <string name="privacy_policy_link">https://sites.google.com/view/femalestretchingexercises-pp/home</string>
+    <string name="privacy_policy_link" translatable="false">https://sites.google.com/view/femalestretchingexercises-pp/home</string>
     <string name="do_it_again">Do it again</string>
 
     <string name="update">Update</string>
@@ -204,7 +204,7 @@
     <string name="critical_update_msg">An critical update is required</string>
     <string name="btn_update">Update</string>
 
-    <string name="version_1_1">Version 1.2</string>
+    <string name="version_1_1" translatable="false">Version 1.2</string>
 
 
 </resources>
