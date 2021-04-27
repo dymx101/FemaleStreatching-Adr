@@ -11,6 +11,7 @@ import com.stretching.utils.Constant
 import com.stretching.utils.Utils
 import com.stretching.db.DataHelper
 import com.stretching.interfaces.CallbackListener
+import com.stretching.utils.AdUtils
 import org.json.JSONObject
 import java.util.*
 
@@ -41,6 +42,8 @@ class SplashScreenActivity : BaseActivity(), CallbackListener {
         }else{
             openInternetDialog(this)
         }
+
+        AdUtils.loadGoogleInterstitial(this, null)
 
     }
 

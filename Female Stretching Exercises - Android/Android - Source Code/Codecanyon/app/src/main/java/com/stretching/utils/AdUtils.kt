@@ -60,36 +60,95 @@ internal object AdUtils {
     }
 
     var mInterstitialAd: InterstitialAd? = null
-    fun loadGoogleFullAd(context: Context, adsCallback: AdsCallback) {
-        if (Debug.DEBUG_IS_HIDE_AD.not() && Utils.isPurchased(context).not()) {
-            showAdsDialog(context)
-            mInterstitialAd = InterstitialAd(context)
-            mInterstitialAd!!.adUnitId = Constant.GOOGLE_INTERSTITIAL
+
+    fun loadGoogleInterstitial(context: Context, adsCallback: AdsCallback?) {
+        mInterstitialAd = InterstitialAd(context)
+        mInterstitialAd?.let {
+            it.adUnitId = Constant.GOOGLE_INTERSTITIAL
             val adRequest = AdRequest.Builder().build()
-            mInterstitialAd!!.loadAd(adRequest)
-            mInterstitialAd!!.adListener = object : AdListener() {
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    if (adsDialog != null && adsDialog!!.isShowing) {
-                        adsDialog!!.dismiss()
+            it.loadAd(adRequest)
+            if (adsCallback != null) {
+                showAdsDialog(context)
+                it.adListener = object: AdListener() {
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
+                        if (adsDialog != null && adsDialog!!.isShowing) {
+                            adsDialog!!.dismiss()
+                        }
+                        it.show()
+                        adsCallback.startNextScreenAfterAd()
                     }
-                    mInterstitialAd!!.show()
-                }
 
-                override fun onAdFailedToLoad(p0: Int) {
-                    super.onAdFailedToLoad(p0)
-                    if (adsDialog != null && adsDialog!!.isShowing) {
-                        adsDialog!!.dismiss()
+                    override fun onAdFailedToLoad(p0: LoadAdError?) {
+                        super.onAdFailedToLoad(p0)
+                        if (adsDialog != null && adsDialog!!.isShowing) {
+                            adsDialog!!.dismiss()
+                        }
+                        adsCallback.startNextScreenAfterAd()
                     }
-                    adsCallback.startNextScreenAfterAd()
-                }
 
-                override fun onAdClosed() {
-                    super.onAdClosed()
+                    override fun onAdClosed() {
+                        super.onAdClosed()
+                        loadGoogleInterstitial(context, null)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showGoogleInterstitial(context: Context, adsCallback: AdsCallback) {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.let {
+                if (it.isLoaded) {
+                    it.show()
+                    it.adListener = object: AdListener() {
+                        override fun onAdClosed() {
+                            super.onAdClosed()
+                            adsCallback.startNextScreenAfterAd()
+                            loadGoogleInterstitial(context, null)
+                        }
+                    }
+                } else {
+                    loadGoogleInterstitial(context, adsCallback)
                     adsCallback.startNextScreenAfterAd()
                 }
             }
+        } else {
+            loadGoogleInterstitial(context, adsCallback)
+            adsCallback.startNextScreenAfterAd()
+        }
+    }
+    fun loadGoogleFullAd(context: Context, adsCallback: AdsCallback) {
+        if (Debug.DEBUG_IS_HIDE_AD.not() && Utils.isPurchased(context).not()) {
+            showGoogleInterstitial(context, adsCallback)
+//            showAdsDialog(context)
+//            mInterstitialAd = InterstitialAd(context)
+//            mInterstitialAd!!.adUnitId = Constant.GOOGLE_INTERSTITIAL
+//            val adRequest = AdRequest.Builder().build()
+//            mInterstitialAd!!.loadAd(adRequest)
+//            mInterstitialAd!!.adListener = object : AdListener() {
+//
+//                override fun onAdLoaded() {
+//                    super.onAdLoaded()
+//                    if (adsDialog != null && adsDialog!!.isShowing) {
+//                        adsDialog!!.dismiss()
+//                    }
+//                    mInterstitialAd!!.show()
+//                }
+//
+//                override fun onAdFailedToLoad(p0: Int) {
+//                    super.onAdFailedToLoad(p0)
+//                    if (adsDialog != null && adsDialog!!.isShowing) {
+//                        adsDialog!!.dismiss()
+//                    }
+//                    adsCallback.startNextScreenAfterAd()
+//                }
+//
+//                override fun onAdClosed() {
+//                    super.onAdClosed()
+//                    adsCallback.startNextScreenAfterAd()
+//                }
+//            }
         } else {
             adsCallback.startNextScreenAfterAd()
         }
